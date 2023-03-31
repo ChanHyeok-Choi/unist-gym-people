@@ -45,6 +45,10 @@
                 <artifactId>javax.persistence-api</artifactId>
                 <version>2.2</version>
         </dependency>
+        <!-- <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-data-mongodb</artifactId>
+        </dependency> -->
     </dependencies>
 
     <!-- Package as an executable jar -->
@@ -68,7 +72,7 @@
                 <configuration>
                     <archive>
                         <manifest>
-                            <mainClass>com.unistgympeople.payroll.PayrollApplication</mainClass>
+                            <mainClass>com.unistgympeople.payroll.RESTexerciseApplication</mainClass>
                         </manifest>
                     </archive>
                     <descriptorRefs>
