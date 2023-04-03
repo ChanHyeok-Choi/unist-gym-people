@@ -11,7 +11,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-class EmployeeController {
+public class EmployeeController {
+
 
     private final EmployeeRepository repository;
 
