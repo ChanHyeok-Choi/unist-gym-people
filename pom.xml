@@ -12,7 +12,12 @@
 
     <groupId>com.unistgympeople</groupId>
         <artifactId>cse364-project</artifactId>
-        <version>0.0.1-SNAPSHOT</version>
+        <version>1.0</version>
+
+        <modules>
+        <module> payroll </module>
+        <module> movie </module>
+        </modules>
 
         <dependencies>
 

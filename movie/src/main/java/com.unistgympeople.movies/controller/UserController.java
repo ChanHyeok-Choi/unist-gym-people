@@ -12,17 +12,20 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.unistgympeople.movies.repository.UserRepository;
 import com.unistgympeople.movies.model.User;
+import com.unistgympeople.movies.dal.UserDAL;
 
 @RestController
 @RequestMapping(value = "/users")
 public class UserController {
 
 	private final Logger LOG = LoggerFactory.getLogger(getClass());
-
+	private final UserDAL userDAL;
 	private final UserRepository userRepository;
 
-	public UserController(UserRepository userRepository) {
+	public UserController(UserRepository userRepository, UserDAL userDAL) {
+
 		this.userRepository = userRepository;
+		this.userDAL=userDAL;
 	}
 
 	@RequestMapping(value = "", method = RequestMethod.GET)
