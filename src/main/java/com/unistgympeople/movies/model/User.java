@@ -3,14 +3,14 @@ package com.unistgympeople.movies.model;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
-@Document
+@Document(collection = "users")
 public class User {
 
 	@Id
 	private String userId;
     private String gender;
-    private Long age;
-    private Long occupation;
+    private int age;
+    private int occupation;
     private String zipcode;
 
 	public String getUserId() {
@@ -29,19 +29,19 @@ public class User {
 		this.gender = gender;
 	}
 
-	public Long getAge() {
+	public int getAge() {
 		return age;
 	}
 
-    public void setAge(Long age) {
+    public void setAge(int age) {
         this.age = age;
     }
 
-    public Long getOccupation() {
+    public int getOccupation() {
         return occupation;
     }
 
-	public void setOccupation(Long occupation) {
+	public void setOccupation(int occupation) {
 		this.occupation = occupation;
 	}
 

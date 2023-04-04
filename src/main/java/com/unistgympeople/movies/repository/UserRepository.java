@@ -7,4 +7,5 @@ import com.unistgympeople.movies.model.User;
 
 @Repository
 public interface UserRepository extends MongoRepository<User, String> {
+    User findById(String userId);
 }
