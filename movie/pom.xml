@@ -10,7 +10,7 @@
         <version>1.0</version>
     </parent>
 
-    <artifactId>payroll</artifactId>
+    <artifactId>movie</artifactId>
     <version>1.0</version>
 
     <dependencies>
