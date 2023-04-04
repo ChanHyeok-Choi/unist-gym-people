@@ -1,6 +1,4 @@
-package com.unistgympeople.movies.dal;
-
-import com.unistgympeople.movies.model.Movie;
+package com.unistgympeople.payroll;
 
 import java.util.List;
 

@@ -1,4 +1,4 @@
-package com.unistgympeople.movies.controller;
+package com.unistgympeople.payroll;
 
 import java.util.List;
 
@@ -9,10 +9,6 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
-
-import com.unistgympeople.movies.repository.UserRepository;
-import com.unistgympeople.movies.model.User;
-import com.unistgympeople.movies.dal.UserDAL;
 
 @RestController
 @RequestMapping(value = "/users")
@@ -34,11 +30,11 @@ public class UserController {
 		return userRepository.findAll();
 	}
 
-	@RequestMapping(value = "/{userId}", method = RequestMethod.GET)
+	/*@RequestMapping(value = "/{userId}", method = RequestMethod.GET)
 	public User getUser(@PathVariable String userId) {
 		LOG.info("Getting user with ID: {}.", userId);
 		return userRepository.findOne(userId);
-	}
+	}*/
 
 	@RequestMapping(value = "/create", method = RequestMethod.POST)
 	public User addNewUsers(@RequestBody User user) {

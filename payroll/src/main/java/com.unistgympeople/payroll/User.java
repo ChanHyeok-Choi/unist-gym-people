@@ -1,4 +1,4 @@
-package com.unistgympeople.movies.model;
+package com.unistgympeople.payroll;
 
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
