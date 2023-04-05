@@ -39,7 +39,7 @@ public class UserController {
 	@GetMapping("/users/{userId}")
 	public User getUser(@PathVariable String userId) {
 		LOG.info("Getting user with ID: {}.", userId);
-		return userRepository.findById(userId).orElseThrow(() -> new EmployeeNotFoundException(userId));
+		return userRepository.findById(userId).orElseThrow(() -> new UserNotFoundException(userId));
 	}
 
 	@PostMapping("/users/")
