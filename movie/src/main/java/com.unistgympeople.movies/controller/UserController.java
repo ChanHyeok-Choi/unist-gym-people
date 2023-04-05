@@ -39,7 +39,7 @@ public class UserController {
 	@GetMapping("/users/{userId}")
 	public User getUser(@PathVariable String userId) {
 		LOG.info("Getting user with ID: {}.", userId);
-		return userRepository.findById(userId).orElse("Error: There is no such user.");
+		return userRepository.findById(userId).orElseThrow(() -> new EmployeeNotFoundException(userId));
 	}
 
 	@PostMapping("/users/")
@@ -57,11 +57,11 @@ public class UserController {
                     user.setAge(newUser.getAge());
                     user.setOccupation(newUser.getOccupation());
                     user.setZipcode(newUser.getZipcode());
-                    return repository.save(user);
+                    return userRepository.save(user);
                 })
                 .orElseGet(() -> {
                     newUser.setUserId(userId);
-                    return repository.save(newUser);
+                    return userRepository.save(newUser);
                 });
     }
 
