@@ -30,8 +30,7 @@ A4. Could not find employee 3
 Q5. curl -X POST http://localhost:8080/employees -H 'Content-type:application/json' -d '{"name": "Samwise Gamgee", "role": "gardener"}'  
 A5. {"id":3,"name":"Samwise Gamgee","role":"gardener"}  
   
-Q6. curl -X PUT http://localhost:8080/employees/3 -H 'Content-type:application/json' -d '{"name": "Samwise Gamgee", "role": "ring be
-arer"}'  
+Q6. curl -X PUT http://localhost:8080/employees/3 -H 'Content-type:application/json' -d '{"name": "Samwise Gamgee", "role": "ring bearer"}'  
 A6. {"id":3,"name":"Samwise Gamgee","role":"ring bearer"}  
   
 ## Part 3 : Test Examples
