@@ -5,11 +5,7 @@ import java.util.List;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import com.unistgympeople.movies.repository.MovieRepository;
 import com.unistgympeople.movies.model.Movie;
@@ -37,7 +33,7 @@ public class MovieController {
 
     @RequestMapping(value = "/{movieId}", method = RequestMethod.GET)
     public Movie getMovie(@PathVariable String movieId) {
-        LOG.info("Getting user with ID: {}.", movieId);
+        LOG.info("Getting movie with ID: {}.", movieId);
         return movieRepository.findById(movieId).orElse(null);
     }
 
@@ -47,4 +43,24 @@ public class MovieController {
         return movieRepository.save(movie);
     }
 
+    @PutMapping("/movies/{movieId}")
+    public Movie replaceMovie(@RequestBody Movie newMovie, @PathVariable String movieId) {
+        LOG.info("replacing movie.");
+        return movieRepository.findById(movieId)
+                .map(movie -> {
+                    movie.setTitle(newMovie.getMovieId());
+                    movie.setGenres(newMovie.getGenres());
+                    return movieRepository.save(movie);
+                })
+                .orElseGet(() -> {
+                    newMovie.setMovieId(movieId);
+                    return movieRepository.save(newMovie);
+                });
+    }
+
+    @DeleteMapping("/movies/{id}")
+    void deleteMovie(@PathVariable String movieId) {
+        movieRepository.deleteById(movieId);
+    }
 }
+

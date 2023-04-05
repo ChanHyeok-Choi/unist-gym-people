@@ -7,15 +7,12 @@ import org.springframework.data.mongodb.core.mapping.Document;
 public class Ratings {
 
     @Id
-    private String userId;
-    private String movieId;
+    private String ratingId;
     private int Rating;
     private Long Timestamp;
-    public String getUserId() { return userId; }
-    public void setUserId(String userId) { this.userId=userId; }
-    public String getMovieId() { return movieId; }
-    public void setMovieId(String movieId) { this.movieId=movieId; }
-    public int Rating() { return Rating; }
+    public String getRatingId() { return ratingId; }
+    public void setRatingId(String ratingId) { this.ratingId=ratingId; }
+    public int getRating() { return Rating; }
     public void setRating(int Rating) { this.Rating=Rating; }
     public Long getTimestamp() { return Timestamp; }
     public void setTimestamp(Long Timestamp) { this.Timestamp=Timestamp; }

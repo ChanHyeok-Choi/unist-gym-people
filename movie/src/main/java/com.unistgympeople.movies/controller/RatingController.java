@@ -4,24 +4,24 @@ import java.util.List;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import com.unistgympeople.movies.repository.RatingRepository;
 import com.unistgympeople.movies.model.Ratings;
+import com.unistgympeople.movies.dal.RatingDAL;
 
 @RestController
 @RequestMapping (value = "/ratings")
 public class RatingController {
 
     private final Logger LOG = LoggerFactory.getLogger(getClass());
-
+    private final RatingDAL ratingDAL;
     private final RatingRepository ratingRepository;
 
-    public RatingController(RatingRepository ratingRepository) { this.ratingRepository=ratingRepository; }
+    public RatingController(RatingRepository ratingRepository, RatingDAL ratingDAL) { 
+        this.ratingRepository=ratingRepository;
+        this.ratingDAL=ratingDAL;
+    }
 
     @RequestMapping(value = "", method = RequestMethod.GET)
     public List<Ratings> getAllRatings() {
@@ -29,15 +29,35 @@ public class RatingController {
         return ratingRepository.findAll();
     }
 
-    @RequestMapping(value = "/{MovieID}", method = RequestMethod.GET)
-    public Ratings getRatings(@PathVariable String userId) {
-        LOG.info("Getting ratings with User ID : {}.", userId);
-        return ratingRepository.findById(userId).orElse(null);
+    @RequestMapping(value = "/{RatingID}", method = RequestMethod.GET)
+    public Ratings getRatings(@PathVariable String ratingId) {
+        LOG.info("Getting ratings with Rating ID : {}.", ratingId);
+        return ratingRepository.findById(ratingId).orElse(null);
     }
 
     @RequestMapping(value = "/create", method = RequestMethod.POST)
     public Ratings addNewRatings(@RequestBody Ratings ratings) {
         LOG.info("Saving rating.");
         return ratingRepository.save(ratings);
+    }
+
+    @PutMapping("/ratings/{ratingId}")
+    public Ratings replaceRating(@RequestBody Ratings newRating, @PathVariable String ratingId) {
+        LOG.info("replacing rating.");
+        return ratingRepository.findById(ratingId)
+                .map(rating -> {
+                    rating.setRating(newRating.getRating());
+                    rating.setTimestamp(newRating.getTimestamp());
+                    return ratingRepository.save(rating);
+                })
+                .orElseGet(() -> {
+                    newRating.setRatingId(ratingId);
+                    return ratingRepository.save(newRating);
+                });
+    }
+
+    @DeleteMapping("/ratings/{id}")
+    void deleteRating(@PathVariable String ratingId) {
+        ratingRepository.deleteById(ratingId);
     }
 }
