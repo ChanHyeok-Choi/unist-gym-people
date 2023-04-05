@@ -37,13 +37,13 @@ public class MovieController {
         return movieRepository.findAll();
     }
 
-    @GetMapping("/ratings/{movieId}")
+    @GetMapping("/movies/{movieId}")
     public Movie getMovie(@PathVariable String movieId) {
         LOG.info("Getting movie with ID: {}.", movieId);
         return movieRepository.findById(movieId).orElseThrow(() -> new MovieNotFoundException(movieId));
     }
 
-    @PostMapping("/ratings/")
+    @PostMapping("/movies/")
     public Movie addNewMovies(@RequestBody Movie movie) {
         LOG.info("Saving movie.");
         return movieRepository.save(movie);
