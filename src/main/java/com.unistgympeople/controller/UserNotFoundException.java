@@ -1,4 +1,4 @@
-package com.unistgympeople.movies.controller;
+package com.unistgympeople.controller;
 
 class UserNotFoundException extends RuntimeException {
 

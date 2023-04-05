@@ -1,4 +1,4 @@
-package com.unistgympeople.movies.controller;
+package com.unistgympeople.controller;
 
 import java.util.List;
 
@@ -13,9 +13,9 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.unistgympeople.movies.repository.UserRepository;
-import com.unistgympeople.movies.model.User;
-import com.unistgympeople.movies.dal.UserDAL;
+import com.unistgympeople.repository.UserRepository;
+import com.unistgympeople.model.User;
+import com.unistgympeople.dal.UserDAL;
 
 @RestController
 public class UserController {

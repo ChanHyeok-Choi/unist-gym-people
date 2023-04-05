@@ -1,8 +1,8 @@
-package com.unistgympeople.movies.repository;
+package com.unistgympeople.repository;
 import org.springframework.data.mongodb.repository.MongoRepository;
 import org.springframework.stereotype.Repository;
 
-import com.unistgympeople.movies.model.Movie;
+import com.unistgympeople.model.Movie;
 
 @Repository
 public interface MovieRepository extends MongoRepository<Movie, String>{

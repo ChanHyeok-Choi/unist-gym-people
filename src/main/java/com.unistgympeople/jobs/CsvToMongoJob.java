@@ -1,8 +1,8 @@
-package com.unistgympeople.movies.jobs;
+package com.unistgympeople.jobs;
  
-import com.unistgympeople.movies.model.User;
-import com.unistgympeople.movies.model.Movie;
-import com.unistgympeople.movies.model.Ratings;
+import com.unistgympeople.model.User;
+import com.unistgympeople.model.Movie;
+import com.unistgympeople.model.Ratings;
 import org.springframework.batch.core.Job;
 import org.springframework.batch.core.Step;
 import org.springframework.batch.core.configuration.annotation.EnableBatchProcessing;

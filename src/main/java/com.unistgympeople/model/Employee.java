@@ -1,4 +1,4 @@
-package com.unistgympeople.payroll;
+package com.unistgympeople.model;
 
 import java.util.Objects;
 

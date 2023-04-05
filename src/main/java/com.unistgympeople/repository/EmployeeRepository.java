@@ -1,4 +1,4 @@
-package com.unistgympeople.payroll;
+package com.unistgympeople;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 

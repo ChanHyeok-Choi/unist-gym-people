@@ -1,4 +1,4 @@
-package com.unistgympeople.payroll;
+package com.unistgympeople.controller;
 
 class EmployeeNotFoundException extends RuntimeException {
 

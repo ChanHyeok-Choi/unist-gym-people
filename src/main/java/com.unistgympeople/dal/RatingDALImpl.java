@@ -1,15 +1,15 @@
-package com.unistgympeople.movies.dal;
+package com.unistgympeople.dal;
 
 import java.util.List;
 
-import com.unistgympeople.movies.model.User;
+import com.unistgympeople.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.stereotype.Repository;
 
-import com.unistgympeople.movies.model.Ratings;
+import com.unistgympeople.model.Ratings;
 @Repository
 public class RatingDALImpl implements RatingDAL{
 

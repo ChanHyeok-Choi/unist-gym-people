@@ -1,4 +1,4 @@
-package com.unistgympeople.movies.controller;
+package com.unistgympeople.controller;
 
 
 import java.util.List;
@@ -13,9 +13,9 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.unistgympeople.movies.repository.MovieRepository;
-import com.unistgympeople.movies.model.Movie;
-import com.unistgympeople.movies.dal.MovieDAL;
+import com.unistgympeople.repository.MovieRepository;
+import com.unistgympeople.model.Movie;
+import com.unistgympeople.dal.MovieDAL;
 
 @RestController
 public class MovieController {
@@ -33,7 +33,7 @@ public class MovieController {
 
     @GetMapping("/movies")
     public List<Movie> getAllMovies() {
-        LOG.info("Getting all movies.");
+        LOG.info("Getting all ");
         return movieRepository.findAll();
     }
 

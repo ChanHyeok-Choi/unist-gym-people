@@ -1,10 +1,12 @@
-package com.unistgympeople.payroll;
+package com.unistgympeople.jobs;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+
+import com.unistgympeople.repository.EmployeeRepository;
 
 @Configuration
 class LoadDatabase {
