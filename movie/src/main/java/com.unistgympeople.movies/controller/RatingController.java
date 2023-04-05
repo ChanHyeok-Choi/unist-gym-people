@@ -35,7 +35,7 @@ public class RatingController {
 
     @GetMapping("/ratings/{movieId}")
     public Ratings getRatings(@PathVariable String movieId) {
-        LOG.info("Getting ratings with Rating ID : {}.", movieId);
+        LOG.info("Getting ratings with Movie ID : {}.", movieId);
         return ratingRepository.findById(movieId).orElseThrow(() -> new RatingNotFoundException(movieId));
     }
 
