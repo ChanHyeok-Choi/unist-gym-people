@@ -5,13 +5,19 @@ import java.util.List;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RestController;
 
 import com.unistgympeople.movies.repository.MovieRepository;
 import com.unistgympeople.movies.model.Movie;
 import com.unistgympeople.movies.dal.MovieDAL;
+
 @RestController
-@RequestMapping(value = "/movies")
 public class MovieController {
 
     private final Logger LOG = LoggerFactory.getLogger(getClass());
@@ -25,19 +31,19 @@ public class MovieController {
         this.movieDAL=movieDAL;
     }
 
-    @RequestMapping(value = "", method = RequestMethod.GET)
+    @GetMapping("/movies")
     public List<Movie> getAllMovies() {
         LOG.info("Getting all movies.");
         return movieRepository.findAll();
     }
 
-    @RequestMapping(value = "/{movieId}", method = RequestMethod.GET)
+    @GetMapping("/ratings/{movieId}")
     public Movie getMovie(@PathVariable String movieId) {
         LOG.info("Getting movie with ID: {}.", movieId);
-        return movieRepository.findById(movieId).orElse(null);
+        return movieRepository.findById(movieId).orElseThrow(() -> new MovieNotFoundException(movieId));
     }
 
-    @RequestMapping(value = "/create", method = RequestMethod.POST)
+    @PostMapping("/ratings/")
     public Movie addNewMovies(@RequestBody Movie movie) {
         LOG.info("Saving movie.");
         return movieRepository.save(movie);
@@ -58,7 +64,7 @@ public class MovieController {
                 });
     }
 
-    @DeleteMapping("/movies/{id}")
+    @DeleteMapping("/movies/{movieId}")
     void deleteMovie(@PathVariable String movieId) {
         movieRepository.deleteById(movieId);
     }

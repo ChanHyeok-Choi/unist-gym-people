@@ -4,15 +4,18 @@ import java.util.List;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RestController;
 import com.unistgympeople.movies.repository.RatingRepository;
-import com.unistgympeople.movies.model.Movie;
-import com.unistgympeople.movies.model.User;
 import com.unistgympeople.movies.model.Ratings;
 import com.unistgympeople.movies.dal.RatingDAL;
 
 @RestController
-@RequestMapping (value = "/ratings")
 public class RatingController {
 
     private final Logger LOG = LoggerFactory.getLogger(getClass());
@@ -24,19 +27,19 @@ public class RatingController {
         this.ratingDAL=ratingDAL;
     }
 
-    @RequestMapping(value = "", method = RequestMethod.GET)
+    @GetMapping("/ratings")
     public List<Ratings> getAllRatings() {
         LOG.info("Getting all ratings");
         return ratingRepository.findAll();
     }
 
-    @RequestMapping(value = "/{RatingID}", method = RequestMethod.GET)
-    public Ratings getRatings(@PathVariable String ratingId) {
-        LOG.info("Getting ratings with Rating ID : {}.", ratingId);
-        return ratingRepository.findById(ratingId).orElse(null);
+    @GetMapping("/ratings/{movieId}")
+    public Ratings getRatings(@PathVariable String movieId) {
+        LOG.info("Getting ratings with Rating ID : {}.", movieId);
+        return ratingRepository.findById(ratingId).orElseThrow(() -> new RatingNotFoundException(movieId));
     }
 
-    @RequestMapping(value = "/create", method = RequestMethod.POST)
+    @PostMapping("/ratings/")
     public Ratings addNewRatings(@RequestBody Ratings ratings) {
         LOG.info("Saving rating.");
         return ratingRepository.save(ratings);
@@ -47,8 +50,8 @@ public class RatingController {
         LOG.info("replacing rating.");
         return ratingRepository.findById(movieId)
                 .map(rating -> {
-                    rating.setMovieId(newRating.getMovieId());
                     rating.setUserId(newRating.getUserId());
+                    rating.setMovieId(newRating.getMovieId());
                     rating.setRating(newRating.getRating());
                     rating.setTimestamp(newRating.getTimestamp());
                     return ratingRepository.save(rating);
@@ -59,8 +62,8 @@ public class RatingController {
                 });
     }
 
-    @DeleteMapping("/ratings/{id}")
-    void deleteRating(@PathVariable String ratingId) {
-        ratingRepository.deleteById(ratingId);
+    @DeleteMapping("/ratings/{movieId}")
+    void deleteRating(@PathVariable String movieId) {
+        ratingRepository.deleteById(movieId);
     }
 }
