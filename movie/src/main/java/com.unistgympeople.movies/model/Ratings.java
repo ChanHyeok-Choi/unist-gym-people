@@ -6,9 +6,9 @@ import org.springframework.data.mongodb.core.mapping.Document;
 @Document(collection = "ratings")
 public class Ratings {
 
-    @Id
-    private String movieId;
+    
     private String userId;
+    private @Id String movieId;
     private int Rating;
     private Long Timestamp;
     public String getUserId() { return userId; }
