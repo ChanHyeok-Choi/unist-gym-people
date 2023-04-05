@@ -1,4 +1,4 @@
-package com.unistgympeople;
+package com.unistgympeople.jobs;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -10,7 +10,7 @@ import com.unistgympeople.repository.EmployeeRepository;
 import com.unistgympeople.model.Employee;
 
 @Configuration
-class LoadDatabase {
+public class LoadDatabase {
 
     private static final Logger log = LoggerFactory.getLogger(LoadDatabase.class);
 

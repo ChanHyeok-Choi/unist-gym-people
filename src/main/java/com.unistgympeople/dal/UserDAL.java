@@ -1,4 +1,4 @@
-package com.unistgympeople;
+package com.unistgympeople.dal;
 
 import java.util.List;
 

@@ -1,4 +1,4 @@
-package com.unistgympeople;
+package com.unistgympeople.controller;
 
 class MovieNotFoundException extends RuntimeException {
 

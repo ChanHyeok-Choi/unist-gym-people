@@ -1,4 +1,4 @@
-package com.unistgympeople;
+package com.unistgympeople.controller;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ControllerAdvice;
