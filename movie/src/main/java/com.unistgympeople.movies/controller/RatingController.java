@@ -5,8 +5,9 @@ import java.util.List;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.web.bind.annotation.*;
-
 import com.unistgympeople.movies.repository.RatingRepository;
+import com.unistgympeople.movies.model.Movie;
+import com.unistgympeople.movies.model.User;
 import com.unistgympeople.movies.model.Ratings;
 import com.unistgympeople.movies.dal.RatingDAL;
 
@@ -41,17 +42,19 @@ public class RatingController {
         return ratingRepository.save(ratings);
     }
 
-    @PutMapping("/ratings/{ratingId}")
-    public Ratings replaceRating(@RequestBody Ratings newRating, @PathVariable String ratingId) {
+    @PutMapping("/ratings/{movieId}")
+    public Ratings replaceRating(@RequestBody Ratings newRating, @PathVariable String movieId) {
         LOG.info("replacing rating.");
-        return ratingRepository.findById(ratingId)
+        return ratingRepository.findById(movieId)
                 .map(rating -> {
+                    rating.setMovieId(newRating.getMovieId());
+                    rating.setUserId(newRating.getUserId());
                     rating.setRating(newRating.getRating());
                     rating.setTimestamp(newRating.getTimestamp());
                     return ratingRepository.save(rating);
                 })
                 .orElseGet(() -> {
-                    newRating.setRatingId(ratingId);
+                    newRating.setMovieId(movieId);
                     return ratingRepository.save(newRating);
                 });
     }
