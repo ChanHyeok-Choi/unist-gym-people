@@ -48,7 +48,7 @@ public class CsvToMongoJob {
     reader.setResource(new ClassPathResource("users.csv"));
     reader.setLineMapper(new DefaultLineMapper<User>() {{
       setLineTokenizer(new DelimitedLineTokenizer() {{
-        setNames(new String[]{"id", "name"});
+        setNames(new String[]{"id"});
  
       }});
       setFieldSetMapper(new BeanWrapperFieldSetMapper<User>() {{
