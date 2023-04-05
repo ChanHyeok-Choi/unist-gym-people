@@ -3,7 +3,7 @@ package com.unistgympeople.movies.model;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
-@Document
+@Document(collection = "movies")
 public class Movie {
     @Id
     private String movieId;

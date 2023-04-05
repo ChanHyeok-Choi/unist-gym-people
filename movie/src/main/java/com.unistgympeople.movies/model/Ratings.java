@@ -2,18 +2,19 @@ package com.unistgympeople.movies.model;
 
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
-@Document
+
+@Document(collection = "ratings")
 public class Ratings {
 
     @Id
-    private int UserID;
-    private int MovieID;
+    private String userId;
+    private String movieId;
     private int Rating;
     private Long Timestamp;
-    public int getUserID() { return UserID; }
-    public void setUserID(int UserID) { this.UserID=UserID; }
-    public int getMovieID() { return MovieID; }
-    public void setMovieID(int MovieID) { this.MovieID=MovieID; }
+    public int getUserId() { return userId; }
+    public void setUserId(String userId) { this.userId=userId; }
+    public int getMovieId() { return movieId; }
+    public void setMovieId(String movieId) { this.movieId=movieId; }
     public int Rating() { return Rating; }
     public void setRating(int Rating) { this.Rating=Rating; }
     public Long getTimestamp() { return Timestamp; }
