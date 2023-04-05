@@ -1,4 +1,4 @@
-package com.unistgympeople.jobs;
+package com.unistgympeople;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

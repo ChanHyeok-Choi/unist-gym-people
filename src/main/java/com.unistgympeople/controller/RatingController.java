@@ -1,4 +1,4 @@
-package com.unistgympeople.controller;
+package com.unistgympeople;
 
 import java.util.List;
 

@@ -1,4 +1,4 @@
-package com.unistgympeople.repository;
+package com.unistgympeople;
 import org.springframework.data.mongodb.repository.MongoRepository;
 import org.springframework.stereotype.Repository;
 

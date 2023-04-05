@@ -1,4 +1,4 @@
-package com.unistgympeople.dal;
+package com.unistgympeople;
 
 import com.unistgympeople.model.Movie;
 

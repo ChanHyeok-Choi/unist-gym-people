@@ -1,4 +1,4 @@
-package com.unistgympeople.controller;
+package com.unistgympeople;
 
 class RatingNotFoundException extends RuntimeException {
 
