@@ -10,7 +10,7 @@ public class Ratings {
 
     private String userId;
     private @Id String movieId;
-    private int \Rating;
+    private int Rating;
     private Long Timestamp;
     public String getUserId() { return userId; }
     public void setUserId(String userId) { this.userId = userId; }
