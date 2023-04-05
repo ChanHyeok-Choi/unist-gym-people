@@ -33,17 +33,10 @@ public class RatingController {
         return ratingRepository.findAll();
     }
 
-<<<<<<< HEAD:src/main/java/com.unistgympeople/controller/RatingController.java
-    @RequestMapping(value = "/{MovieID}", method = RequestMethod.GET)
-    public Ratings getRatings(@PathVariable String movieId) {
-        LOG.info("Getting ratings with User ID : {}.", movieId);
-        return ratingRepository.findById(movieId).orElse(null);
-=======
     @GetMapping("/ratings/{movieId}")
     public Ratings getRatings(@PathVariable String movieId) {
         LOG.info("Getting ratings with Rating ID : {}.", movieId);
         return ratingRepository.findById(movieId).orElseThrow(() -> new RatingNotFoundException(movieId));
->>>>>>> 7fb3fa8f00387ab48b9a946446dd9d059bfab5c9:movie/src/main/java/com.unistgympeople.movies/controller/RatingController.java
     }
 
     @PostMapping("/ratings/")
