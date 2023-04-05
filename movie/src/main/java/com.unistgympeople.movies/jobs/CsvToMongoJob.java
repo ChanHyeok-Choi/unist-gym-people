@@ -112,7 +112,7 @@ public class CsvToMongoJob {
       reader.setResource(new ClassPathResource("ratings.csv"));
       reader.setLineMapper(new DefaultLineMapper<Ratings>() {{
           setLineTokenizer(new DelimitedLineTokenizer() {{
-              setNames(new String[]{"userId", "movieId", "rating", "timestamp"});
+              setNames(new String[]{"ratingId", "rating", "timestamp"});
               setDelimiter(",");
           }});
           setFieldSetMapper(new BeanWrapperFieldSetMapper<Ratings>() {{
