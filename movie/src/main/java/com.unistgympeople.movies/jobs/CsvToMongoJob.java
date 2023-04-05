@@ -49,7 +49,7 @@ public class CsvToMongoJob {
   @Bean
   public FlatFileItemReader<User> userReader() {
     FlatFileItemReader<User> reader = new FlatFileItemReader<>();
-    reader.setResource(new ClassPathResource("user.csv"));
+    reader.setResource(new ClassPathResource("users.csv"));
     reader.setLineMapper(new DefaultLineMapper<User>() {{
       setLineTokenizer(new DelimitedLineTokenizer() {{
         setNames(new String[]{"userId", "gender", "age", "occupation", "zip-code"});
