@@ -7,6 +7,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 import com.unistgympeople.repository.EmployeeRepository;
+import com.unistgympeople.model.Employee;
 
 @Configuration
 class LoadDatabase {

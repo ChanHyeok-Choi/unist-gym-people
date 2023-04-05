@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.unistgympeople.repository.EmployeeRepository;
+import com.unistgympeople.model.Employee;
 
 @RestController
 public class EmployeeController {
