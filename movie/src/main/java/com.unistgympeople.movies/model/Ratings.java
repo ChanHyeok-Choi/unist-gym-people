@@ -11,9 +11,9 @@ public class Ratings {
     private String movieId;
     private int Rating;
     private Long Timestamp;
-    public int getUserId() { return userId; }
+    public String getUserId() { return userId; }
     public void setUserId(String userId) { this.userId=userId; }
-    public int getMovieId() { return movieId; }
+    public String getMovieId() { return movieId; }
     public void setMovieId(String movieId) { this.movieId=movieId; }
     public int Rating() { return Rating; }
     public void setRating(int Rating) { this.Rating=Rating; }
