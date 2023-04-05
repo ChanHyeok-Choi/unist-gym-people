@@ -6,5 +6,5 @@ import com.unistgympeople.movies.model.Movie;
 
 @Repository
 public interface MovieRepository extends MongoRepository<Movie, String>{
-    Movie findbyId(ID movieId);
+    Movie findOne(String movieId);
 }

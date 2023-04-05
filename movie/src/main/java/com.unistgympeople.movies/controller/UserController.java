@@ -37,7 +37,7 @@ public class UserController {
 	@RequestMapping(value = "/{userId}", method = RequestMethod.GET)
 	public User getUser(@PathVariable String userId) {
 		LOG.info("Getting user with ID: {}.", userId);
-		return userRepository.findbyId(userId);
+		return userRepository.findOne(userId);
 	}
 
 	@RequestMapping(value = "/create", method = RequestMethod.POST)

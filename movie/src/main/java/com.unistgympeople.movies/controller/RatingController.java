@@ -2,7 +2,6 @@ package com.unistgympeople.movies.controller;
 
 import java.util.List;
 
-import com.unistgympeople.movies.model.User;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -33,7 +32,7 @@ public class RatingController {
     @RequestMapping(value = "/{MovieID}", method = RequestMethod.GET)
     public Ratings getRatings(@PathVariable String userId) {
         LOG.info("Getting ratings with User ID : {}.", userId);
-        return ratingRepository.findbyId(userId);
+        return ratingRepository.findOne(userId);
     }
 
     @RequestMapping(value = "/create", method = RequestMethod.POST)
