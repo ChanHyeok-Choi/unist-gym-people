@@ -32,7 +32,7 @@ public class RatingController {
     @RequestMapping(value = "/{MovieID}", method = RequestMethod.GET)
     public Ratings getRatings(@PathVariable String userId) {
         LOG.info("Getting ratings with User ID : {}.", userId);
-        return ratingRepository.findOne(userId);
+        return ratingRepository.findById(userId).orElse(null);
     }
 
     @RequestMapping(value = "/create", method = RequestMethod.POST)

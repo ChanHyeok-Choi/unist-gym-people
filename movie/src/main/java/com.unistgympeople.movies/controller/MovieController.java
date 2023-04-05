@@ -38,7 +38,7 @@ public class MovieController {
     @RequestMapping(value = "/{movieId}", method = RequestMethod.GET)
     public Movie getMovie(@PathVariable String movieId) {
         LOG.info("Getting user with ID: {}.", movieId);
-        return movieRepository.findOne(movieId);
+        return movieRepository.findById(movieId).orElse(null);
     }
 
     @RequestMapping(value = "/create", method = RequestMethod.POST)

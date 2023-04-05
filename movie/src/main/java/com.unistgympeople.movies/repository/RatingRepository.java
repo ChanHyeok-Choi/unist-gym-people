@@ -7,5 +7,5 @@ import com.unistgympeople.movies.model.Ratings;
 
 @Repository
 public interface RatingRepository extends MongoRepository<Ratings, String> {
-    Ratings findOne(String userId);
+    // Ratings findOne(String userId);
 }
