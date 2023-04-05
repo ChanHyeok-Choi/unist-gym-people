@@ -79,10 +79,10 @@ public class CsvToMongoJob {
   @Bean
   public FlatFileItemReader<Movie> movieReader() {
       FlatFileItemReader<Movie> reader = new FlatFileItemReader<>();
-      reader.setResource(new ClassPathResource("movie.csv"));
+      reader.setResource(new ClassPathResource("movies.csv"));
       reader.setLineMapper(new DefaultLineMapper<Movie>() {{
           setLineTokenizer(new DelimitedLineTokenizer() {{
-              setNames(new String[]{"id", "title", "genres"});
+              setNames(new String[]{"movieId", "title", "genres"});
               setDelimiter(",");
           }});
           setFieldSetMapper(new BeanWrapperFieldSetMapper<Movie>() {{
