@@ -36,7 +36,7 @@ public class RatingController {
     @GetMapping("/ratings/{movieId}")
     public Ratings getRatings(@PathVariable String movieId) {
         LOG.info("Getting ratings with Rating ID : {}.", movieId);
-        return ratingRepository.findById(ratingId).orElseThrow(() -> new RatingNotFoundException(movieId));
+        return ratingRepository.findById(movieId).orElseThrow(() -> new RatingNotFoundException(movieId));
     }
 
     @PostMapping("/ratings/")
