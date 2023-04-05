@@ -15,7 +15,7 @@ import com.unistgympeople.movies.repository.MovieRepository;
 import com.unistgympeople.movies.model.Movie;
 import com.unistgympeople.movies.dal.MovieDAL;
 @RestController
-@RequestMapping(value = "/users")
+@RequestMapping(value = "/movies")
 public class MovieController {
 
     private final Logger LOG = LoggerFactory.getLogger(getClass());
