@@ -1,4 +1,4 @@
-package com.unistgympeople;
+package com.unistgympeople.jobs;
  
 import com.unistgympeople.model.User;
 import com.unistgympeople.model.Movie;
