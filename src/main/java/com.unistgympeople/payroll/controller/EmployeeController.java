@@ -1,4 +1,4 @@
-package com.unistgympeople.controller;
+package com.unistgympeople.payroll.controller;
 
 import java.util.List;
 
@@ -10,8 +10,8 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.unistgympeople.repository.EmployeeRepository;
-import com.unistgympeople.model.Employee;
+import com.unistgympeople.payroll.repository.EmployeeRepository;
+import com.unistgympeople.payroll.model.Employee;
 
 @RestController
 public class EmployeeController {

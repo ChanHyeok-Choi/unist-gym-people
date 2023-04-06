@@ -1,6 +1,6 @@
-package com.unistgympeople.dal;
+package com.unistgympeople.movie.dal;
 
-import com.unistgympeople.model.Movie;
+import com.unistgympeople.movie.model.Movie;
 
 import java.util.List;
 

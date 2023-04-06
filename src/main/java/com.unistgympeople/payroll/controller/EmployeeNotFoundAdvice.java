@@ -1,4 +1,4 @@
-package com.unistgympeople.controller;
+package com.unistgympeople.payroll.controller;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ControllerAdvice;

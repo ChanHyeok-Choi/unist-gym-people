@@ -1,8 +1,8 @@
-package com.unistgympeople.dal;
+package com.unistgympeople.movie.dal;
 
 import java.util.List;
 
-import com.unistgympeople.model.User;
+import com.unistgympeople.movie.model.User;
 
 public interface UserDAL {
 

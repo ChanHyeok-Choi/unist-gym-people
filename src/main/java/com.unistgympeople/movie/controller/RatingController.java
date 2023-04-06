@@ -1,4 +1,4 @@
-package com.unistgympeople.controller;
+package com.unistgympeople.movie.controller;
 
 import java.util.List;
 
@@ -11,9 +11,9 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
-import com.unistgympeople.repository.RatingRepository;
-import com.unistgympeople.model.Ratings;
-import com.unistgympeople.dal.RatingDAL;
+import com.unistgympeople.movie.repository.RatingRepository;
+import com.unistgympeople.movie.model.Ratings;
+import com.unistgympeople.movie.dal.RatingDAL;
 
 @RestController
 public class RatingController {

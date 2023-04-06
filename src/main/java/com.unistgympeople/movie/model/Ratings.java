@@ -1,9 +1,12 @@
-package com.unistgympeople.model;
+package com.unistgympeople.movie.model;
 
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
-@Document(collection = "ratings")
+import lombok.Data;
+
+// @Document(collection = "ratings")
+@Data
 public class Ratings {
 
     private String userId;

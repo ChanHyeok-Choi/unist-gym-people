@@ -1,4 +1,4 @@
-package com.unistgympeople.dal;
+package com.unistgympeople.movie.dal;
 
 import java.util.List;
 
@@ -8,7 +8,7 @@ import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.stereotype.Repository;
 
-import com.unistgympeople.model.User;
+import com.unistgympeople.movie.model.User;
 
 @Repository
 public class UserDALImpl implements UserDAL {

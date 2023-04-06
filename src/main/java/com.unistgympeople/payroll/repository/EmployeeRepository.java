@@ -1,8 +1,8 @@
-package com.unistgympeople.repository;
+package com.unistgympeople.payroll.repository;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 
-import com.unistgympeople.model.Employee;
+import com.unistgympeople.payroll.model.Employee;
 
 public interface EmployeeRepository extends JpaRepository<Employee, Long> {
 

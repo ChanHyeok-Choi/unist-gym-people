@@ -1,4 +1,4 @@
-package com.unistgympeople.controller;
+package com.unistgympeople.movie.controller;
 
 
 import java.util.List;
@@ -13,9 +13,9 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.unistgympeople.repository.MovieRepository;
-import com.unistgympeople.model.Movie;
-import com.unistgympeople.dal.MovieDAL;
+import com.unistgympeople.movie.repository.MovieRepository;
+import com.unistgympeople.movie.model.Movie;
+import com.unistgympeople.movie.dal.MovieDAL;
 
 @RestController
 public class MovieController {
