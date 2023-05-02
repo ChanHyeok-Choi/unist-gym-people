@@ -60,18 +60,15 @@
         </dependencies>
 
         <build>
-                <resources>
-                        <resource>
-                                <directory>src/main/java</directory>
-                                <excludes>
-                                        <exclude>com/backup</exclude>
-                                </excludes>
-                        </resource>
-                </resources>
                 <plugins>
                 <plugin>
                         <groupId>org.springframework.boot</groupId>
                         <artifactId>spring-boot-maven-plugin</artifactId>
+                        <configuration>
+                                <excludes>
+                                        <exclude>**/backup/**</exclude>
+                                </excludes>
+                        </configuration>
                 </plugin>
                 </plugins>
         </build>

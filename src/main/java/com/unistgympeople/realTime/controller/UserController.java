@@ -22,21 +22,21 @@ public class UserController {
     }
     // end::get-aggregate-root[]
 
-    @PostMapping("/users")
+    @PostMapping("/")
     User newEmployee(@RequestBody User newUser) {
         return userRepository.save(newUser);
     }
 
     // Single item
 
-    @GetMapping("/users/{id}")
+    @GetMapping("/{id}")
     User one(@PathVariable String id) {
 
         return userRepository.findById(id)
                 .orElseThrow(() -> new UserNotFoundException(id));
     }
 
-    @PutMapping("/users/{id}")
+    @PutMapping("/{id}")
     User replaceEmployee(@RequestBody User newUser, @PathVariable String id) {
 
         return userRepository.findById(id)
@@ -51,7 +51,7 @@ public class UserController {
                 });
     }
 
-    @DeleteMapping("/users/{id}")
+    @DeleteMapping("/{id}")
     void deleteEmployee(@PathVariable String id) {
         userRepository.deleteById(id);
     }
