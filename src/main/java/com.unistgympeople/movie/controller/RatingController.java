@@ -13,18 +13,16 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 import com.unistgympeople.movie.repository.RatingRepository;
 import com.unistgympeople.movie.model.Ratings;
-import com.unistgympeople.movie.dal.RatingDAL;
 
 @RestController
 public class RatingController {
 
     private final Logger LOG = LoggerFactory.getLogger(getClass());
-    private final RatingDAL ratingDAL;
+
     private final RatingRepository ratingRepository;
 
-    public RatingController(RatingRepository ratingRepository, RatingDAL ratingDAL) { 
+    public RatingController(RatingRepository ratingRepository) {
         this.ratingRepository=ratingRepository;
-        this.ratingDAL=ratingDAL;
     }
 
     @GetMapping("/ratings")

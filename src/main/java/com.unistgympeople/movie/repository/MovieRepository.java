@@ -1,11 +1,10 @@
 package com.unistgympeople.movie.repository;
 
+import com.unistgympeople.movie.model.Movie;
 import org.springframework.data.mongodb.repository.MongoRepository;
 import org.springframework.stereotype.Repository;
 
-import com.unistgympeople.movie.model.User;
-
 @Repository
-public interface UserRepository extends MongoRepository<User, String> {
-    // User findOne(String userId);
+public interface MovieRepository extends MongoRepository<Movie, String>{
+    // Movie findOne(String movieId);
 }

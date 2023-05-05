@@ -15,7 +15,6 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.unistgympeople.movie.repository.MovieRepository;
 import com.unistgympeople.movie.model.Movie;
-import com.unistgympeople.movie.dal.MovieDAL;
 
 @RestController
 public class MovieController {
@@ -23,12 +22,10 @@ public class MovieController {
     private final Logger LOG = LoggerFactory.getLogger(getClass());
 
     private final MovieRepository movieRepository;
-    private final MovieDAL movieDAL;
 
-    public MovieController(MovieRepository movieRepository, MovieDAL movieDAL) {
+    public MovieController(MovieRepository movieRepository) {
 
         this.movieRepository = movieRepository;
-        this.movieDAL=movieDAL;
     }
 
     @GetMapping("/movies")

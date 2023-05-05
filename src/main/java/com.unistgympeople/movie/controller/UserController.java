@@ -15,19 +15,15 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.unistgympeople.movie.repository.UserRepository;
 import com.unistgympeople.movie.model.User;
-import com.unistgympeople.movie.dal.UserDAL;
-
 @RestController
 public class UserController {
 
 	private final Logger LOG = LoggerFactory.getLogger(getClass());
-	private final UserDAL userDAL;
 	private final UserRepository userRepository;
 
-	public UserController(UserRepository userRepository, UserDAL userDAL) {
+	public UserController(UserRepository userRepository) {
 
 		this.userRepository = userRepository;
-		this.userDAL=userDAL;
 	}
 
     @GetMapping("/users")
