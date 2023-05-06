@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <title>User Count Example</title>
+</head>
+<body>
+<p>Current user count: <span id="userCount"></span></p>
+
+<script th:inline="javascript">
+  var socket = new WebSocket('ws://' + window.location.host + '/user-count');
+
+  socket.onmessage = function(event) {
+    document.querySelector("#userCount").textContent = event.data;
+  };
+</script>
+</body>
+</html>
