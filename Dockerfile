@@ -6,8 +6,15 @@ ENV LD_LIBRARY_PATH=/usr/local/lib
 ENV LIBRARY_PATH=/usr/local/lib
 
 #Standard update-upgrade packages
-RUN apt-get -y -q update upgrade
-RUN apt-get install -y vim curl git openjdk-17-jdk maven
+RUN apt-get -y -q update
+RUN apt-get -y -q upgrade
+
+# Other dependencies '
+RUN apt-get -y install vim
+RUN apt-get -y install maven
+RUN apt-get -y install openjdk-17-jdk openjdk-17-jre
+RUN apt-get -y install git tar wget nano curl
+RUN apt-get update && apt-get install -y gnupg2
 
 #Install MongoDB
 RUN wget -qO - https://www.mongodb.org/static/pgp/server-6.0.asc | apt-key add -
