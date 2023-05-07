@@ -14,7 +14,7 @@ public class User {
     @Id
     private String id;
     private int userId;
-    private Date timeStamp;
+    private String timeStamp;
 
     public User() {}
     /*public User(String userId, Date timeStamp) {
@@ -25,6 +25,6 @@ public class User {
     public int getUserId() { return userId; }
     public void setUserId(int id) { this.userId = id; }
 
-    public Date getTimeStamp() { return timeStamp; }
-    public void setTimeStamp(Date timeStamp) { this.timeStamp = timeStamp; }
+    public String getTimeStamp() { return timeStamp; }
+    public void setTimeStamp(String timeStamp) { this.timeStamp = timeStamp; }
 }

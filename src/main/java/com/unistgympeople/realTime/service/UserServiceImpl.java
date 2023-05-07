@@ -6,6 +6,8 @@ import org.springframework.stereotype.Service;
 
 import com.mongodb.client.result.UpdateResult;
 
+import java.time.Instant;
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
@@ -27,6 +29,7 @@ public class UserServiceImpl implements UserService{
     @Override
     public String save(User user){
         user.setUserId(getMaxId() + 1);
+        user.setTimeStamp(user.getTimeStamp());
         return userRepository.save(user).getId();
     }
 
