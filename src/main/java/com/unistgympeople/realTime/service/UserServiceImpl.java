@@ -31,7 +31,7 @@ public class UserServiceImpl implements UserService{
         user.setUserId(getMaxId() + 1);
         user.setTimeStamp(user.getTimeStamp());
         return userRepository.save(user).getId();
-    }
+}
 
     @Override
     public List<User> getUser(){
