@@ -1,8 +1,7 @@
 package com.unistgympeople.realTime.handler;
 
-import java.util.Set;
-import java.util.concurrent.ConcurrentHashMap;
-
+import com.unistgympeople.realTime.repository.UserRepository;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
@@ -11,8 +10,10 @@ import org.springframework.web.socket.TextMessage;
 import org.springframework.web.socket.WebSocketSession;
 import org.springframework.web.socket.handler.AbstractWebSocketHandler;
 
-import com.unistgympeople.realTime.repository.UserRepository;
+import java.util.Set;
+import java.util.concurrent.ConcurrentHashMap;
 
+@Slf4j
 @Component
 public class UserCountHandler extends AbstractWebSocketHandler {
     private final UserRepository userRepository;
@@ -56,6 +57,7 @@ public class UserCountHandler extends AbstractWebSocketHandler {
     // Methods that run when the WebSocket client disconnects
     @Override
     public void afterConnectionClosed(WebSocketSession session, CloseStatus status) throws Exception {
+        log.info("WebSocket connection established: {}", session.getId());
         // Remove a WebSocket session from a Set
         sessions.remove(session);
 
