@@ -17,6 +17,6 @@ public class WebSocketConfig implements WebSocketConfigurer {
 
     @Override
     public void registerWebSocketHandlers(WebSocketHandlerRegistry registry) {
-        registry.addHandler(new UserCountHandler(userRepository), "/users");
+        registry.addHandler(new UserCountHandler(userRepository), "/userCount");
     }
 }

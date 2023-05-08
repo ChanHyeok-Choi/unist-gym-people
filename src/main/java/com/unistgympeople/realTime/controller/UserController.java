@@ -56,6 +56,11 @@ public class UserController {
         return ResponseEntity.ok(new_user.get());
     }
 
+    @GetMapping("/userCount")
+    public String getUserCount(User user) {
+        return "UserCount";
+    }
+
     @GetMapping("/{id}")
     public ResponseEntity<User> getUser(@PathVariable("id") String id) {
         if(id.length() == 0) {
