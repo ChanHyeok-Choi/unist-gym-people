@@ -9,18 +9,19 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.socket.CloseStatus;
 import org.springframework.web.socket.TextMessage;
 import org.springframework.web.socket.WebSocketSession;
-import org.springframework.web.socket.handler.TextWebSocketHandler;
+import org.springframework.web.socket.handler.AbstractWebSocketHandler;
 
 import com.unistgympeople.realTime.repository.UserRepository;
 
 @Component
-public class UserCountHandler extends TextWebSocketHandler {
+public class UserCountHandler extends AbstractWebSocketHandler {
     private final UserRepository userRepository;
 
     @Autowired
     public UserCountHandler(UserRepository userRepository) {
         this.userRepository = userRepository;
     }
+
     // Set to store the WebSocket session being accessed
     private final Set<WebSocketSession> sessions = ConcurrentHashMap.newKeySet();
 
@@ -72,4 +73,3 @@ public class UserCountHandler extends TextWebSocketHandler {
         return userRepository.findAll().size();
     }
 }
-
