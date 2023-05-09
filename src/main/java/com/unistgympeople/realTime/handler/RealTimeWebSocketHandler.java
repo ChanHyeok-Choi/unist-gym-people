@@ -29,8 +29,10 @@ public class RealTimeWebSocketHandler extends TextWebSocketHandler {
 
     @Scheduled(fixedDelay = 1000) // 1초마다 사용자 수 갱신
     public void sendUserCount() throws Exception {
-        userCount = getUserCount();
-        session.sendMessage(new TextMessage(String.valueOf(userCount)));
+        if (session != null) {
+            userCount = getUserCount();
+            session.sendMessage(new TextMessage(String.valueOf(userCount)));
+        }
     }
 
     public int getUserCount() { return userService.getUser().size(); }
