@@ -26,7 +26,10 @@ public class ChatRoom {
             chatMessage.setMessage(chatMessage.getSender() + " enter " + chatMessage.getRoomId() + " room.");
         }
         sendMessage(chatMessage, chatService);
-
+/*curl -X POST http://localhost:8080/chat -H "Content-Type: application/json" -d "{ \ "name"
+: "ChatRoom1" \ }"
+wscat -c ws://localhost:8080/ws/chat
+{"type":"ENTER", "roomId":"", "sender":"user1", "message":"asd"}*/
     }
 
     private <T> void sendMessage(T message, ChatService chatService) {
