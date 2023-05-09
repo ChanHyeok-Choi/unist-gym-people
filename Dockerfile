@@ -13,8 +13,9 @@ RUN apt-get -y -q upgrade
 RUN apt-get -y install vim
 RUN apt-get -y install maven
 RUN apt-get -y install openjdk-17-jdk openjdk-17-jre
-RUN apt-get -y install git tar wget nano curl
+RUN apt-get -y install git tar wget nano curl npm
 RUN apt-get update && apt-get install -y gnupg2
+RUN npm install -g -y wscat
 
 #Install MongoDB
 RUN wget -qO - https://www.mongodb.org/static/pgp/server-6.0.asc | apt-key add -
