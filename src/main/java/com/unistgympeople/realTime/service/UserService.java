@@ -21,4 +21,6 @@ public interface UserService {
 
     public int getMaxId();
 
+    public int getUserCount();
+
 }

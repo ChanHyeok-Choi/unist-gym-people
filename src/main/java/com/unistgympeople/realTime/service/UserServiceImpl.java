@@ -64,4 +64,8 @@ public class UserServiceImpl implements UserService{
         query.limit(1).with(Sort.by(Sort.Direction.DESC, "userId"));
         return mongoTemplate.find(query, User.class).get(0).getUserId();
     }
+
+    public int getUserCount() {
+        return (int) userRepository.count();
+    }
 }
