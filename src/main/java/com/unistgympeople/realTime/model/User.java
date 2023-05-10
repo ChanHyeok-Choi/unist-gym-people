@@ -9,10 +9,15 @@ import org.springframework.data.mongodb.core.mapping.Document;
 @Document(collection = "users")
 @JsonInclude(JsonInclude.Include.NON_NULL) //include only non_null values
 public class User {
+    public enum UserType{
+        ENTER, EXIT
+    }
     @Id
     private String id;
     private int userId;
     private String timeStamp;
+    private UserType userType;
+
 
     public User() {}
     /*public User(String userId, Date timeStamp) {
@@ -25,4 +30,7 @@ public class User {
 
     public String getTimeStamp() { return timeStamp; }
     public void setTimeStamp(String timeStamp) { this.timeStamp = timeStamp; }
+
+    public UserType getUserType() { return userType; }
+    public void setUserType(UserType userType) { this.userType = userType; }
 }

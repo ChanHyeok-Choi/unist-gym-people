@@ -32,7 +32,7 @@ public class RealTimeWebSocketHandler extends TextWebSocketHandler {
         }
     }
 
-    public int getUserCount() { return userService.getUser().size(); }
+    public int getUserCount() { return userService.getUserCount(); }
 
     @Override
     public void afterConnectionEstablished(WebSocketSession session) throws Exception {

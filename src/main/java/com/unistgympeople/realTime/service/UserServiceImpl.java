@@ -26,6 +26,7 @@ public class UserServiceImpl implements UserService{
     public String save(User user){
         user.setUserId(getMaxId() + 1);
         user.setTimeStamp(user.getTimeStamp());
+        user.setUserType(user.getUserType());
         return userRepository.save(user).getId();
 }
 
@@ -53,7 +54,8 @@ public class UserServiceImpl implements UserService{
     public UpdateResult updateUserById(int id, User updated_user) {
         Query query = new Query(Criteria.where("userId").is(id));
         Update update = new Update()
-                .set("timeStamp", updated_user.getTimeStamp());
+                .set("timeStamp", updated_user.getTimeStamp())
+                .set("userType", updated_user.getUserType());
         UpdateResult result = mongoTemplate.updateFirst(query, update, User.class);
         return result;
     }
