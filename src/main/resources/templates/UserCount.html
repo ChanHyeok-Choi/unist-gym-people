@@ -5,14 +5,23 @@
   <title>User Count</title>
 </head>
 <body>
-<p>Current user count: <span id="userCount"></span></p>
-
+<H1>Welcome to UNIST GYM People!</H1>
+<HR>
+<!--<H2>Current UNIST GYM Users: <span th:text = ${userCount}>Loading...</span></H2>-->
+<p>Current UNIST GYM Users: <span th:id="ws/userCount">Loading...</span></p>
+<button id="updateButton">Update</button>
 <script th:inline="javascript">
-  var socket = new WebSocket('wss://' + window.location.host + '/userCount');
+  var socket = new WebSocket('ws://' + window.location.host + '/ws/userCount');
+  var userCountElement = document.getElementById('ws/userCount');
 
   socket.onmessage = function(event) {
-    document.querySelector("#userCount").textContent = event.data;
+    userCountElement.textContent = event.data;
   };
+
+  const updateButton = document.getElementById('updateButton');
+  updateButton.addEventListener('click', function() {
+    socket.send('updateUserCount');
+  });
 </script>
 </body>
 </html>

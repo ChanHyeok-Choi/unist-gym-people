@@ -10,6 +10,7 @@ import com.unistgympeople.realTime.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -57,8 +58,9 @@ public class UserController {
     }
 
     @GetMapping("/userCount")
-    public int getUserCount() {
-        return userService.getUser().size();
+    public ResponseEntity<Long> getUserCount() {
+        long userCount = userService.getUser().size();
+        return ResponseEntity.ok(userCount);
     }
 
     @GetMapping("/{id}")
