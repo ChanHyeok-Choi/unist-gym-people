@@ -57,8 +57,8 @@ public class UserController {
     }
 
     @GetMapping("/userCount")
-    public String getUserCount(User user) {
-        return "UserCount";
+    public int getUserCount() {
+        return userService.getUser().size();
     }
 
     @GetMapping("/{id}")
