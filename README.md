@@ -51,7 +51,7 @@ curl -X GET http://localhost:8080/Calender/(Memberid)/(Date)/Calorie
 #Command to save the Calender in database
 ##(event) is String value, and (num) is Integer value.
 ##Exception thrown when Exercise type is not declared exercise.csv, or num is 0 or negative.
-curl -X POST http://localhost:8080/Calender -H 'Content-type:application/json' -d '{"memberid":"(Memberid)", "time":"(Date)", "event":"(event)","num":"(num)")}'
+curl -X POST http://localhost:8080/Calender -H 'Content-type:application/json' -d '{"memberid":"(Memberid)", "time":"(Date)", "event":"(event)","num":"(num)"}'
 
 #Command to show all Exercise in database.
 curl -X GET http://localhost:8080/Exercise
@@ -63,7 +63,7 @@ curl -X GET http://localhost:8080/Exercise/(Exercisetype)
 #Command to add new Exercise in database
 ##(exercisetype) is String value and (percalorie) is Integer value.
 ##Exception is thrown when percalorie is 0 or negative
-curl-X POST http://localhost:8080/Exercise -H 'Content-type:application/json' -d '{"exercisetype":"(exercisetype)","percalorie":"(percalorie)"}'
+curl -X POST http://localhost:8080/Exercise -H 'Content-type:application/json' -d '{"exercisetype":"(exercisetype)","percalorie":"(percalorie)"}'
 ```
 
 ---
