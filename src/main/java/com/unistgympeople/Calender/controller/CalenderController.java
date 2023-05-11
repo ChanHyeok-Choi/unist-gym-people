@@ -30,6 +30,8 @@ public class CalenderController {
         Exercise exercise = mongoTemplate.findOne(query,Exercise.class);
         if(exercise == null)
         {throw new ObjectIdException("Exercise type not found!");}
+        if(calender.getNum() <=0)
+        {throw new ObjectIdException("Number must be positive");}
         return calenderService.save(calender);
     }
 
