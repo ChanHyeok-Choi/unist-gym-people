@@ -35,34 +35,41 @@ java -jar target/cse364-project-1.0-SNAPSHOT.jar
 ### Feature 3 : User's Workout Calender
 
 You can execute these CURL commands as follows
-```
+
 #Command to show every exercise member has done.
 ##(Memberid) is Integer value.
+```
 curl -X GET http://localhost:8080/Calender/(Memberid)
-
+```
 #Command to show every exercise member has done on certain date.
 ##(Data) is String value, with formate yyyy-mm-dd (ex. 2023-05-07).
+```
 curl -X GET http://localhost:8080/Calender/(Memberid)/(Date)
-
+```
 #Command to show total Calorie membe has spent on certain date.
 ##Expected return value is Integer.
+```
 curl -X GET http://localhost:8080/Calender/(Memberid)/(Date)/Calorie
-
+```
 #Command to save the Calender in database
 ##(event) is String value, and (num) is Integer value.
 ##Exception thrown when Exercise type is not declared exercise.csv, or num is 0 or negative.
+```
 curl -X POST http://localhost:8080/Calender -H 'Content-type:application/json' -d '{"memberid":"(Memberid)", "time":"(Date)", "event":"(event)","num":"(num)"}'
-
+```
 #Command to show all Exercise in database.
+```
 curl -X GET http://localhost:8080/Exercise
-
+```
 #Command to show specific Exercise in database.
 ##(Exercisetype) is String value.
+```
 curl -X GET http://localhost:8080/Exercise/(Exercisetype)
-
+```
 #Command to add new Exercise in database
 ##(exercisetype) is String value and (percalorie) is Integer value.
 ##Exception is thrown when percalorie is 0 or negative
+```
 curl -X POST http://localhost:8080/Exercise -H 'Content-type:application/json' -d '{"exercisetype":"(exercisetype)","percalorie":"(percalorie)"}'
 ```
 
