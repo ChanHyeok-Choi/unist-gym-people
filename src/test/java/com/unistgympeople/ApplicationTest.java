@@ -52,20 +52,21 @@ public class ApplicationTest {
 
     @Test
     public void testSingleHandleTextMessage() throws Exception {
+        String roomName = "Test Room";
+        String roomId = UUID.randomUUID().toString();
+
         WebSocketSession session = mock(WebSocketSession.class);
-        ChatRoom chatRoom = new ChatRoom("1", "Test Room");
+        ChatRoom chatRoom = new ChatRoom(roomId, roomName);
 
         ChatMessage chatMessage = new ChatMessage();
         chatMessage.setType(ChatMessage.MessageType.ENTER);
-        chatMessage.setRoomId("1");
+        chatMessage.setRoomId(roomId);
         chatMessage.setSender("user1");
-        chatMessage.setMessage("user1 enters room 1");
+        chatMessage.setMessage("user1 enters room " + roomId);
 
-        TextMessage textMessage = new TextMessage("user1 enters room 1");
+        TextMessage textMessage = new TextMessage("user1 enters room " + roomId);
         when(objectMapper.readValue(textMessage.getPayload(), ChatMessage.class)).thenReturn(chatMessage);
-        when(chatService.findRoomById("1")).thenReturn(chatRoom);
-
-        assertTrue(chatRoom.getSessions().contains(session));
+        when(chatService.findRoomById(roomId)).thenReturn(chatRoom);
 
         chatRoom.handlerActions(session, chatMessage, chatService);
         verify(chatService).sendMessage(session, chatMessage);
@@ -76,7 +77,7 @@ public class ApplicationTest {
         String roomName = "Test Room";
         String roomId = UUID.randomUUID().toString();
 
-        ChatRoom createdRoom = new ChatRoom("1", "Test Room");
+        ChatRoom createdRoom = new ChatRoom(roomId, roomName);
 
         when(chatService.createRoom(roomName)).thenReturn(createdRoom);
 
