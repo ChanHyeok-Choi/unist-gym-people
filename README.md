@@ -61,36 +61,70 @@ java -jar target/cse364-project-1.0-SNAPSHOT.jar
 
 ### Feature 3 : User's Workout Calender
 
-You can execute these CURL commands as follows
+
+1. Command to show every exercise member has done.
+   * (Memberid) is Integer value.
 ```
-#Command to show every exercise member has done.
-##(Memberid) is Integer value.
-curl -X GET http://localhost:8080/Calender/(Memberid)
+curl -X GET http://localhost:8080/Calender/1
 
-#Command to show every exercise member has done on certain date.
-##(Data) is String value, with format yyyy-mm-dd (ex. 2023-05-07).
-curl -X GET http://localhost:8080/Calender/(Memberid)/(Date)
+//returns All Calenders for memberid 1
+```
 
-#Command to show total Calorie membe has spent on certain date.
-##Expected return value is Integer.
-curl -X GET http://localhost:8080/Calender/(Memberid)/(Date)/Calorie
+2. Command to show every exercise member has done on certain date.
+   * (Data) is String value, with format yyyy-mm-dd (ex. 2023-05-07).
+```
+curl -X GET http://localhost:8080/Calender/1/2023-05-08
 
-#Command to save the Calender in database
-##(event) is String value, and (num) is Integer value.
-##Exception thrown when Exercise type is not declared exercise.csv, or num is 0 or negative.
-curl -X POST http://localhost:8080/Calender -H 'Content-type:application/json' -d '{"memberid":"(Memberid)", "time":"(Date)", "event":"(event)","num":"(num)"}'
+//returns Calenders for memberid 1 with date 2023-05-08
+```
 
-#Command to show all Exercise in database.
+3. Command to show total Calorie membe has spent on certain date.
+   * Expected return value is Integer.
+```
+curl -X GET http://localhost:8080/Calender/1/2023-05-08/Calorie
+
+//returns Total Calorie for memberid 1 with date 2023-05-08
+//now for the sample data, the result is (Running) 200 * 10 + (Swimming) 200 * 20 = 6000
+```
+
+4. Command to save the Calender in database
+   * (event) is String value, and (num) is Integer value.
+   * Exception thrown when Exercise type is not declared exercise.csv, or num is 0 or negative.
+```
+curl -X POST http://localhost:8080/Calender -H 'Content-type:application/json' -d '{"memberid":"2", "time":"2023-05-11", "event":"Wrong","num":"1"}'
+//Throws exception "Exercise type not found!"
+
+curl -X POST http://localhost:8080/Calender -H 'Content-type:application/json' -d '{"memberid":"2", "time":"2023-05-11", "event":"Swimming","num":"-1"}'
+//Throws exception "Number must be positive"
+
+curl -X POST http://localhost:8080/Calender -H 'Content-type:application/json' -d '{"memberid":"2", "time":"2023-05-11", "event":"Swimming","num":"20"}'
+//Saves Database
+```
+
+5. Command to show all Exercise in database.
+```
 curl -X GET http://localhost:8080/Exercise
 
-#Command to show specific Exercise in database.
-##(Exercisetype) is String value.
-curl -X GET http://localhost:8080/Exercise/(Exercisetype)
+//returns All Exercises
+```
 
-#Command to add new Exercise in database
-##(exercisetype) is String value and (percalorie) is Integer value.
-##Exception is thrown when percalorie is 0 or negative
-curl -X POST http://localhost:8080/Exercise -H 'Content-type:application/json' -d '{"exercisetype":"(exercisetype)","percalorie":"(percalorie)"}'
+6. Command to show specific Exercise in database.
+   * (Exercisetype) is String value.
+```
+curl -X GET http://localhost:8080/Exercise/Swimming
+
+//returns Database for Swimming
+```
+
+7. Command to add new Exercise in database
+   * (exercisetype) is String value and (percalorie) is Integer value.
+   * Exception is thrown when percalorie is 0 or negative
+```
+curl -X POST http://localhost:8080/Exercise -H 'Content-type:application/json' -d '{"exercisetype":"TestExercise","percalorie":"0"}'
+//Throws exception "PerCalorie must be positive value!"
+
+curl -X POST http://localhost:8080/Exercise -H 'Content-type:application/json' -d '{"exercisetype":"TestExercise","percalorie":"10"}'
+//Saves Database
 ```
 
 ---
