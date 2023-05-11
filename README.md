@@ -32,6 +32,33 @@ java -jar target/cse364-project-1.0-SNAPSHOT.jar
 
 ### Feature 2 : Real-Time Chat Service
 
+1. Use RESTapi for creating a ChatRoom to use real-time chat service.
+   ```
+   :~/project# curl -X POST http://localhost:8080/chat -H "Content-Type: application/json" -d "{ \ "name" : "ChatRoom1" \ }"
+   {"roomId":"a7220487-0395-4cf4-97c6-92f489062e6c","name":"{ \\ name : ChatRoom1 \\ }","sessions":[]}
+   ```
+2. Open new Terminal and make a ENTER request for `user1` and `user2`. Actually, you can use multiple users requests. 
+   When requesting a message in the format of `json`, you make sure Please adhere to the following format and include the roomId returned when creating the chatRoom. 
+   * Terminal 1:
+   ```
+   :~/project# wscat -c ws://localhost:8080/ws/chat
+   Connected (press CTRL+C to quit)
+   > {"type":"ENTER", "roomId":"a7220487-0395-4cf4-97c6-92f489062e6c", "sender":"user1", "message":"something"}
+   ```
+   * Terminal 2:
+   ```
+   :~/project# wscat -c ws://localhost:8080/ws/chat
+   Connected (press CTRL+C to quit)
+   > {"type":"ENTER", "roomId":"a7220487-0395-4cf4-97c6-92f489062e6c", "sender":"user2", "message":"something"}
+   ```
+   If `user2` enters the ChatRoom, you can see the below message in Terminal 1.
+   ```
+   > 
+   ```
+3. Make a TALK request for conversation.
+   ```
+   ```
+
 ### Feature 3 : User's Workout Calender
 
 You can execute these CURL commands as follows
