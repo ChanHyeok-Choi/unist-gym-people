@@ -41,7 +41,7 @@ You can execute these CURL commands as follows
 curl -X GET http://localhost:8080/Calender/(Memberid)
 
 #Command to show every exercise member has done on certain date.
-##(Data) is String value, with formate yyyy-mm-dd (ex. 2023-05-07).
+##(Data) is String value, with format yyyy-mm-dd (ex. 2023-05-07).
 curl -X GET http://localhost:8080/Calender/(Memberid)/(Date)
 
 #Command to show total Calorie membe has spent on certain date.
