@@ -47,10 +47,6 @@ public class ApplicationTest {
     }
 
     @Test
-    public void testWebSocketConnection() throws Exception {
-    }
-
-    @Test
     public void testSingleHandleTextMessage() throws Exception {
         String roomName = "Test Room";
         String roomId = UUID.randomUUID().toString();
