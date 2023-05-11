@@ -32,31 +32,40 @@ java -jar target/cse364-project-1.0-SNAPSHOT.jar
 
 ### Feature 2 : Real-Time Chat Service
 
-1. Use RESTapi for creating a ChatRoom to use real-time chat service.
+1. Use REST-API for creating a ChatRoom to use real-time chat service.
    ```
    :~/project# curl -X POST http://localhost:8080/chat -H "Content-Type: application/json" -d "{ \ "name" : "ChatRoom1" \ }"
-   {"roomId":"a7220487-0395-4cf4-97c6-92f489062e6c","name":"{ \\ name : ChatRoom1 \\ }","sessions":[]}
+   {"roomId":"108fca4d-ccda-44f2-8015-1f0aab43ddba","name":"{ \\ name : ChatRoom1 \\ }","sessions":[]}
    ```
-2. Open new Terminal and make a ENTER request for `user1` and `user2`. Actually, you can use multiple users requests. 
-   When requesting a message in the format of `json`, you make sure Please adhere to the following format and include the roomId returned when creating the chatRoom. 
+2. Open new Terminal and make a `ENTER` request for `user1` and `user2`. Actually, you can use multiple users requests. 
+   When requesting a message in the format of `json`, you make sure please adhere to the following format and include the roomId returned after creating the chatRoom. 
    * Terminal 1:
    ```
    :~/project# wscat -c ws://localhost:8080/ws/chat
    Connected (press CTRL+C to quit)
-   > {"type":"ENTER", "roomId":"a7220487-0395-4cf4-97c6-92f489062e6c", "sender":"user1", "message":"something"}
+   > {"type":"ENTER", "roomId":"108fca4d-ccda-44f2-8015-1f0aab43ddba", "sender":"user1", "message":"something"}
+   < {"type":"ENTER","roomId":"108fca4d-ccda-44f2-8015-1f0aab43ddba","sender":"user1","message":"user1 enter 108fca4d-ccda-44f2-8015-1f0aab43ddba room."}
    ```
    * Terminal 2:
    ```
    :~/project# wscat -c ws://localhost:8080/ws/chat
    Connected (press CTRL+C to quit)
-   > {"type":"ENTER", "roomId":"a7220487-0395-4cf4-97c6-92f489062e6c", "sender":"user2", "message":"something"}
+   > {"type":"ENTER", "roomId":"108fca4d-ccda-44f2-8015-1f0aab43ddba", "sender":"user2", "message":"something"}
+   < {"type":"ENTER","roomId":"108fca4d-ccda-44f2-8015-1f0aab43ddba","sender":"user2","message":"user2 enter 108fca4d-ccda-44f2-8015-1f0aab43ddba room."}
    ```
-   If `user2` enters the ChatRoom, you can see the below message in Terminal 1.
+   If `user2` enters the ChatRoom on already connected `user1`, you can see an additional message in Terminal 1:
    ```
-   > 
+   < {"type":"ENTER","roomId":"108fca4d-ccda-44f2-8015-1f0aab43ddba","sender":"user2","message":"user2 enter 108fca4d-ccda-44f2-8015-1f0aab43ddba room."}
    ```
-3. Make a TALK request for conversation.
+3. Make a `TALK` request for conversation.
+   * Terminal 1:
    ```
+   > {"type":"TALK", "roomId":"108fca4d-ccda-44f2-8015-1f0aab43ddba", "sender":"user2", "message":"Hello!"}
+   < {"type":"TALK","roomId":"108fca4d-ccda-44f2-8015-1f0aab43ddba","sender":"user2","message":"Hello!"}
+   ```
+   * Terminal 2:
+   ```
+   < {"type":"TALK","roomId":"108fca4d-ccda-44f2-8015-1f0aab43ddba","sender":"user2","message":"Hello!"}
    ```
 
 ### Feature 3 : User's Workout Calender
@@ -134,5 +143,10 @@ curl -X POST http://localhost:8080/Exercise -H 'Content-type:application/json' -
 ### Feature 1 : Real-Time User Viewer
 
 ### Feature 2 : Real-Time Chat Service
+   On the result of `mvn jacoco:report`, there's no branch in ChatRoom Package.
+   However, we wrote test codes for mainly operating functions.
+1. testSingleHandleTextMessage(): verify that `handleTextMessage()` function works well in [ChatRoomWebSocketHandler.java](src/main/java/com/unistgympeople/chatRoom/handler/ChatRoomWebSocketHandler.java)
+2. testCreateRoom(): verify that `createRoom()` function works well in [ChatService.java](src/main/java/com/unistgympeople/chatRoom/service/ChatService.java)
+3. testFindAllRoom(): verify that `findAllRoom()` function works well in [ChatService.java](src/main/java/com/unistgympeople/chatRoom/service/ChatService.java)
 
 ### Feature 3 : User's Workout Calender
