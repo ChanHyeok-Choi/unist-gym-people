@@ -1,6 +1,9 @@
 package com.unistgympeople;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.unistgympeople.Calender.Service.CalenderService;
+import com.unistgympeople.Calender.controller.CalenderController;
+import com.unistgympeople.Calender.model.Calender;
 import com.unistgympeople.chatRoom.controller.ChatController;
 import com.unistgympeople.chatRoom.handler.ChatRoomWebSocketHandler;
 import com.unistgympeople.chatRoom.model.ChatMessage;
@@ -13,7 +16,6 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.messaging.simp.stomp.StompHeaders;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.web.socket.TextMessage;
 import org.springframework.web.socket.WebSocketSession;
@@ -24,7 +26,6 @@ import java.util.UUID;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
-import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.Mockito.*;
 
 @RunWith(SpringRunner.class)
@@ -101,6 +102,79 @@ public class ApplicationTest {
     }
 
     // <--- ChatRoom Test Code lines --->
+
+    // <--- Calender Test Code lines --->
+
+    @Mock
+    private CalenderService calenderService;
+
+    @Test
+    public void testGetCalenderByMember(){
+        int memberid = 1;
+        String time = "2023-05-12";
+        String event = "Pushup";
+        Integer num = 50;
+
+        List<Calender> calenders = new ArrayList<>();
+        calenders.add(new Calender(memberid,time,event,num));
+
+        when(calenderService.getCalenderByMember(memberid)).thenReturn(calenders);
+
+        CalenderController calenderController = new CalenderController(calenderService);
+        List<Calender> result = calenderController.getEvents(memberid);
+
+        assertNotNull(result);
+        assertEquals(1,result.size());
+        assertEquals(calenders, result);
+    }
+
+    @Test
+    public void testCalenderByMemberAndDate(){
+        int memberid = 1;
+        String time1 = "2023-05-12";
+        String event1 = "Pushup";
+        String event2 = "Jumprope";
+        Integer num1 = 50;
+        Integer num2 = 100;
+
+        List<Calender> calenders = new ArrayList<>();
+        calenders.add(new Calender(memberid, time1, event1, num1));
+        calenders.add(new Calender(memberid, time1, event2, num2));
+
+        when(calenderService.getCalenderByMemberAndTime(memberid,time1)).thenReturn(calenders);
+
+        CalenderController calenderController = new CalenderController(calenderService);
+        List<Calender> result = calenderController.getEventsOnDate(memberid,time1);
+
+        assertNotNull(result);
+        assertEquals(2,result.size());
+        assertEquals(calenders, result);
+    }
+
+    @Test
+    public void testCalenderCalorie(){
+        int memberid = 1;
+        String time1 = "2023-05-12";
+        String event1 = "Pushup";
+        String event2 = "Jumprope";
+        Integer num1 = 50;
+        Integer num2 = 100;
+
+        Integer answer = 200;
+        List<Calender> calenders = new ArrayList<>();
+        calenders.add(new Calender(memberid, time1, event1, num1));
+        calenders.add(new Calender(memberid, time1, event2, num2));
+
+        when(calenderService.getCalenderByMemberAndTime(memberid,time1)).thenReturn(calenders);
+
+        CalenderController calenderController = new CalenderController(calenderService);
+        Integer result = calenderController.getCalorieOnDate(memberid,time1);
+
+        assertNotNull(result);
+        assertEquals(answer,result);
+    }
+
+    // <--- Calender Test Code lines --->
 
     // Add more test cases for other methods and scenarios...
 

@@ -11,4 +11,5 @@ public interface CalenderService {
 
     public List<Calender> getCalenderByMemberAndTime(int memberid, String time);
 
+    public Integer getCalorieByMemberAndTime(int memberid, String time);
 }
