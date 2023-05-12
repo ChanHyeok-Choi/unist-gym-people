@@ -32,38 +32,108 @@ java -jar target/cse364-project-1.0-SNAPSHOT.jar
 
 ### Feature 2 : Real-Time Chat Service
 
+1. Use REST-API for creating a ChatRoom to use real-time chat service.
+   ```
+   :~/project# curl -X POST http://localhost:8080/chat -H "Content-Type: application/json" -d "{ \ "name" : "ChatRoom1" \ }"
+   {"roomId":"108fca4d-ccda-44f2-8015-1f0aab43ddba","name":"{ \\ name : ChatRoom1 \\ }","sessions":[]}
+   ```
+2. Open new Terminal and make a `ENTER` request for `user1` and `user2`. Actually, you can use multiple users requests. 
+   When requesting a message in the format of `json`, you make sure please adhere to the following format and include the roomId returned after creating the chatRoom. 
+   * Terminal 1:
+   ```
+   :~/project# wscat -c ws://localhost:8080/ws/chat
+   Connected (press CTRL+C to quit)
+   > {"type":"ENTER", "roomId":"108fca4d-ccda-44f2-8015-1f0aab43ddba", "sender":"user1", "message":"something"}
+   < {"type":"ENTER","roomId":"108fca4d-ccda-44f2-8015-1f0aab43ddba","sender":"user1","message":"user1 enter 108fca4d-ccda-44f2-8015-1f0aab43ddba room."}
+   ```
+   * Terminal 2:
+   ```
+   :~/project# wscat -c ws://localhost:8080/ws/chat
+   Connected (press CTRL+C to quit)
+   > {"type":"ENTER", "roomId":"108fca4d-ccda-44f2-8015-1f0aab43ddba", "sender":"user2", "message":"something"}
+   < {"type":"ENTER","roomId":"108fca4d-ccda-44f2-8015-1f0aab43ddba","sender":"user2","message":"user2 enter 108fca4d-ccda-44f2-8015-1f0aab43ddba room."}
+   ```
+   If `user2` enters the ChatRoom on already connected `user1`, you can see an additional message in Terminal 1:
+   ```
+   < {"type":"ENTER","roomId":"108fca4d-ccda-44f2-8015-1f0aab43ddba","sender":"user2","message":"user2 enter 108fca4d-ccda-44f2-8015-1f0aab43ddba room."}
+   ```
+3. Make a `TALK` request for conversation.
+   * Terminal 1:
+   ```
+   > {"type":"TALK", "roomId":"108fca4d-ccda-44f2-8015-1f0aab43ddba", "sender":"user2", "message":"Hello!"}
+   < {"type":"TALK","roomId":"108fca4d-ccda-44f2-8015-1f0aab43ddba","sender":"user2","message":"Hello!"}
+   ```
+   * Terminal 2:
+   ```
+   < {"type":"TALK","roomId":"108fca4d-ccda-44f2-8015-1f0aab43ddba","sender":"user2","message":"Hello!"}
+   ```
+
 ### Feature 3 : User's Workout Calender
 
-You can execute these CURL commands as follows
+
+1. Command to show every exercise member has done.
+   * (Memberid) is Integer value.
 ```
-#Command to show every exercise member has done.
-##(Memberid) is Integer value.
-curl -X GET http://localhost:8080/Calender/(Memberid)
+curl -X GET http://localhost:8080/Calender/1
 
-#Command to show every exercise member has done on certain date.
-##(Data) is String value, with format yyyy-mm-dd (ex. 2023-05-07).
-curl -X GET http://localhost:8080/Calender/(Memberid)/(Date)
+//returns All Calenders for memberid 1
+```
 
-#Command to show total Calorie membe has spent on certain date.
-##Expected return value is Integer.
-curl -X GET http://localhost:8080/Calender/(Memberid)/(Date)/Calorie
+2. Command to show every exercise member has done on certain date.
+   * (Data) is String value, with format yyyy-mm-dd (ex. 2023-05-07).
+```
+curl -X GET http://localhost:8080/Calender/1/2023-05-08
 
-#Command to save the Calender in database
-##(event) is String value, and (num) is Integer value.
-##Exception thrown when Exercise type is not declared exercise.csv, or num is 0 or negative.
-curl -X POST http://localhost:8080/Calender -H 'Content-type:application/json' -d '{"memberid":"(Memberid)", "time":"(Date)", "event":"(event)","num":"(num)"}'
+//returns Calenders for memberid 1 with date 2023-05-08
+```
 
-#Command to show all Exercise in database.
+3. Command to show total Calorie membe has spent on certain date.
+   * Expected return value is Integer.
+```
+curl -X GET http://localhost:8080/Calender/1/2023-05-08/Calorie
+
+//returns Total Calorie for memberid 1 with date 2023-05-08
+//now for the sample data, the result is (Running) 200 * 10 + (Swimming) 200 * 20 = 6000
+```
+
+4. Command to save the Calender in database
+   * (event) is String value, and (num) is Integer value.
+   * Exception thrown when Exercise type is not declared exercise.csv, or num is 0 or negative.
+```
+curl -X POST http://localhost:8080/Calender -H 'Content-type:application/json' -d '{"memberid":"2", "time":"2023-05-11", "event":"Wrong","num":"1"}'
+//Throws exception "Exercise type not found!"
+
+curl -X POST http://localhost:8080/Calender -H 'Content-type:application/json' -d '{"memberid":"2", "time":"2023-05-11", "event":"Swimming","num":"-1"}'
+//Throws exception "Number must be positive"
+
+curl -X POST http://localhost:8080/Calender -H 'Content-type:application/json' -d '{"memberid":"2", "time":"2023-05-11", "event":"Swimming","num":"20"}'
+//Saves Database
+```
+
+5. Command to show all Exercise in database.
+```
 curl -X GET http://localhost:8080/Exercise
 
-#Command to show specific Exercise in database.
-##(Exercisetype) is String value.
-curl -X GET http://localhost:8080/Exercise/(Exercisetype)
+//returns All Exercises
+```
 
-#Command to add new Exercise in database
-##(exercisetype) is String value and (percalorie) is Integer value.
-##Exception is thrown when percalorie is 0 or negative
-curl -X POST http://localhost:8080/Exercise -H 'Content-type:application/json' -d '{"exercisetype":"(exercisetype)","percalorie":"(percalorie)"}'
+6. Command to show specific Exercise in database.
+   * (Exercisetype) is String value.
+```
+curl -X GET http://localhost:8080/Exercise/Swimming
+
+//returns Database for Swimming
+```
+
+7. Command to add new Exercise in database
+   * (exercisetype) is String value and (percalorie) is Integer value.
+   * Exception is thrown when percalorie is 0 or negative
+```
+curl -X POST http://localhost:8080/Exercise -H 'Content-type:application/json' -d '{"exercisetype":"TestExercise","percalorie":"0"}'
+//Throws exception "PerCalorie must be positive value!"
+
+curl -X POST http://localhost:8080/Exercise -H 'Content-type:application/json' -d '{"exercisetype":"TestExercise","percalorie":"10"}'
+//Saves Database
 ```
 
 ---
@@ -73,5 +143,10 @@ curl -X POST http://localhost:8080/Exercise -H 'Content-type:application/json' -
 ### Feature 1 : Real-Time User Viewer
 
 ### Feature 2 : Real-Time Chat Service
+   On the result of `mvn jacoco:report`, there's no branch in ChatRoom Package.
+   However, we wrote test codes for mainly operating functions.
+1. testSingleHandleTextMessage(): verify that `handleTextMessage()` function works well in [ChatRoomWebSocketHandler.java](src/main/java/com/unistgympeople/chatRoom/handler/ChatRoomWebSocketHandler.java)
+2. testCreateRoom(): verify that `createRoom()` function works well in [ChatService.java](src/main/java/com/unistgympeople/chatRoom/service/ChatService.java)
+3. testFindAllRoom(): verify that `findAllRoom()` function works well in [ChatService.java](src/main/java/com/unistgympeople/chatRoom/service/ChatService.java)
 
 ### Feature 3 : User's Workout Calender
