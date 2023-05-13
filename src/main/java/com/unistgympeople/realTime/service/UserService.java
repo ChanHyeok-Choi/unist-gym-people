@@ -23,4 +23,5 @@ public interface UserService {
 
     public int getUserCount();
 
+    public List<User> getAllUser();
 }

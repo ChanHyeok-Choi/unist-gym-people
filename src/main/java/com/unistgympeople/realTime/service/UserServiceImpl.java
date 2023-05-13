@@ -2,10 +2,14 @@ package com.unistgympeople.realTime.service;
 
 import com.mongodb.client.result.UpdateResult;
 import com.unistgympeople.realTime.model.User;
+import com.unistgympeople.realTime.model.Usernum;
 import com.unistgympeople.realTime.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Example;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.mongodb.core.MongoTemplate;
+import org.springframework.data.mongodb.core.aggregation.Aggregation;
+import org.springframework.data.mongodb.core.aggregation.MatchOperation;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.data.mongodb.core.query.Update;
@@ -68,6 +72,18 @@ public class UserServiceImpl implements UserService{
     }
 
     public int getUserCount() {
-        return (int) userRepository.count();
+        Query enterquery = new Query(Criteria.where("userType").is("ENTER"));
+        Query exitquery = new Query(Criteria.where("userType").is("EXIT"));
+        int enternum = mongoTemplate.find(enterquery,User.class).size();
+        int exitnum = mongoTemplate.find(exitquery,User.class).size();
+        int num = enternum-exitnum;
+        return num;
+    }
+
+    @Override
+    public List<User> getAllUser() {
+        Query datequery = new Query();
+        List<User> dates = mongoTemplate.find(datequery,User.class);
+        return dates;
     }
 }
