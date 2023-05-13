@@ -2,11 +2,13 @@ package com.unistgympeople;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.unistgympeople.Calender.Service.CalenderService;
+import com.unistgympeople.Calender.Service.CalenderServiceImpl;
 import com.unistgympeople.Calender.Service.ExerciseService;
 import com.unistgympeople.Calender.controller.CalenderController;
 import com.unistgympeople.Calender.controller.ExerciseController;
 import com.unistgympeople.Calender.model.Calender;
 import com.unistgympeople.Calender.model.Exercise;
+import com.unistgympeople.Calender.repository.CalenderRepository;
 import com.unistgympeople.chatRoom.controller.ChatController;
 import com.unistgympeople.chatRoom.handler.ChatRoomWebSocketHandler;
 import com.unistgympeople.chatRoom.model.ChatMessage;
@@ -116,6 +118,8 @@ public class ApplicationTest {
     // <--- Calender Test Code lines --->
 
     @Mock
+    private CalenderRepository calenderRepository;
+    @Mock
     private CalenderService calenderService;
     @Mock
     private ExerciseService exerciseService;
@@ -141,6 +145,25 @@ public class ApplicationTest {
         assertEquals(calenders, result);
     }
 
+
+
+    @Test
+    public void testGetCalenderServiceByMember(){
+        int memberid = 1;
+        String time = "2023-05-12";
+        String event = "Pushup";
+        Integer num = 50;
+        List<Calender> calenders = new ArrayList<>();
+        calenders.add(new Calender(memberid,time,event,num));
+        when(calenderRepository.findCalenderByMemberid(memberid)).thenReturn(calenders);
+        CalenderService calenderService1 = new CalenderServiceImpl(calenderRepository,mongoTemplate);
+        List<Calender> result = calenderService1.getCalenderByMember(memberid);
+
+        assertNotNull(result);
+        assertEquals(1,result.size());
+        assertEquals(calenders,result);
+    }
+
     @Test
     public void testCalenderByMemberAndDate(){
         int memberid = 1;
@@ -164,6 +187,22 @@ public class ApplicationTest {
         assertEquals(calenders, result);
     }
 
+    @Test
+    public void testGetCalenderServiceByMemberAndDate(){
+        int memberid = 1;
+        String time = "2023-05-12";
+        String event = "Pushup";
+        Integer num = 50;
+        List<Calender> calenders = new ArrayList<>();
+        calenders.add(new Calender(memberid,time,event,num));
+        when(calenderRepository.findCalenderByMemberidAndTime(memberid,time)).thenReturn(calenders);
+        CalenderService calenderService1 = new CalenderServiceImpl(calenderRepository,mongoTemplate);
+        List<Calender> result = calenderService1.getCalenderByMemberAndTime(memberid,time);
+
+        assertNotNull(result);
+        assertEquals(1,result.size());
+        assertEquals(calenders,result);
+    }
     @Test
     public void testCalenderCalorie(){
 
@@ -202,6 +241,8 @@ public class ApplicationTest {
         assertEquals(2,result.size());
         assertEquals(exercises, result);
     }
+
+
 
     @Test
     public void testGetExerciseByType(){

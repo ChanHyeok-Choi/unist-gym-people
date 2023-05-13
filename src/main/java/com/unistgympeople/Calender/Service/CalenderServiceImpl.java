@@ -18,6 +18,16 @@ public class CalenderServiceImpl implements CalenderService {
     @Autowired
     private MongoTemplate mongoTemplate;
 
+    public CalenderServiceImpl(){};
+
+    public CalenderServiceImpl(CalenderRepository calenderRepository)
+    {this.calenderRepository=calenderRepository;}
+
+    public CalenderServiceImpl(CalenderRepository calenderRepository, MongoTemplate mongoTemplate){
+        this.calenderRepository=calenderRepository;
+        this.mongoTemplate=mongoTemplate;
+    }
+
     @Override
     public String save(Calender calender) {
         {
