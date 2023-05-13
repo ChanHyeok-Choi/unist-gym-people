@@ -8,28 +8,26 @@ import com.unistgympeople.Calender.controller.ExerciseController;
 import com.unistgympeople.Calender.model.Calender;
 import com.unistgympeople.Calender.model.Exercise;
 import com.unistgympeople.chatRoom.controller.ChatController;
+import com.unistgympeople.chatRoom.handler.ChatRoomWebSocketConfig;
 import com.unistgympeople.chatRoom.handler.ChatRoomWebSocketHandler;
+import org.springframework.web.socket.config.annotation.WebSocketHandlerRegistration;
+import org.springframework.web.socket.config.annotation.WebSocketHandlerRegistry;
 import com.unistgympeople.chatRoom.model.ChatMessage;
 import com.unistgympeople.chatRoom.model.ChatRoom;
 import com.unistgympeople.chatRoom.service.ChatService;
 import org.junit.Before;
-import org.junit.Rule;
 import org.junit.Test;
-import org.junit.rules.ExpectedException;
 import org.junit.runner.RunWith;
-import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.test.context.junit4.SpringRunner;
-import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.web.socket.TextMessage;
 import org.springframework.web.socket.WebSocketSession;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
@@ -45,16 +43,26 @@ public class ApplicationTest {
 
     @Mock
     private ChatService chatService;
-
     @Mock
     private ObjectMapper objectMapper;
-
-    @InjectMocks
+    @Mock
     private ChatRoomWebSocketHandler chatRoomWebSocketHandler;
+    @Mock
+    private WebSocketHandlerRegistration registration;
+    @Mock
+    private WebSocketHandlerRegistry registry;
 
     @Before
     public void setUp() {
         MockitoAnnotations.initMocks(this);
+    }
+
+    @Test
+    public void testRegisterWebSocketHandlers() {
+        ChatRoomWebSocketConfig webSocketConfig = new ChatRoomWebSocketConfig(chatRoomWebSocketHandler);
+        when(registry.addHandler(any(ChatRoomWebSocketHandler.class), eq("ws/chat"))).thenReturn(registration);
+        webSocketConfig.registerWebSocketHandlers(registry);
+        verify(registration).setAllowedOrigins("*");
     }
 
     @Test
@@ -109,6 +117,15 @@ public class ApplicationTest {
 
         assertNotNull(result);
         assertEquals(2, result.size());
+    }
+
+    @Test
+    public void testFindRoomById() {
+        chatService = new ChatService(objectMapper);
+        chatService.init();
+        ChatRoom chatRoom = chatService.createRoom("Test Room");
+        ChatRoom retrievedRoom = chatService.findRoomById(chatRoom.getRoomId());
+        assertEquals(chatRoom, retrievedRoom);
     }
 
     // <--- ChatRoom Test Code lines --->
