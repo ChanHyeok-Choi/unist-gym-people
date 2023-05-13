@@ -127,8 +127,11 @@ curl -X GET http://localhost:8080/Exercise/Swimming
 
 7. Command to add new Exercise in database
    * (exercisetype) is String value and (percalorie) is Integer value.
-   * Exception is thrown when percalorie is 0 or negative
+   * Exception is thrown when Exercise type already exists or percalorie is not positive
 ```
+curl -X POST http://localhost:8080/Exercise -H 'Content-type:application/json' -d '{"exercisetype":"Jumprope","percalorie":"10"}'
+//Throws exception "Exercise Already exists!"
+
 curl -X POST http://localhost:8080/Exercise -H 'Content-type:application/json' -d '{"exercisetype":"TestExercise","percalorie":"0"}'
 //Throws exception "PerCalorie must be positive value!"
 

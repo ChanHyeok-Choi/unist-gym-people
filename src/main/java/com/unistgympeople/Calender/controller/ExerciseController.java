@@ -13,6 +13,9 @@ import java.util.List;
 public class ExerciseController {
     @Autowired
     private ExerciseService exerciseService;
+    public ExerciseController(){};
+    public ExerciseController(ExerciseService exerciseService) {this.exerciseService=exerciseService;}
+
     @PostMapping
     public String save(@RequestBody Exercise exercise){
         return exerciseService.save(exercise);

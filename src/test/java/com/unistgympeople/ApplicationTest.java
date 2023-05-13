@@ -2,8 +2,11 @@ package com.unistgympeople;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.unistgympeople.Calender.Service.CalenderService;
+import com.unistgympeople.Calender.Service.ExerciseService;
 import com.unistgympeople.Calender.controller.CalenderController;
+import com.unistgympeople.Calender.controller.ExerciseController;
 import com.unistgympeople.Calender.model.Calender;
+import com.unistgympeople.Calender.model.Exercise;
 import com.unistgympeople.chatRoom.controller.ChatController;
 import com.unistgympeople.chatRoom.handler.ChatRoomWebSocketHandler;
 import com.unistgympeople.chatRoom.model.ChatMessage;
@@ -15,11 +18,12 @@ import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
-import org.mockito.Spy;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.test.context.junit4.SpringRunner;
+import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.web.socket.TextMessage;
 import org.springframework.web.socket.WebSocketSession;
 
@@ -110,7 +114,10 @@ public class ApplicationTest {
 
     @Mock
     private CalenderService calenderService;
-
+    @Mock
+    private ExerciseService exerciseService;
+    @Autowired
+    private MongoTemplate mongoTemplate;
     @Test
     public void testGetCalenderByMember(){
         int memberid = 1;
@@ -154,7 +161,6 @@ public class ApplicationTest {
         assertEquals(calenders, result);
     }
 
-/*
     @Test
     public void testCalenderCalorie(){
 
@@ -178,7 +184,35 @@ public class ApplicationTest {
         assertNotNull(result);
         assertEquals(answer,result);
     }
-*/
+
+    @Test
+    public void testGetAllExercise(){
+        List<Exercise> exercises= new ArrayList<>();
+        exercises.add(new Exercise("TestExercise1",100));
+        exercises.add(new Exercise("TestExercise2",50));
+        when(exerciseService.getExercise()).thenReturn(exercises);
+
+        ExerciseController exerciseController = new ExerciseController(exerciseService);
+        List<Exercise> result = exerciseController.getAllExercise();
+
+        assertNotNull(result);
+        assertEquals(2,result.size());
+        assertEquals(exercises, result);
+    }
+
+    @Test
+    public void testGetExerciseByType(){
+        List<Exercise> exercises= new ArrayList<>();
+        exercises.add(new Exercise ("TestExercise1",100));
+        when(exerciseService.getExerciseByExercisetype("TestExercise1")).thenReturn(exercises);
+
+        ExerciseController exerciseController = new ExerciseController(exerciseService);
+        List<Exercise> result = exerciseController.getEvents("TestExercise1");
+
+        assertNotNull(result);
+        assertEquals(1,result.size());
+        assertEquals(exercises, result);
+    }
     // <--- Calender Test Code lines --->
 
     // Add more test cases for other methods and scenarios...
