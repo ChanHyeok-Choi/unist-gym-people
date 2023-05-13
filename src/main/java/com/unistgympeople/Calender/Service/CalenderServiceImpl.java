@@ -1,6 +1,5 @@
 package com.unistgympeople.Calender.Service;
 
-import com.unistgympeople.Calender.exception.ObjectIdException;
 import com.unistgympeople.Calender.model.Calender;
 import com.unistgympeople.Calender.model.Exercise;
 import com.unistgympeople.Calender.repository.CalenderRepository;
@@ -27,10 +26,10 @@ public class CalenderServiceImpl implements CalenderService {
             query.addCriteria(Criteria.where("exercisetype").is(exercise_type));
             Exercise exercise = mongoTemplate.findOne(query, Exercise.class);
             if (exercise == null) {
-                throw new ObjectIdException("Exercise type not found!");
+                return null;
             }
             if (calender.getNum() <= 0) {
-                throw new ObjectIdException("Number must be positive");
+                return null;
             }
             return calenderRepository.save(calender).getId();
         }
@@ -50,9 +49,7 @@ public class CalenderServiceImpl implements CalenderService {
     public Integer getCalorieByMemberAndTime(int memberid, String time)
     {
         Query query = new Query();
-        query.addCriteria(Criteria.where("memberid").
-
-        is(memberid));
+        query.addCriteria(Criteria.where("memberid").is(memberid));
         query.addCriteria(Criteria.where("time").is(time));
         List<Calender> result = mongoTemplate.find(query, Calender.class);
         Integer total = 0;
@@ -63,10 +60,10 @@ public class CalenderServiceImpl implements CalenderService {
             innerquery.addCriteria(Criteria.where("exercisetype").is(now.getEvent()));
             Exercise exercise = mongoTemplate.findOne(innerquery, Exercise.class);
             if (exercise == null) {
-                throw new ObjectIdException("Exercise type not found!");
+                return -1;
             }
-        Integer count = now.getNum() * exercise.getpercalorie();
-        total = total + count;
+            Integer count = now.getNum() * exercise.getpercalorie();
+            total = total + count;
         }
         return total;
     }

@@ -13,13 +13,16 @@ import com.unistgympeople.chatRoom.model.ChatMessage;
 import com.unistgympeople.chatRoom.model.ChatRoom;
 import com.unistgympeople.chatRoom.service.ChatService;
 import org.junit.Before;
+import org.junit.Rule;
 import org.junit.Test;
+import org.junit.rules.ExpectedException;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.test.context.junit4.SpringRunner;
@@ -212,6 +215,70 @@ public class ApplicationTest {
         assertNotNull(result);
         assertEquals(1,result.size());
         assertEquals(exercises, result);
+    }
+    @Test
+    public void testPostCalender(){
+
+        int memberid = 1;
+        String time1 = "2023-05-12";
+        String event1 = "NotExists";
+        String event2 = "Jumprope";
+        Integer num1 = 50;
+        Integer num2 = -1;
+        Calender test1 = new Calender(memberid, time1, event2, num1);
+        Calender test2 = new Calender(memberid, time1, event1, num1);
+        Calender test3 = new Calender(memberid, time1, event2, num2);
+        CalenderController calenderController = new CalenderController(calenderService);
+        String output1 = calenderController.save(test2);
+        String output2 = calenderController.save(test3);
+        String output3 = calenderController.save(test1);
+        assertEquals(null,output1);
+        assertEquals(null,output2);
+        assertEquals(test1.getId(),output3);
+    }
+
+    @Test
+    public void testCalorieCalenderEmpty(){
+        CalenderController calenderController = new CalenderController(calenderService);
+        Integer result = calenderController.getCalorieOnDate(1,"2023-05-07");
+        Integer answer = 0;
+        assertEquals(answer, result);
+    }
+    @Test
+    public void testCalorieCalender(){
+        int memberid = 1;
+        String time1 = "2023-05-12";
+        String event1 = "NotExists";
+        Integer num1 = 50;
+        List<Calender> calenders = new ArrayList<>();
+        calenders.add(new Calender(memberid, time1, event1, num1));
+
+        when(calenderService.getCalorieByMemberAndTime(memberid,time1)).thenReturn(-1);
+        CalenderController calenderController = new CalenderController(calenderService);
+        Integer result = calenderController.getCalorieOnDate(memberid,time1);
+        Integer answer = -1;
+
+        assertEquals(answer, result);
+    }
+
+    @Test
+    public void testPostExercise(){
+
+        int memberid = 1;
+        String event1 = "NewExercise";
+        String event2 = "Jumprope";
+        Integer num1 = 50;
+        Integer num2 = -1;
+        Exercise test1 = new Exercise(event1,num1);
+        Exercise test2 = new Exercise(event2,num1);
+        Exercise test3 = new Exercise("NewerExercise",num2);
+        ExerciseController exerciseController = new ExerciseController(exerciseService);
+        String output1 = exerciseController.save(test1);
+        String output2 = exerciseController.save(test2);
+        String output3 = exerciseController.save(test3);
+        assertEquals(test1.getId(),output1);
+        assertEquals(null,output2);
+        assertEquals(null,output3);
     }
     // <--- Calender Test Code lines --->
 

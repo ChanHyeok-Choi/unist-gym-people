@@ -26,10 +26,11 @@ public class ExerciseServiceImpl implements ExerciseService{
         query.addCriteria(Criteria.where("exercisetype").is(exercise_type));
         Exercise result = mongoTemplate.findOne(query, Exercise.class);
         if (result != null) {
-            throw new ObjectIdException("Exercise Already exists!");
+            return null;
         }
-        if (exercise.getpercalorie() <=0)
-        {throw new ObjectIdException("PerCalorie must be positive value!");        }
+        if (exercise.getpercalorie() <=0){
+            return null;
+        }
 
         return exerciseRepository.save(exercise).getId();
     }
@@ -52,6 +53,4 @@ public class ExerciseServiceImpl implements ExerciseService{
         UpdateResult result = mongoTemplate.updateFirst(query,update,Exercise.class);
         return result;
     }
-
-
 }
