@@ -67,6 +67,7 @@ public class ApplicationTest {
         verify(registration).setAllowedOrigins("*");
     }
 
+
     @Test
     public void testSingleHandleTextMessage() throws Exception {
         String roomName = "Test Room";
