@@ -18,6 +18,7 @@ import org.mockito.MockitoAnnotations;
 import org.mockito.Spy;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.web.socket.TextMessage;
 import org.springframework.web.socket.WebSocketSession;
@@ -153,7 +154,7 @@ public class ApplicationTest {
         assertEquals(calenders, result);
     }
 
-    /*
+/*
     @Test
     public void testCalenderCalorie(){
 
@@ -177,7 +178,7 @@ public class ApplicationTest {
         assertNotNull(result);
         assertEquals(answer,result);
     }
-    */
+*/
     // <--- Calender Test Code lines --->
 
     // Add more test cases for other methods and scenarios...

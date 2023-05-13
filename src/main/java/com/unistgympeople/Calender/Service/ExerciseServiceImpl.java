@@ -3,6 +3,7 @@ package com.unistgympeople.Calender.Service;
 import com.mongodb.client.result.UpdateResult;
 import com.unistgympeople.Calender.model.Exercise;
 import com.unistgympeople.Calender.repository.ExerciseRepository;
+import com.unistgympeople.realTime.exception.ObjectIdException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.query.Criteria;
@@ -20,6 +21,16 @@ public class ExerciseServiceImpl implements ExerciseService{
     private MongoTemplate mongoTemplate;
     @Override
     public String save(Exercise exercise){
+        String exercise_type = exercise.getexercisetype();
+        Query query = new Query();
+        query.addCriteria(Criteria.where("exercisetype").is(exercise_type));
+        Exercise result = mongoTemplate.findOne(query, Exercise.class);
+        if (result != null) {
+            throw new ObjectIdException("Exercise Already exists!");
+        }
+        if (exercise.getpercalorie() <=0)
+        {throw new ObjectIdException("PerCalorie must be positive value!");        }
+
         return exerciseRepository.save(exercise).getId();
     }
     @Override

@@ -15,8 +15,6 @@ public class ExerciseController {
     private ExerciseService exerciseService;
     @PostMapping
     public String save(@RequestBody Exercise exercise){
-        if (exercise.getpercalorie() <=0)
-        {throw new ObjectIdException("PerCalorie must be positive value!");        }
         return exerciseService.save(exercise);
     }
     @GetMapping
