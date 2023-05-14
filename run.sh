@@ -1,6 +1,6 @@
 #!/bin/bash
 
-git clone https://github.com/dydrkfl06/CSE364Project.git
+git clone https://github.com/ChanHyeok-Choi/CSE364Project.git
 cd CSE364Project
 
 # Create User Administrator MongoDB
