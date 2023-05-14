@@ -19,7 +19,6 @@ public class ExerciseServiceImpl implements ExerciseService{
     private ExerciseRepository exerciseRepository;
     @Autowired
     private MongoTemplate mongoTemplate;
-
     public ExerciseServiceImpl(){};
     public ExerciseServiceImpl(ExerciseRepository exerciseRepository){
         this.exerciseRepository=exerciseRepository;

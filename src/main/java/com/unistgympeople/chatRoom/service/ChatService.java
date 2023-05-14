@@ -20,7 +20,7 @@ public class ChatService {
     private Map<String, ChatRoom> chatRooms;
 
     @PostConstruct
-    private void init() {
+    public void init() {
         chatRooms = new LinkedHashMap<>();
     }
 
