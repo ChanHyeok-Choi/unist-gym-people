@@ -39,24 +39,6 @@ public class UserController {
     @Autowired
     private UsernumService usernumService;
 
-    @ExceptionHandler(ObjectIdException.class)
-    public ResponseEntity<String> handleObjectIdException() {
-        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                .body("Something wrong when saving the user");
-    }
-
-    @ExceptionHandler(ParameterErrorNumberException.class)
-    public ResponseEntity<String> handleParameterErrorNumber() {
-        return ResponseEntity.status(HttpStatus.NOT_FOUND)
-                .body("User id does not exist!");
-    }
-
-    @ExceptionHandler(ParameterErrorStringException.class)
-    public ResponseEntity<String> handleParameterErrorString() {
-        return ResponseEntity.status(HttpStatus.NOT_ACCEPTABLE)
-                .body("Parameter is not a number!");
-    }
-
     @PostMapping
     public ResponseEntity<User> saveUser(@RequestBody User user) {
         String new_id = userService.save(user);
