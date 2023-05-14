@@ -14,6 +14,9 @@ import com.unistgympeople.Calender.repository.ExerciseRepository;
 import com.unistgympeople.chatRoom.controller.ChatController;
 import com.unistgympeople.chatRoom.handler.ChatRoomWebSocketConfig;
 import com.unistgympeople.chatRoom.handler.ChatRoomWebSocketHandler;
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.boot.test.context.TestConfiguration;
+import org.springframework.test.context.junit.jupiter.SpringJUnitConfig;
 import org.springframework.web.socket.config.annotation.WebSocketHandlerRegistration;
 import org.springframework.web.socket.config.annotation.WebSocketHandlerRegistry;
 import com.unistgympeople.chatRoom.model.ChatMessage;
@@ -247,6 +250,27 @@ public class ApplicationTest {
         assertNotNull(result);
         assertEquals(answer,result);
     }
+    /*@Test
+    public void testCalenderServiceCalorie(){
+        int memberid = 1;
+        String time1 = "2023-05-12";
+        String event1 = "Pushup";
+        String event2 = "Jumprope";
+        Integer num1 = 50;
+        Integer num2 = 100;
+
+        Integer answer = 200;
+        List<Calender> calenders = new ArrayList<>();
+        calenders.add(new Calender(memberid, time1, event1, num1));
+        calenders.add(new Calender(memberid, time1, event2, num2));
+        when(calenderRepository.findCalenderByMemberidAndTime(memberid,time1)).thenReturn(calenders);
+
+        CalenderService calenderService1 = new CalenderServiceImpl(calenderRepository,mongoTemplate);
+        Integer result = calenderService1.getCalorieByMemberAndTime(memberid, time1);
+        assertNotNull(result);
+        assertEquals(answer,result);
+    }*/
+
     @Test
     public void testPostCalender(){
 
