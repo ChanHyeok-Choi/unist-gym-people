@@ -6,9 +6,6 @@ import java.util.Date;
 import java.lang.Object.*;
 
 import com.sun.jdi.IntegerValue;
-import com.unistgympeople.realTime.exception.ObjectIdException;
-import com.unistgympeople.realTime.exception.ParameterErrorNumberException;
-import com.unistgympeople.realTime.exception.ParameterErrorStringException;
 import com.unistgympeople.realTime.model.User;
 import com.unistgympeople.realTime.model.Usernum;
 import com.unistgympeople.realTime.repository.UsernumRepository;
@@ -43,9 +40,6 @@ public class UserController {
     public ResponseEntity<User> saveUser(@RequestBody User user) {
         String new_id = userService.save(user);
         Optional<User> new_user = userService.getUserById(new_id);
-        if(new_user == null) {
-            throw new ObjectIdException("Something wrong when saving the user!");
-        }
         return ResponseEntity.ok(new_user.get());
     }
 
@@ -56,9 +50,6 @@ public class UserController {
         Usernum usernum = new Usernum();
         String new_userid = usernumService.save(usernum,userIntCount);
         Optional<Usernum> new_usernum = usernumService.getUsernumById(new_userid);
-        if(new_usernum == null) {
-            throw new ObjectIdException("Something wrong when saving the user!");
-        }
         return ResponseEntity.ok(userCount);
     }
 
@@ -82,38 +73,15 @@ public class UserController {
 
     @GetMapping("/{id}")
     public ResponseEntity<User> getUser(@PathVariable("id") String id) {
-        if(id.length() == 0) {
-            throw new ParameterErrorStringException("Parameter is not a number!");
-        }
-        try {
-            int user_id = Integer.parseInt(id);
-            Optional<User> result = userService.getUserById(user_id);
-            if(result.isPresent()) {
-                return ResponseEntity.ok(result.get());
-            }
-            throw new ParameterErrorNumberException("User id does not exist!");
-        } catch(NumberFormatException e) {
-            throw new ParameterErrorStringException("Parameter is not a number!");
-        }
+        int user_id = Integer.parseInt(id);
+        Optional<User> result = userService.getUserById(user_id);
+        return ResponseEntity.ok(result.get());
     }
 
     @PutMapping("/{id}")
     public ResponseEntity<User> updateUser(@PathVariable("id") String id, @RequestBody User user) {
-        if(id.length() == 0) {
-            throw new ParameterErrorStringException("Parameter is not a number!");
-        }
-        try {
-            int user_id = Integer.parseInt(id);
-            UpdateResult result = userService.updateUserById(user_id, user);
-            if(result.getMatchedCount() == 0) {
-                throw new ParameterErrorNumberException("User id does not exist!");
-            }
-            if(!result.wasAcknowledged()) {
-                throw new ObjectIdException("Something wrong when saving the user!");
-            }
-            return ResponseEntity.ok(userService.getUserById(user_id).get());
-        } catch(NumberFormatException e) {
-            throw new ParameterErrorStringException("Parameter is not a number!");
-        }
+        int user_id = Integer.parseInt(id);
+        UpdateResult result = userService.updateUserById(user_id, user);
+        return ResponseEntity.ok(userService.getUserById(user_id).get());
     }
 }
