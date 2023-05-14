@@ -2,10 +2,13 @@ package com.unistgympeople.realTime.model;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
-@Data
+@Getter
+@Setter
 @Document(collection = "users")
 @JsonInclude(JsonInclude.Include.NON_NULL) //include only non_null values
 public class User {
