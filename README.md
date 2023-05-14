@@ -146,10 +146,11 @@ curl -X POST http://localhost:8080/Exercise -H 'Content-type:application/json' -
 ### Feature 1 : Real-Time User Viewer
 
 ### Feature 2 : Real-Time Chat Service
-   On the result of `mvn jacoco:report`, there's no branch in ChatRoom Package.
+   On the result of `mvn jacoco:report`, there's only one branch in ChatRoom Package.
    However, we wrote test codes for mainly operating functions.
-1. testSingleHandleTextMessage(): verify that `handleTextMessage()` function works well in [ChatRoomWebSocketHandler.java](src/main/java/com/unistgympeople/chatRoom/handler/ChatRoomWebSocketHandler.java)
+1. testRegisterWebSocketHandler() & testSingleHandleTextMessage(): verify that `registerWebSocketHandlers()` and `handleTextMessage()` functions work well in [ChatRoomWebSocketConfig.java](src/main/java/com/unistgympeople/chatRoom/handler/ChatRoomWebSocketConfig.java) and [ChatRoomWebSocketHandler.java](src/main/java/com/unistgympeople/chatRoom/handler/ChatRoomWebSocketHandler.java)
 2. testCreateRoom(): verify that `createRoom()` function works well in [ChatService.java](src/main/java/com/unistgympeople/chatRoom/service/ChatService.java)
-3. testFindAllRoom(): verify that `findAllRoom()` function works well in [ChatService.java](src/main/java/com/unistgympeople/chatRoom/service/ChatService.java)
+3. testFindAllRoom() & testFindRoomById(): verify that `findAllRoom()` and `findRoomById()` functions work well in [ChatService.java](src/main/java/com/unistgympeople/chatRoom/service/ChatService.java)
+4. testSendMessage(): verify that `sendMessage()` function works well in [ChatService.java](src/main/java/com/unistgympeople/chatRoom/service/ChatService.java)
 
 ### Feature 3 : User's Workout Calender

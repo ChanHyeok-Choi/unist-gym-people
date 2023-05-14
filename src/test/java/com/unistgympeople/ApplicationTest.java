@@ -33,12 +33,14 @@ import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.web.socket.TextMessage;
 import org.springframework.web.socket.WebSocketSession;
+import org.w3c.dom.Text;
 
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
+import static com.mongodb.internal.connection.tlschannel.util.Util.assertTrue;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.mockito.Mockito.*;
@@ -65,34 +67,65 @@ public class ApplicationTest {
     }
 
     @Test
-    public void testRegisterWebSocketHandlers() {
+    public void testRegisterWebSocketHandler() throws Exception {
         ChatRoomWebSocketConfig webSocketConfig = new ChatRoomWebSocketConfig(chatRoomWebSocketHandler);
         when(registry.addHandler(any(ChatRoomWebSocketHandler.class), eq("ws/chat"))).thenReturn(registration);
         webSocketConfig.registerWebSocketHandlers(registry);
         verify(registration).setAllowedOrigins("*");
-    }
 
+        String roomId = "1";
+        String sender = "user1";
+        String messageText = "test";
+
+        ChatMessage chatMessage = new ChatMessage();
+        chatMessage.setRoomId(roomId);
+        chatMessage.setSender(sender);
+        chatMessage.setMessage(messageText);
+
+        WebSocketSession session = mock(WebSocketSession.class);
+        ChatRoom chatRoom = mock(ChatRoom.class);
+        TextMessage textMessage = new TextMessage("{\"type\":\"ENTER\", \"roomId\":\"1\", \"sender\":\"user1\", \"message\":\"something\"}");
+        String payload = textMessage.getPayload();
+        when(objectMapper.readValue(payload, ChatMessage.class)).thenReturn(chatMessage);
+        when(chatService.findRoomById(roomId)).thenReturn(chatRoom);
+
+        ChatRoomWebSocketHandler webSocketHandler = new ChatRoomWebSocketHandler(objectMapper, chatService);
+        webSocketHandler.handleTextMessage(session, textMessage);
+
+        verify(objectMapper).readValue(payload, ChatMessage.class);
+        verify(chatRoom).handlerActions(session, chatMessage, chatService);
+    }
 
     @Test
     public void testSingleHandleTextMessage() throws Exception {
-        String roomName = "Test Room";
         String roomId = UUID.randomUUID().toString();
 
         WebSocketSession session = mock(WebSocketSession.class);
-        ChatRoom chatRoom = new ChatRoom(roomId, roomName);
 
-        ChatMessage chatMessage = new ChatMessage();
-        chatMessage.setType(ChatMessage.MessageType.ENTER);
-        chatMessage.setRoomId(roomId);
-        chatMessage.setSender("user1");
-        chatMessage.setMessage("user1 enters room " + roomId);
+        ChatMessage chatMessageEnter = mock(ChatMessage.class);
+        when(chatMessageEnter.getType()).thenReturn(ChatMessage.MessageType.ENTER);
+        chatMessageEnter.setType(ChatMessage.MessageType.ENTER);
+        chatMessageEnter.setRoomId(roomId);
+        chatMessageEnter.setSender("user1");
+        chatMessageEnter.setMessage("user1 enters room " + roomId);
 
-        TextMessage textMessage = new TextMessage("user1 enters room " + roomId);
-        when(objectMapper.readValue(textMessage.getPayload(), ChatMessage.class)).thenReturn(chatMessage);
-        when(chatService.findRoomById(roomId)).thenReturn(chatRoom);
+        TextMessage textMessageEnter = new TextMessage("user1 enters room " + roomId);
 
-        chatRoom.handlerActions(session, chatMessage, chatService);
-        verify(chatService).sendMessage(session, chatMessage);
+        chatService.sendMessage(session, textMessageEnter);
+        verify(chatService).sendMessage(session, textMessageEnter);
+
+        doNothing().when(session).sendMessage(any(TextMessage.class));
+
+        ChatMessage chatMessageTalk = mock(ChatMessage.class);
+        when(chatMessageTalk.getType()).thenReturn(ChatMessage.MessageType.TALK);
+        chatMessageTalk.setType(ChatMessage.MessageType.TALK);
+        chatMessageTalk.setRoomId(roomId);
+        chatMessageTalk.setSender("user1");
+        chatMessageTalk.setMessage("Hello! Nice to meet test!");
+
+        ChatRoom chatRoom = new ChatRoom(roomId, "Test Room");
+        chatRoom.handlerActions(session, chatMessageEnter, chatService);
+        chatRoom.handlerActions(session, chatMessageTalk, chatService);
     }
 
     @Test
@@ -114,11 +147,17 @@ public class ApplicationTest {
 
     @Test
     public void testFindAllRoom() {
-        List<ChatRoom> rooms = new ArrayList<>();
-        rooms.add(new ChatRoom("1", "Room 1"));
-        rooms.add(new ChatRoom("2", "Room 2"));
+        chatService = new ChatService(objectMapper);
+        chatService.init();
 
-        when(chatService.findAllRoom()).thenReturn(rooms);
+        chatService.createRoom("Room 1");
+        chatService.createRoom("Room 2");
+
+        List<ChatRoom> rooms = new ArrayList<>();
+        rooms.add(new ChatRoom(UUID.randomUUID().toString(), "Room 1"));
+        rooms.add(new ChatRoom(UUID.randomUUID().toString(), "Room 2"));
+
+        assertEquals(chatService.findAllRoom().size(), rooms.size());
 
         ChatController chatController = new ChatController(chatService);
         List<ChatRoom> result = chatController.findAllRoom();
@@ -134,6 +173,24 @@ public class ApplicationTest {
         ChatRoom chatRoom = chatService.createRoom("Test Room");
         ChatRoom retrievedRoom = chatService.findRoomById(chatRoom.getRoomId());
         assertEquals(chatRoom, retrievedRoom);
+    }
+
+    @Test
+    public void testSendMessage() throws IOException {
+        chatService = new ChatService(objectMapper);
+
+        String messageText = "Test message";
+        TextMessage message = new TextMessage(messageText);
+
+        WebSocketSession session = mock(WebSocketSession.class);
+
+        doNothing().when(session).sendMessage(any(TextMessage.class));
+        when(objectMapper.writeValueAsString(message)).thenReturn(messageText);
+
+        chatService.sendMessage(session, message);
+
+        verify(session).sendMessage(any(TextMessage.class));
+        verify(objectMapper).writeValueAsString(message);
     }
 
     // <--- ChatRoom Test Code lines --->
