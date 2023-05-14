@@ -14,6 +14,11 @@ import com.unistgympeople.Calender.repository.ExerciseRepository;
 import com.unistgympeople.chatRoom.controller.ChatController;
 import com.unistgympeople.chatRoom.handler.ChatRoomWebSocketConfig;
 import com.unistgympeople.chatRoom.handler.ChatRoomWebSocketHandler;
+import com.unistgympeople.realTime.model.User;
+import com.unistgympeople.realTime.model.Usernum;
+import com.unistgympeople.realTime.repository.UserRepository;
+import com.unistgympeople.realTime.service.UserService;
+import com.unistgympeople.realTime.service.UsernumService;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.test.context.TestConfiguration;
 import org.springframework.test.context.junit.jupiter.SpringJUnitConfig;
@@ -472,6 +477,54 @@ public class ApplicationTest {
     }
     
     // <--- Calender Test Code lines --->
+
+    // <--- HotTime Test Code lines --->
+    @Mock
+    private UserService userService;
+
+    @Mock
+    private UsernumService usernumService;
+
+    @Autowired
+    private UserRepository userRepository;
+
+    @Test
+    public void testgenerateUserModel() {
+        String testid = "userid";
+        int testuserid = 123;
+        String testtimestamp = "2023-05-14T12:23:12Z";
+        User.UserType testusertype1 = User.UserType.ENTER;
+        User.UserType testusertype2 = User.UserType.EXIT;
+        User usertest1 = new User();
+        usertest1.setId(testid);
+        usertest1.setUserId(testuserid);
+        usertest1.setTimeStamp(testtimestamp);
+        usertest1.setUserType(testusertype1);
+
+        assertEquals(usertest1.getId(),testid);
+        assertEquals(usertest1.getUserId(),testuserid);
+        assertEquals(usertest1.getTimeStamp(),testtimestamp);
+        assertEquals(usertest1.getUserType(),testusertype1);
+    }
+
+    @Test
+    public void testgenerateUsernumModel(){
+        String testusernumid = "testid";
+        String testdate = "2023-05-14";
+        String testtime = "10:08:23";
+        int testusernum = 23;
+        Usernum usernumtest1 = new Usernum();
+        usernumtest1.setId(testusernumid);
+        usernumtest1.setDate(testdate);
+        usernumtest1.setTime(testtime);
+        usernumtest1.setUserNumber(testusernum);
+
+        assertEquals(usernumtest1.getId(),testusernumid);
+        assertEquals(usernumtest1.getDate(),testdate);
+        assertEquals(usernumtest1.getTime(),testtime);
+        assertEquals(usernumtest1.getUserNumber(),testusernum);
+    }
+    // <--- HotTime Test Code lines --->
 
     // Add more test cases for other methods and scenarios...
 
