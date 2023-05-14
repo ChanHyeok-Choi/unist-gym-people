@@ -8,17 +8,13 @@ import org.springframework.data.mongodb.core.mapping.Document;
 @Getter
 @Setter
 @Document(collection = "usernums")
-@RequiredArgsConstructor
 @JsonInclude(JsonInclude.Include.NON_NULL) //include only non_null values
 public class Usernum {
 
     @Id @Generated
     private String id;
-    @NonNull
     private String date;
-    @NonNull
     private String time;
-    @NonNull
     private int userNumber;
 
     public Usernum() {}
