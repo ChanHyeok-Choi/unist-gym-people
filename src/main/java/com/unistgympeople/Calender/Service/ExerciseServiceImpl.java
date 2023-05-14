@@ -19,6 +19,15 @@ public class ExerciseServiceImpl implements ExerciseService{
     private ExerciseRepository exerciseRepository;
     @Autowired
     private MongoTemplate mongoTemplate;
+
+    public ExerciseServiceImpl(){};
+    public ExerciseServiceImpl(ExerciseRepository exerciseRepository){
+        this.exerciseRepository=exerciseRepository;
+    }
+    public ExerciseServiceImpl(ExerciseRepository exerciseRepository, MongoTemplate mongoTemplate){
+        this.exerciseRepository=exerciseRepository;
+        this.mongoTemplate=mongoTemplate;
+    }
     @Override
     public String save(Exercise exercise){
         String exercise_type = exercise.getexercisetype();

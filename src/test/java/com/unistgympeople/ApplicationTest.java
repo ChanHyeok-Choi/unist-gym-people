@@ -4,11 +4,13 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.unistgympeople.Calender.Service.CalenderService;
 import com.unistgympeople.Calender.Service.CalenderServiceImpl;
 import com.unistgympeople.Calender.Service.ExerciseService;
+import com.unistgympeople.Calender.Service.ExerciseServiceImpl;
 import com.unistgympeople.Calender.controller.CalenderController;
 import com.unistgympeople.Calender.controller.ExerciseController;
 import com.unistgympeople.Calender.model.Calender;
 import com.unistgympeople.Calender.model.Exercise;
 import com.unistgympeople.Calender.repository.CalenderRepository;
+import com.unistgympeople.Calender.repository.ExerciseRepository;
 import com.unistgympeople.chatRoom.controller.ChatController;
 import com.unistgympeople.chatRoom.handler.ChatRoomWebSocketHandler;
 import com.unistgympeople.chatRoom.model.ChatMessage;
@@ -27,6 +29,8 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.data.mongodb.core.MongoTemplate;
+import org.springframework.data.mongodb.core.query.Criteria;
+import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.web.socket.TextMessage;
@@ -121,6 +125,8 @@ public class ApplicationTest {
     private CalenderRepository calenderRepository;
     @Mock
     private CalenderService calenderService;
+    @Mock
+    private ExerciseRepository exerciseRepository;
     @Mock
     private ExerciseService exerciseService;
     @Autowired
@@ -226,37 +232,6 @@ public class ApplicationTest {
         assertNotNull(result);
         assertEquals(answer,result);
     }
-
-    @Test
-    public void testGetAllExercise(){
-        List<Exercise> exercises= new ArrayList<>();
-        exercises.add(new Exercise("TestExercise1",100));
-        exercises.add(new Exercise("TestExercise2",50));
-        when(exerciseService.getExercise()).thenReturn(exercises);
-
-        ExerciseController exerciseController = new ExerciseController(exerciseService);
-        List<Exercise> result = exerciseController.getAllExercise();
-
-        assertNotNull(result);
-        assertEquals(2,result.size());
-        assertEquals(exercises, result);
-    }
-
-
-
-    @Test
-    public void testGetExerciseByType(){
-        List<Exercise> exercises= new ArrayList<>();
-        exercises.add(new Exercise ("TestExercise1",100));
-        when(exerciseService.getExerciseByExercisetype("TestExercise1")).thenReturn(exercises);
-
-        ExerciseController exerciseController = new ExerciseController(exerciseService);
-        List<Exercise> result = exerciseController.getEvents("TestExercise1");
-
-        assertNotNull(result);
-        assertEquals(1,result.size());
-        assertEquals(exercises, result);
-    }
     @Test
     public void testPostCalender(){
 
@@ -273,6 +248,25 @@ public class ApplicationTest {
         String output1 = calenderController.save(test2);
         String output2 = calenderController.save(test3);
         String output3 = calenderController.save(test1);
+        assertEquals(null,output1);
+        assertEquals(null,output2);
+        assertEquals(test1.getId(),output3);
+    }
+
+    @Test
+    public void testPostCalenderService(){
+        int memberid = 1;
+        String time1 = "2023-05-12";
+        String event1 = "NotExists";
+        String event2 = "Jumprope";
+        Integer num1 = 50;
+        Integer num2 = -1;
+        Calender test1 = new Calender(memberid, time1, event2, num1);
+        Calender test2 = new Calender(memberid, time1, event1, num1);
+        Calender test3 = new Calender(memberid, time1, event2, num2);
+        String output1 = calenderService.save(test2);
+        String output2 = calenderService.save(test3);
+        String output3 = calenderService.save(test1);
         assertEquals(null,output1);
         assertEquals(null,output2);
         assertEquals(test1.getId(),output3);
@@ -301,7 +295,48 @@ public class ApplicationTest {
 
         assertEquals(answer, result);
     }
+    @Test
+    public void testGetAllExercise(){
+        List<Exercise> exercises= new ArrayList<>();
+        exercises.add(new Exercise("TestExercise1",100));
+        exercises.add(new Exercise("TestExercise2",50));
+        when(exerciseService.getExercise()).thenReturn(exercises);
 
+        ExerciseController exerciseController = new ExerciseController(exerciseService);
+        List<Exercise> result = exerciseController.getAllExercise();
+
+        assertNotNull(result);
+        assertEquals(2,result.size());
+        assertEquals(exercises, result);
+    }
+    @Test
+    public void testGetAllExerciseService(){
+        List<Exercise> exercises= new ArrayList<>();
+        Exercise exercise1 = new Exercise("TestExercise1",100);
+        Exercise exercise2 = new Exercise("TestExercise2",50);
+        exercises.add(exercise1);
+        exercises.add(exercise2);
+        when(exerciseRepository.findAll()).thenReturn(exercises);
+        ExerciseService exerciseService1 = new ExerciseServiceImpl(exerciseRepository,mongoTemplate);
+        List<Exercise> result = exerciseService1.getExercise();
+
+        assertNotNull(result);
+        assertEquals(2,result.size());
+        assertEquals(exercises, result);
+    }
+    @Test
+    public void testGetExerciseByType(){
+        List<Exercise> exercises= new ArrayList<>();
+        exercises.add(new Exercise ("TestExercise1",100));
+        when(exerciseService.getExerciseByExercisetype("TestExercise1")).thenReturn(exercises);
+
+        ExerciseController exerciseController = new ExerciseController(exerciseService);
+        List<Exercise> result = exerciseController.getEvents("TestExercise1");
+
+        assertNotNull(result);
+        assertEquals(1,result.size());
+        assertEquals(exercises, result);
+    }
     @Test
     public void testPostExercise(){
 
@@ -321,6 +356,26 @@ public class ApplicationTest {
         assertEquals(null,output2);
         assertEquals(null,output3);
     }
+    @Test
+    public void testPostExerciseService(){
+
+        int memberid = 1;
+        String event1 = "NewExercise";
+        String event2 = "Jumprope";
+        Integer num1 = 50;
+        Integer num2 = -1;
+        Exercise test1 = new Exercise(event1,num1);
+        Exercise test2 = new Exercise(event2,num1);
+        Exercise test3 = new Exercise("NewerExercise",num2);
+        String output1 = exerciseService.save(test1);
+        String output2 = exerciseService.save(test2);
+        String output3 = exerciseService.save(test3);
+        assertEquals(test1.getId(),output1);
+        assertEquals(null,output2);
+        assertEquals(null,output3);
+    }
+
+
     // <--- Calender Test Code lines --->
 
     // Add more test cases for other methods and scenarios...
