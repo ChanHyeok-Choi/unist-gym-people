@@ -139,7 +139,7 @@ public class ApplicationTest {
     // <--- ChatRoom Test Code lines --->
     // <--- Calender Test Code lines --->
 
-    @Autowired
+    @Mock
     private CalenderRepository calenderRepository;
     @Mock
     private CalenderService calenderService;
@@ -147,7 +147,7 @@ public class ApplicationTest {
     private ExerciseRepository exerciseRepository;
     @Mock
     private ExerciseService exerciseService;
-    @Autowired
+    @Mock
     private MongoTemplate mongoTemplate;
     @Test
     public void testGetCalenderByMember(){
@@ -343,7 +343,7 @@ public class ApplicationTest {
         assertEquals(calenderService2.getClass(),CalenderServiceImpl.class);
         assertEquals(calenderService3.getClass(),CalenderServiceImpl.class);
     }
-    /*@Test
+    @Test
     public void testPostCalenderService(){
         int memberid = 1;
         String time1 = "2023-05-12";
@@ -361,28 +361,29 @@ public class ApplicationTest {
         assertEquals(null,output1);
         assertEquals(null,output2);
         assertEquals(test1.getId(),output3);
-    }*/
+    }
 
-    /* @Test
+    @Test
     public void testGetCalenderServiceByMemberAndDate(){
         int memberid = 1;
         String time = "2023-05-12";
         String event = "Pushup";
         Integer num = 50;
         Calender calender = new Calender(memberid,time,event,num);
+        Calender calender1 = new Calender(1,"2023-05-13","Pushup",10);
         List<Calender> calenders = new ArrayList<>();
         calenders.add(calender);
+        calenders.add(calender1);
+        when(calenderRepository.findAll()).thenReturn(calenders);
+        when(mongoTemplate.findAll(Calender.class)).thenReturn(calenders);
         CalenderService calenderService1 = new CalenderServiceImpl(calenderRepository,mongoTemplate);
-        calenderService1.save(calender);
-        calenderService1.save(new Calender(1,"2023-05-13","Pushup",20));
         List<Calender> result = calenderService1.getCalenderByMemberAndTime(memberid,time);
 
         assertNotNull(result);
         assertEquals(1,result.size());
-        assertEquals(calenders,result);
-    }*/
+    }
 
-    /*@Test
+    @Test
     public void testGetCalenderServiceByMember(){
         int memberid = 1;
         String time = "2023-05-12";
@@ -398,7 +399,7 @@ public class ApplicationTest {
         assertNotNull(result);
         assertEquals(1,result.size());
         assertEquals(calenders,result);
-    }*/
+    }
 
     @Test
     public void ExerciseModelTest(){
