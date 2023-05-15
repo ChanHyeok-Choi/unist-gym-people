@@ -28,40 +28,58 @@ java -jar target/cse364-project-1.0-SNAPSHOT.jar
 ## Part 2 : Implement REST APIs for your three features (90 points, 30 points for each feature)
 
 ### Feature 1 : Real-Time User Viewer
-1. Check connection with users.csv file (with visualize full datasets).
+1. Check connection with users.csv file (with visualize full datasets).  
+   Printed data lines (user) are not aligned, but it is total 17 lines, consist of `id`, `userId`, `timestamp`, `userType`.
    ```
    curl -X GET http://localhost:8080/users/showUser
-   > {
+   > [{"id":"6462230037461934cbcc80a4","userId":4,"timeStamp":"2023-05-09T15:05:05Z","userType":"EXIT"},
+   {"id":"6462230037461934cbcc80a5","userId":2,"timeStamp":"2023-05-09T15:05:00Z","userType":"ENTER"},
+   ...,
+   {"id":"6462230037461934cbcc80b3","userId":2,"timeStamp":"2023-05-09T15:05:04Z","userType":"EXIT"},
+   {"id":"6462230037461934cbcc80b4","userId":3,"timeStamp":"2023-05-09T15:05:00Z","userType":"ENTER"}]
    ```
-2. Check connection with usernums.csv file (with visualize full datasets).
+2. Check connection with usernums.csv file (with visualize full datasets).  
+   Printed data lines (usernum) are not aligned, but it is total 17 lines, consist of `id`, `userId`, `timestamp`, `userType`.
    ```
    curl -X GET http://localhost:8080/users/showCount
-   > {
+   > [{"id":"64622300480fef1754ea907b","date":"2023-05-09","time":"15:05:05","userNumber":4},
+   {"id":"64622300480fef1754ea907c","date":"2023-05-09","time":"15:05:06","userNumber":5},
+   ...,
+   {"id":"64622300480fef1754ea908a","date":"2023-05-09","time":"15:05:00","userNumber":2},
+   {"id":"64622300480fef1754ea908b","date":"2023-05-09","time":"15:05:00","userNumber":1}]
    ```
-3. Check each user datalines (example of 2nd line).
+3. Check each user data lines in users.csv file (example of 2nd line).
    ```
    curl -X GET http://localhost:8080/users/2
-   > {
+   > {"id":"6462230037461934cbcc80a5","userId":2,"timeStamp":"2023-05-09T15:05:00Z","userType":"ENTER"}
    ```
-4. Show number of people in Gym & add new data to usernums.csv.
+4. Show number of people in Gym (visualized) & add new data to usernums.csv (not visualized).
    ```
    curl -X GET http://localhost:8080/users/userCount
-   > {
+   > 7
    ```
-5. Show specific date's all time of Gym's people is more than average people of that date. (example: 2023-05-09)
-   ```
-   curl -X GET http://localhost:8080/users/hotdate/2023-05-09
-   > {
-   ```
-6. POST new data about users (of users.csv)
+5. Show specific date's all time of Gym's people is more than average people of that date. (example: 2023-05-09)  
+   Average number of people in Gym of date `2023-05-09` is `5.23`, so returned data lines are usernum data of date `2023-05-09` which has bigger `userNumber` value than `5.23`.
    ```
    curl -X GET http://localhost:8080/users/hotdate/2023-05-09
-   > {
+   > [{"id":"64622300480fef1754ea907d","date":"2023-05-09","time":"15:05:07","userNumber":6},
+   {"id":"64622300480fef1754ea907f","date":"2023-05-09","time":"15:05:09","userNumber":6},
+   {"id":"64622300480fef1754ea9080","date":"2023-05-09","time":"15:05:10","userNumber":7},
+   {"id":"64622300480fef1754ea9081","date":"2023-05-09","time":"15:05:11","userNumber":8},
+   {"id":"64622300480fef1754ea9082","date":"2023-05-09","time":"15:05:12","userNumber":7},
+   {"id":"64622300480fef1754ea9083","date":"2023-05-09","time":"15:05:13","userNumber":8},
+   {"id":"64622300480fef1754ea9084","date":"2023-05-09","time":"15:05:14","userNumber":7},
+   {"id":"64622300480fef1754ea9086","date":"2023-05-09","time":"15:05:03","userNumber":6}]
    ```
-7. PUT to change data of users (of users.csv)
+6. POST new data about users
    ```
-   curl -X GET http://localhost:8080/users/hotdate/2023-05-09
-   > {
+   curl -X POST http://localhost:8080/users -H 'Content-type:application/json' -d '{"timeStamp":"2023-05-15T10:21:44Z","userType":"ENTER"}'
+   > {"id":"646223f32681fc54546a731d","userId":13,"timeStamp":"2023-05-15T10:21:44Z","userType":"ENTER"}
+   ```
+7. PUT to change data of users
+   ```
+   curl -X PUT http://localhost:8080/users/13 -H 'Content-type:application/json' -d '{"userId":13,"timeStamp":"2023-05-16T11:22:33Z","userType":"EXIT"}'
+   > {"id":"646223f32681fc54546a731d","userId":13,"timeStamp":"2023-05-16T11:22:33Z","userType":"EXIT"}
    ```
 
 ### Feature 2 : Real-Time Chat Service
@@ -186,7 +204,15 @@ curl -X POST http://localhost:8080/Exercise -H 'Content-type:application/json' -
 ## Part 3 : Achieve more than 90% of branch coverage with your unit tests
 
 ### Feature 1 : Real-Time User Viewer
-   On the result of `mvn jacoco:report`, there are some branches in 
+   On the result of `mvn jacoco:report`, there are some branches in realTime Package.
+1. testgenerateUserModel() & testgenerateUsernumModel()
+   * verify that `user` & `usernum` model work well with getter & setter functions.
+2. testUserService() & testUsernumService()
+   * verify that overall functions in [UserServiceImpl.java](src/main/java/com/unistgympeople/realTime/service/UserServiceImpl.java) & [UsernumServiceImpl.java](src/main/java/com/unistgympeople/realTime/service/UsernumServiceImpl.java) work well,
+   includes save(), getUser(), getUserById(), ... etc.
+3. testUserController()
+   * verify that overall functions in [UserController.java](src/main/java/com/unistgympeople/realTime/controller/UserController.java) works well,
+   includes saveUser(), getUserCount(), getAllUsernum(), ... etc.
 
 ### Feature 2 : Real-Time Chat Service
    On the result of `mvn jacoco:report`, there's only one branch in ChatRoom Package.
