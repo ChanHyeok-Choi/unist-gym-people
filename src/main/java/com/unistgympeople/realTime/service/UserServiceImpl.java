@@ -26,6 +26,14 @@ public class UserServiceImpl implements UserService{
     @Autowired
     private MongoTemplate mongoTemplate;
 
+    public void setUserRepository(UserRepository userRepository) {
+        this.userRepository = userRepository;
+    }
+
+    public void setMongoTemplate(MongoTemplate mongoTemplate) {
+        this.mongoTemplate = mongoTemplate;
+    }
+
     @Override
     public String save(User user){
         user.setUserId(getMaxId() + 1);
@@ -68,7 +76,11 @@ public class UserServiceImpl implements UserService{
     public int getMaxId() {
         Query query = new Query();
         query.limit(1).with(Sort.by(Sort.Direction.DESC, "userId"));
-        return mongoTemplate.find(query, User.class).get(0).getUserId();
+        List<User> userList = mongoTemplate.find(query, User.class);
+        if (userList.isEmpty()) {
+            return 0;
+        }
+        return userList.get(0).getUserId();
     }
 
     public int getUserCount() {

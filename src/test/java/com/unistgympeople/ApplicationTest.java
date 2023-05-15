@@ -18,9 +18,12 @@ import com.unistgympeople.realTime.model.User;
 import com.unistgympeople.realTime.model.Usernum;
 import com.unistgympeople.realTime.repository.UserRepository;
 import com.unistgympeople.realTime.service.UserService;
+import com.unistgympeople.realTime.service.UserServiceImpl;
 import com.unistgympeople.realTime.service.UsernumService;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.test.context.TestConfiguration;
+import org.springframework.data.mongodb.core.query.Criteria;
+import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.test.context.junit.jupiter.SpringJUnitConfig;
 import org.springframework.web.socket.config.annotation.WebSocketHandlerRegistration;
 import org.springframework.web.socket.config.annotation.WebSocketHandlerRegistry;
@@ -41,9 +44,7 @@ import org.springframework.web.socket.WebSocketSession;
 import org.w3c.dom.Text;
 
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.UUID;
+import java.util.*;
 
 import static com.mongodb.internal.connection.tlschannel.util.Util.assertTrue;
 import static org.junit.Assert.assertEquals;
@@ -209,7 +210,7 @@ public class ApplicationTest {
     private ExerciseRepository exerciseRepository;
     @Mock
     private ExerciseService exerciseService;
-    @Autowired
+    @Mock
     private MongoTemplate mongoTemplate;
     @Test
     public void testGetCalenderByMember(){
@@ -485,7 +486,7 @@ public class ApplicationTest {
     @Mock
     private UsernumService usernumService;
 
-    @Autowired
+    @Mock
     private UserRepository userRepository;
 
     @Test
@@ -524,6 +525,47 @@ public class ApplicationTest {
         assertEquals(usernumtest1.getTime(),testtime);
         assertEquals(usernumtest1.getUserNumber(),testusernum);
     }
+
+    @Test
+    public void testUserService() {
+        String testId = "1";
+        int userId = 1;
+        String testTimeStamp = "2023-05-14T12:23:12Z";
+        User.UserType testUserType = User.UserType.ENTER;
+        User user = new User();
+        user.setId(testId);
+        user.setUserId(userId);
+        user.setTimeStamp(testTimeStamp);
+        user.setUserType(testUserType);
+
+        UserServiceImpl userService1 = new UserServiceImpl();
+        userService1.setUserRepository(userRepository);
+        userService1.setMongoTemplate(mongoTemplate);
+
+        when(userRepository.save(user)).thenReturn(user);
+
+        String id = userService1.save(user);
+
+        verify(userRepository).save(user);
+        assertEquals(id, user.getId());
+
+        when(userRepository.findById(testId)).thenReturn(Optional.of(user));
+        Optional<User> userById = userService1.getUserById(testId);
+        assertTrue(userById.isPresent());
+        assertEquals(user, userById.get());
+
+        when(userRepository.findAll()).thenReturn(List.of(user));
+        List<User> userList = userService1.getUser();
+        assertEquals(1, userList.size());
+        assertEquals(user, userList.get(0));
+
+        Query enterquery = new Query(Criteria.where("userType").is("ENTER"));
+        Query exitquery = new Query(Criteria.where("userType").is("EXIT"));
+        when(mongoTemplate.find(enterquery, User.class)).thenReturn(List.of(user));
+        when(mongoTemplate.find(exitquery, User.class)).thenReturn(Collections.emptyList());
+        assertEquals(1, userService1.getUserCount());
+    }
+
     // <--- HotTime Test Code lines --->
 
     // Add more test cases for other methods and scenarios...
