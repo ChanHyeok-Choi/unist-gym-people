@@ -108,12 +108,15 @@ public class ApplicationTest {
 
         WebSocketSession session = mock(WebSocketSession.class);
 
-        ChatMessage chatMessageEnter = mock(ChatMessage.class);
-        when(chatMessageEnter.getType()).thenReturn(ChatMessage.MessageType.ENTER);
+        ChatMessage chatMessageEnter = new ChatMessage();
         chatMessageEnter.setType(ChatMessage.MessageType.ENTER);
         chatMessageEnter.setRoomId(roomId);
         chatMessageEnter.setSender("user1");
         chatMessageEnter.setMessage("user1 enters room " + roomId);
+
+        assertEquals(chatMessageEnter.getType(), ChatMessage.MessageType.ENTER);
+        assertEquals(chatMessageEnter.getSender(), "user1");
+        assertEquals(chatMessageEnter.getMessage(), "user1 enters room " + roomId);
 
         TextMessage textMessageEnter = new TextMessage("user1 enters room " + roomId);
 
@@ -149,6 +152,7 @@ public class ApplicationTest {
         assertNotNull(result);
         assertEquals(roomId, result.getRoomId());
         assertEquals(roomName, result.getName());
+        assertEquals(createdRoom.getSessions().size(), 0);
     }
 
     @Test
