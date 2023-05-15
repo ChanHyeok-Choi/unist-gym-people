@@ -8,7 +8,7 @@ import org.springframework.data.mongodb.core.mapping.Document;
 @Getter
 @Setter
 @Document(collection = "usernums")
-@JsonInclude(JsonInclude.Include.NON_NULL) //include only non_null values
+@JsonInclude(JsonInclude.Include.NON_NULL)
 public class Usernum {
 
     @Id @Generated
@@ -18,8 +18,4 @@ public class Usernum {
     private int userNumber;
 
     public Usernum() {}
-    /*public User(String userId, Date timeStamp) {
-        this.userId = userId;
-        this.timeStamp = timeStamp;
-    }*/
 }

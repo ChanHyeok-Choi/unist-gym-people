@@ -1,6 +1,7 @@
 package com.unistgympeople;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.mongodb.client.result.UpdateResult;
 import com.unistgympeople.Calender.Service.CalenderService;
 import com.unistgympeople.Calender.Service.CalenderServiceImpl;
 import com.unistgympeople.Calender.Service.ExerciseService;
@@ -14,14 +15,20 @@ import com.unistgympeople.Calender.repository.ExerciseRepository;
 import com.unistgympeople.chatRoom.controller.ChatController;
 import com.unistgympeople.chatRoom.handler.ChatRoomWebSocketConfig;
 import com.unistgympeople.chatRoom.handler.ChatRoomWebSocketHandler;
+import com.unistgympeople.realTime.controller.UserController;
 import com.unistgympeople.realTime.model.User;
 import com.unistgympeople.realTime.model.Usernum;
 import com.unistgympeople.realTime.repository.UserRepository;
+import com.unistgympeople.realTime.repository.UsernumRepository;
 import com.unistgympeople.realTime.service.UserService;
 import com.unistgympeople.realTime.service.UserServiceImpl;
 import com.unistgympeople.realTime.service.UsernumService;
+import com.unistgympeople.realTime.service.UsernumServiceImpl;
+import org.springframework.data.domain.Sort;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
+import org.springframework.data.mongodb.core.query.Update;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.socket.config.annotation.WebSocketHandlerRegistration;
 import org.springframework.web.socket.config.annotation.WebSocketHandlerRegistry;
 import com.unistgympeople.chatRoom.model.ChatMessage;
@@ -42,8 +49,8 @@ import java.io.IOException;
 import java.util.*;
 
 import static com.mongodb.internal.connection.tlschannel.util.Util.assertTrue;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.*;
+import static org.junit.Assert.assertNull;
 import static org.mockito.Mockito.*;
 
 @RunWith(SpringRunner.class)
@@ -652,6 +659,8 @@ public class ApplicationTest {
 
     @Mock
     private UserRepository userRepository;
+    @Mock
+    private UsernumRepository usernumRepository;
 
     @Test
     public void testgenerateUserModel() {
@@ -701,35 +710,198 @@ public class ApplicationTest {
         user.setUserId(userId);
         user.setTimeStamp(testTimeStamp);
         user.setUserType(testUserType);
+        String testId2 = "2";
+        int userId2 = 2;
+        String testTimeStamp2 = "2023-05-15T12:23:12Z";
+        User.UserType testUserType2 = User.UserType.ENTER;
+        User user2 = new User();
+        user2.setId(testId2);
+        user2.setUserId(userId2);
+        user2.setTimeStamp(testTimeStamp2);
+        user2.setUserType(testUserType2);
 
         UserServiceImpl userService1 = new UserServiceImpl();
         userService1.setUserRepository(userRepository);
         userService1.setMongoTemplate(mongoTemplate);
 
         when(userRepository.save(user)).thenReturn(user);
+        when(userRepository.save(user2)).thenReturn(user2);
 
         String id = userService1.save(user);
+        String id2 = userService1.save(user2);
 
         verify(userRepository).save(user);
         assertEquals(id, user.getId());
+
+        verify(userRepository).save(user2);
+        assertEquals(id2, user2.getId());
+
+        Query getmaxquery = new Query();
+        getmaxquery.limit(1).with(Sort.by(Sort.Direction.DESC,"userId"));
+        when(mongoTemplate.find(getmaxquery,User.class)).thenReturn(List.of(user2));
+        int max_id = userService1.getMaxId();
+        assertEquals(1,max_id);
+
+        Query idquery = new Query(Criteria.where("userId").is(userId));
+        when(mongoTemplate.findOne(idquery,User.class)).thenReturn(user);
+        Optional<User> userByuserId1 = userService1.getUserById(userId);
+        Optional<User> userByuserId2 = userService1.getUserById(13);
+        assertTrue(userByuserId1.isPresent());
+        assertFalse(userByuserId2.isPresent());
+        assertEquals(user,userByuserId1.get());
 
         when(userRepository.findById(testId)).thenReturn(Optional.of(user));
         Optional<User> userById = userService1.getUserById(testId);
         assertTrue(userById.isPresent());
         assertEquals(user, userById.get());
 
-        when(userRepository.findAll()).thenReturn(List.of(user));
+        when(userRepository.findAll()).thenReturn(List.of(user,user2));
         List<User> userList = userService1.getUser();
-        assertEquals(1, userList.size());
+        assertEquals(2, userList.size());
         assertEquals(user, userList.get(0));
 
         Query enterquery = new Query(Criteria.where("userType").is("ENTER"));
         Query exitquery = new Query(Criteria.where("userType").is("EXIT"));
-        when(mongoTemplate.find(enterquery, User.class)).thenReturn(List.of(user));
+        when(mongoTemplate.find(enterquery, User.class)).thenReturn(List.of(user,user2));
         when(mongoTemplate.find(exitquery, User.class)).thenReturn(Collections.emptyList());
-        assertEquals(1, userService1.getUserCount());
+        assertEquals(2, userService1.getUserCount());
+
+        Query voidquery = new Query();
+        when(mongoTemplate.find(voidquery,User.class)).thenReturn(List.of(user,user2));
+        List<User> getalluser = userService1.getAllUser();
+        assertEquals(2,getalluser.size());
+
+        Query updatequery = new Query(Criteria.where("userId").is(userId2));
+        Update update = new Update().set("timeStamp",user2.getTimeStamp())
+                .set("userType",user2.getUserType());
+        when(mongoTemplate.updateFirst(updatequery,update,User.class)).thenReturn(null);
+        UpdateResult updateResult = userService1.updateUserById(userId2,user2);
+        assertNull(updateResult);
     }
 
+    @Test
+    public void testUsernumService() {
+        String testid = "1";
+        String testdate = "2023-05-15";
+        String testtime = "16:51:22";
+        int usernumber = 3;
+        Usernum usernum = new Usernum();
+        usernum.setId(testid);
+        usernum.setDate(testdate);
+        usernum.setTime(testtime);
+        usernum.setUserNumber(usernumber);
+
+        UsernumServiceImpl usernumService1 = new UsernumServiceImpl();
+        usernumService1.setUsernumRepository(usernumRepository);
+        usernumService1.setMongoTemplate2(mongoTemplate);
+
+        when(usernumRepository.save(usernum)).thenReturn(usernum);
+        String id = usernumService1.save(usernum,usernumber);
+        verify(usernumRepository).save(usernum);
+        assertEquals(id, usernum.getId());
+
+        when(usernumRepository.findById(id)).thenReturn(Optional.of(usernum));
+        Optional<Usernum> usernumFindById = usernumService1.getUsernumById(testid);
+        assertTrue(usernumFindById.isPresent());
+        assertEquals(usernum,usernumFindById.get());
+
+        Query voidquery = new Query();
+        when(mongoTemplate.find(voidquery,Usernum.class)).thenReturn(List.of(usernum));
+        List<Usernum> getallusernumList = usernumService1.getAllUsernum();
+        assertEquals(1, getallusernumList.size());
+        assertEquals(usernum, getallusernumList.get(0));
+
+        Query usernumbydatequery = new Query(Criteria.where("date").is(testdate));
+        when(mongoTemplate.find(usernumbydatequery,Usernum.class)).thenReturn(List.of(usernum));
+        List<Usernum> getnumberbydateList = usernumService1.getUsernumByDate(testdate);
+        assertEquals(new ArrayList<>(),getnumberbydateList);
+
+        String testid2 = "2";
+        String testdate2 = "2023-05-15";
+        String testtime2 = "17:13:21";
+        int usernumber2 = 6;
+        Usernum usernum2 = new Usernum();
+        usernum2.setId(testid2);
+        usernum2.setDate(testdate2);
+        usernum2.setTime(testtime2);
+        usernum2.setUserNumber(usernumber2);
+
+        when(usernumRepository.save(usernum2)).thenReturn(usernum2);
+        String id2 = usernumService1.save(usernum2,usernumber2);
+        verify(usernumRepository).save(usernum2);
+        assertEquals(id2, usernum2.getId());
+
+        Query usernumbydatequery2 = new Query(Criteria.where("date").is(testdate));
+        when(mongoTemplate.find(usernumbydatequery,Usernum.class)).thenReturn(List.of(usernum,usernum2));
+        List<Usernum> getnumberbydateList2 = usernumService1.getUsernumByDate(testdate);
+        assertEquals(1,getnumberbydateList2.size());
+        assertEquals(usernum2,getnumberbydateList2.get(0));
+    }
+
+    @Test
+    public void testUserController() {
+        UserController userController = new UserController();
+        userController.setUserController(userService);
+        userController.setUsernumController(usernumService);
+
+        String testId = "1";
+        int userId = 1;
+        String testTimeStamp = "2023-05-14T12:23:12Z";
+        User.UserType testUserType = User.UserType.ENTER;
+        User user = new User();
+        user.setId(testId);
+        user.setUserId(userId);
+        user.setTimeStamp(testTimeStamp);
+        user.setUserType(testUserType);
+
+        when(userService.save(user)).thenReturn(testId);
+        when(userService.getUserById(testId)).thenReturn(Optional.of(user));
+        ResponseEntity<User> resresponse = userController.saveUser(user);
+        assertNotNull(resresponse);
+        assertEquals(user,resresponse.getBody());
+
+        String testnumid = "1";
+        String testdate = "2023-05-15";
+        String testtime = "18:27:23";
+        when(userService.getUserCount()).thenReturn(1);
+        Usernum countusernum = new Usernum();
+        countusernum.setId(testnumid);
+        countusernum.setDate(testdate);
+        countusernum.setTime(testtime);
+        countusernum.setUserNumber(1);
+        when(usernumService.save(countusernum,1)).thenReturn(countusernum.getId());
+        when(usernumService.getUsernumById(countusernum.getId())).thenReturn(Optional.of(countusernum));
+        ResponseEntity<Long> resusernum = userController.getUserCount();
+        assertNotNull(resusernum);
+        assertEquals(1,resusernum.getBody().intValue());
+
+        when(usernumService.getAllUsernum()).thenReturn(List.of(countusernum));
+        List<Usernum> getallusernums = userController.getAllUsernum();
+        assertEquals(1,getallusernums.size());
+        assertEquals(countusernum,getallusernums.get(0));
+
+        when(userService.getAllUser()).thenReturn(List.of(user));
+        List<User> getallusers = userController.getAllUser();
+        assertEquals(1, getallusers.size());
+        assertEquals(user,getallusers.get(0));
+
+        when(usernumService.getUsernumByDate(testdate)).thenReturn(List.of(countusernum));
+        List<Usernum> getdateusernums = userController.getHotdate(testdate);
+        assertEquals(1, getdateusernums.size());
+        assertEquals(countusernum,getdateusernums.get(0));
+
+        int getuser_id = Integer.parseInt(testId);
+        when(userService.getUserById(getuser_id)).thenReturn(Optional.of(user));
+        ResponseEntity<User> getbyiduser = userController.getUser(testId);
+        assertNotNull(getbyiduser);
+        assertEquals(user,getbyiduser.getBody());
+
+        int update_id = Integer.parseInt(testId);
+        when(userService.updateUserById(update_id,user)).thenReturn(null);
+        ResponseEntity<User> updatetest = userController.updateUser(testId,user);
+        assertNotNull(updatetest);
+        assertEquals(user,updatetest.getBody());
+    }
     // <--- HotTime Test Code lines --->
 
     // Add more test cases for other methods and scenarios...

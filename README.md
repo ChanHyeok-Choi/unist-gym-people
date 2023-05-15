@@ -13,13 +13,13 @@ mongod --fork --logpath /var/log/mongodb.log
 mongosh admin --eval "db.createUser({ user: 'admin', pwd: 'password', roles: ['userAdminAnyDatabase'] })"
 
 # Import data/*.csv to MongoDB
-mongoimport --db=cse364 --collection=users --authenticationDatabase admin --username admin --password password --type=csv --file=data/users.csv --fields=userId.int32\(\),timeStamp.string\(\) --columnsHaveTypes
-mongoimport --db=cse364 --collection=usernums --authenticationDatabase admin --username admin --password password --type=csv --file=data/usernums.csv --fields=usernumId.int32\(\),date.string\(\),time.string\(\),num.int32\(\) --columnsHaveTypes
+mongoimport --db=cse364 --collection=users --authenticationDatabase admin --username admin --password password --type=csv --file=data/users.csv --fields=userId.int32\(\),timeStamp.string\(\),userType.string\(\) --columnsHaveTypes
+mongoimport --db=cse364 --collection=usernums --authenticationDatabase admin --username admin --password password --type=csv --file=data/usernums.csv --fields=date.string\(\),time.string\(\),userNumber.int32\(\) --columnsHaveTypes
 
 mongoimport --db=cse364 --collection=calender --authenticationDatabase admin --username admin --password password --type=csv --file=data/calender.csv --fields=memberid.int32\(\),time.string\(\),event.string\(\),num.int32\(\) --columnsHaveTypes
 mongoimport --db=cse364 --collection=exercise --authenticationDatabase admin --username admin --password password --type=csv --file=data/exercise.csv --fields=exercisetype.string\(\),percalorie.int32\(\) --columnsHaveTypes
-mvn package
 
+mvn package
 java -jar target/cse364-project-1.0-SNAPSHOT.jar
 ```
 
@@ -28,6 +28,41 @@ java -jar target/cse364-project-1.0-SNAPSHOT.jar
 ## Part 2 : Implement REST APIs for your three features (90 points, 30 points for each feature)
 
 ### Feature 1 : Real-Time User Viewer
+1. Check connection with users.csv file (with visualize full datasets).
+   ```
+   curl -X GET http://localhost:8080/users/showUser
+   > {
+   ```
+2. Check connection with usernums.csv file (with visualize full datasets).
+   ```
+   curl -X GET http://localhost:8080/users/showCount
+   > {
+   ```
+3. Check each user datalines (example of 2nd line).
+   ```
+   curl -X GET http://localhost:8080/users/2
+   > {
+   ```
+4. Show number of people in Gym & add new data to usernums.csv.
+   ```
+   curl -X GET http://localhost:8080/users/userCount
+   > {
+   ```
+5. Show specific date's all time of Gym's people is more than average people of that date. (example: 2023-05-09)
+   ```
+   curl -X GET http://localhost:8080/users/hotdate/2023-05-09
+   > {
+   ```
+6. POST new data about users (of users.csv)
+   ```
+   curl -X GET http://localhost:8080/users/hotdate/2023-05-09
+   > {
+   ```
+7. PUT to change data of users (of users.csv)
+   ```
+   curl -X GET http://localhost:8080/users/hotdate/2023-05-09
+   > {
+   ```
 
 ### Feature 2 : Real-Time Chat Service
 
@@ -151,6 +186,7 @@ curl -X POST http://localhost:8080/Exercise -H 'Content-type:application/json' -
 ## Part 3 : Achieve more than 90% of branch coverage with your unit tests
 
 ### Feature 1 : Real-Time User Viewer
+   On the result of `mvn jacoco:report`, there are some branches in 
 
 ### Feature 2 : Real-Time Chat Service
    On the result of `mvn jacoco:report`, there's only one branch in ChatRoom Package.
@@ -161,7 +197,7 @@ curl -X POST http://localhost:8080/Exercise -H 'Content-type:application/json' -
 4. testSendMessage(): verify that `sendMessage()` function works well in [ChatService.java](src/main/java/com/unistgympeople/chatRoom/service/ChatService.java)
 
 ### Feature 3 : User's Workout Calender
-   On the result of 'mvn jacoco:report', there are some branches in Calender Package.
+   On the result of `mvn jacoco:report`, there are some branches in Calender Package.
 1. CalenderModelTest() & CalenderServiceTest() & ExerciseModelTest() & ExerciseServiceTest()
     * verify that `calender`, `calender service`, `exercise`, `exercises service` constructors, getter and setter function work well.
 2. GetCalenderByMemberTest() & GetCalenderServiceByMemberTest()

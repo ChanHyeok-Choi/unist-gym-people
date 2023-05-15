@@ -1,16 +1,11 @@
 package com.unistgympeople.realTime.service;
 
-import com.mongodb.client.result.UpdateResult;
-import com.unistgympeople.realTime.model.User;
 import com.unistgympeople.realTime.model.Usernum;
 import com.unistgympeople.realTime.repository.UsernumRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Sort;
 import org.springframework.data.mongodb.core.MongoTemplate;
-import org.springframework.data.mongodb.core.aggregation.*;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
-import org.springframework.data.mongodb.core.query.Update;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
@@ -26,6 +21,14 @@ public class UsernumServiceImpl implements UsernumService{
     private UsernumRepository usernumRepository;
     @Autowired
     private MongoTemplate mongoTemplate2;
+
+    public void setUsernumRepository(UsernumRepository usernumRepository) {
+        this.usernumRepository = usernumRepository;
+    }
+
+    public void setMongoTemplate2(MongoTemplate mongoTemplate) {
+        this.mongoTemplate2 = mongoTemplate;
+    }
 
     @Override
     public String save(Usernum usernum,int number){
@@ -68,29 +71,6 @@ public class UsernumServiceImpl implements UsernumService{
                 results.add(d);
             }
         }
-        /*
-        MatchOperation getDateUsernum = Aggregation.match(
-                Criteria.where("date").is(date)
-        );
-
-        GroupOperation avgUsernum = Aggregation.group("$date").avg("$userNumber").as("avg_num");
-
-        MatchOperation filterAvgNum = Aggregation.match(
-                Criteria.where("userNumber").gte("avg_num")
-        );
-
-        Aggregation aggregation = Aggregation.newAggregation(
-                getDateUsernum,
-                avgUsernum,
-                filterAvgNum
-        );
-
-        List<Usernum> results = mongoTemplate2.aggregate(
-                aggregation,
-                "usernum",
-                Usernum.class
-        ).getMappedResults();
-        */
         return results;
     }
 }

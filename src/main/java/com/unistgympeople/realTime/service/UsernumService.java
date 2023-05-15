@@ -1,6 +1,5 @@
 package com.unistgympeople.realTime.service;
 
-import com.mongodb.client.result.UpdateResult;
 import com.unistgympeople.realTime.model.Usernum;
 
 import java.util.List;

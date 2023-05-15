@@ -2,14 +2,10 @@ package com.unistgympeople.realTime.service;
 
 import com.mongodb.client.result.UpdateResult;
 import com.unistgympeople.realTime.model.User;
-import com.unistgympeople.realTime.model.Usernum;
 import com.unistgympeople.realTime.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Example;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.mongodb.core.MongoTemplate;
-import org.springframework.data.mongodb.core.aggregation.Aggregation;
-import org.springframework.data.mongodb.core.aggregation.MatchOperation;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.data.mongodb.core.query.Update;
@@ -40,7 +36,7 @@ public class UserServiceImpl implements UserService{
         user.setTimeStamp(user.getTimeStamp());
         user.setUserType(user.getUserType());
         return userRepository.save(user).getId();
-}
+    }
 
     @Override
     public List<User> getUser(){
