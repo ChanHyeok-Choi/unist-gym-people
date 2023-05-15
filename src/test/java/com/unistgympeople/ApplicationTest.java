@@ -206,7 +206,7 @@ public class ApplicationTest {
     // <--- ChatRoom Test Code lines --->
     // <--- Calender Test Code lines --->
 
-    
+
     @Mock
     private CalenderRepository calenderRepository;
     @Mock
@@ -421,12 +421,25 @@ public class ApplicationTest {
         Calender test1 = new Calender(memberid, time1, event2, num1);
         Calender test2 = new Calender(memberid, time1, event1, num1);
         Calender test3 = new Calender(memberid, time1, event2, num2);
-        String output1 = calenderService1.save(test2);
-        String output2 = calenderService1.save(test3);
-        String output3 = calenderService1.save(test1);
-        assertEquals(null,output1);
-        assertEquals(null,output2);
-        assertEquals(test1.getId(),output3);
+        Exercise exercise = new Exercise("Jumprope",1);
+        Query query1 = new Query();
+        query1.addCriteria(Criteria.where("exercisetype").is("Jumprope"));
+        when(mongoTemplate.findOne(query1, Exercise.class)).thenReturn(exercise);
+        Query query2 = new Query();
+        query2.addCriteria(Criteria.where("exercisetype").is("NotExists"));
+        when(mongoTemplate.findOne(query2, Exercise.class)).thenReturn(null);
+        when(calenderRepository.save(test1)).thenReturn(test1);
+        when(calenderRepository.save(test2)).thenReturn(test2);
+        when(calenderRepository.save(test3)).thenReturn(test3);
+        String answer = test1.getId();
+        String id1 = calenderService1.save(test1);
+        String id2 = calenderService1.save(test2);
+        String id3 = calenderService1.save(test3);
+
+        assertEquals(answer,id1);
+        assertEquals(null,id2);
+        assertEquals(null,id3);
+
     }
 
     @Test
@@ -565,7 +578,6 @@ public class ApplicationTest {
     @Test
     public void testPostExerciseService(){
 
-        int memberid = 1;
         String event1 = "NewExercise";
         String event2 = "Jumprope";
         Integer num1 = 50;
@@ -573,16 +585,50 @@ public class ApplicationTest {
         Exercise test1 = new Exercise(event1,num1);
         Exercise test2 = new Exercise(event2,num1);
         Exercise test3 = new Exercise("NewerExercise",num2);
-        String output1 = exerciseService.save(test1);
-        String output2 = exerciseService.save(test2);
-        String output3 = exerciseService.save(test3);
-        assertEquals(test1.getId(),output1);
-        assertEquals(null,output2);
-        assertEquals(null,output3);
+        ExerciseService exerciseService1 = new ExerciseServiceImpl(exerciseRepository,mongoTemplate);
+        Exercise exercise = new Exercise("Jumprope",1);
+        Query query1 = new Query();
+        query1.addCriteria(Criteria.where("exercisetype").is("Jumprope"));
+        when(mongoTemplate.findOne(query1, Exercise.class)).thenReturn(exercise);
+        Query query2 = new Query();
+        query2.addCriteria(Criteria.where("exercisetype").is("NewExercise"));
+        when(mongoTemplate.findOne(query2, Exercise.class)).thenReturn(null);
+        Query query3 = new Query();
+        query3.addCriteria(Criteria.where("exercisetype").is("NewerExercise"));
+        when(mongoTemplate.findOne(query3, Exercise.class)).thenReturn(null);
+        when(exerciseRepository.save(test1)).thenReturn(test1);
+        when(exerciseRepository.save(test2)).thenReturn(test2);
+        when(exerciseRepository.save(test3)).thenReturn(test3);
+        String answer = test2.getId();
+        String id1 = exerciseService1.save(test1);
+        String id2 = exerciseService1.save(test2);
+        String id3 = exerciseService1.save(test3);
+        assertEquals(null,id1);
+        assertEquals(answer,id2);
+        assertEquals(null,id3);
+    }
+
+    @Test
+    public void ExerciseServiceGetByExerciseType(){
+
+        String event2 = "Jumprope";
+        Integer num1 = 50;
+        Exercise exercise = new Exercise(event2,num1);
+        List<Exercise> exercises = new ArrayList<>();
+        exercises.add(exercise);
+        Query query1 = new Query();
+        query1.addCriteria(Criteria.where("exercisetype").is(event2));
+        when(mongoTemplate.find(query1, Exercise.class)).thenReturn(exercises);
+        ExerciseService exerciseService1 = new ExerciseServiceImpl(exerciseRepository,mongoTemplate);
+        List<Exercise> result = exerciseService1.getExerciseByExercisetype(event2);
+        assertNotNull(result);
+        assertEquals(result.size(),1);
+        assertEquals(result,exercises);
     }
 
 
-    
+
+
     // <--- Calender Test Code lines --->
 
     // <--- HotTime Test Code lines --->

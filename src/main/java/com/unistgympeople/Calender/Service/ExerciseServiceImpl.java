@@ -52,12 +52,5 @@ public class ExerciseServiceImpl implements ExerciseService{
         return result;
 
     }
-    @Override
-    public UpdateResult updateExerciseByExercisetype(String exercise_type, Exercise updated_exercise){
-        Query query = new Query(Criteria.where("exercisetype").is(exercise_type));
-        Update update = new Update()
-                .set("percalorie", updated_exercise.getpercalorie());
-        UpdateResult result = mongoTemplate.updateFirst(query,update,Exercise.class);
-        return result;
-    }
+
 }

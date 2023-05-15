@@ -9,6 +9,5 @@ public interface ExerciseService {
     public String save(Exercise exercise);
     public List<Exercise> getExercise();
     public List<Exercise> getExerciseByExercisetype(String exercise_type);
-    public UpdateResult updateExerciseByExercisetype(String exercise_type, Exercise updated_exercise);
 
 }
