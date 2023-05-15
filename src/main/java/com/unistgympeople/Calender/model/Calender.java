@@ -2,11 +2,13 @@ package com.unistgympeople.Calender.model;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
-
-@Data
+@Getter
+@Setter
 @Document(collection = "calender")
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class Calender {
