@@ -199,9 +199,9 @@ public class ApplicationTest {
     }
 
     // <--- ChatRoom Test Code lines --->
+
+
     // <--- Calender Test Code lines --->
-
-
     @Mock
     private CalenderRepository calenderRepository;
     @Mock
@@ -213,7 +213,37 @@ public class ApplicationTest {
     @Mock
     private MongoTemplate mongoTemplate;
     @Test
-    public void testGetCalenderByMember(){
+    public void CalenderModelTest(){
+        Calender calender1 = new Calender();
+        Calender calender2 = new Calender(1,"2023-05-14","Pushup",10);
+        assertEquals(calender1.getClass(),Calender.class);
+        assertEquals(calender2.getMemberid(),1);
+        assertEquals(calender2.getTime(),"2023-05-14");
+        assertEquals(calender2.getEvent(),"Pushup");
+        assertEquals(calender2.getNum(),10);
+        calender1.setId("TEST");
+        calender1.setMemberid(1);
+        calender1.setEvent("NewEvent");
+        calender1.setTime("2023-05-15");
+        calender1.setNum(10);
+        assertEquals(calender1.getId(),"TEST");
+        assertEquals(calender1.getMemberid(),1);
+        assertEquals(calender1.getTime(),"2023-05-15");
+        assertEquals(calender1.getEvent(),"NewEvent");
+        assertEquals(calender1.getNum(),10);
+    }
+    @Test
+    public void CalenderServiceTest(){
+        CalenderService calenderService1 = new CalenderServiceImpl();
+        CalenderService calenderService2 = new CalenderServiceImpl(calenderRepository);
+        CalenderService calenderService3 = new CalenderServiceImpl(calenderRepository, mongoTemplate);
+
+        assertEquals(calenderService1.getClass(),CalenderServiceImpl.class);
+        assertEquals(calenderService2.getClass(),CalenderServiceImpl.class);
+        assertEquals(calenderService3.getClass(),CalenderServiceImpl.class);
+    }
+    @Test
+    public void GetCalenderByMemberTest(){
         int memberid = 1;
         String time = "2023-05-12";
         String event = "Pushup";
@@ -231,9 +261,30 @@ public class ApplicationTest {
         assertEquals(1,result.size());
         assertEquals(calenders, result);
     }
+    @Test
+    public void GetCalenderServiceByMemberTest(){
+        int memberid = 1;
+        String time = "2023-05-12";
+        String event = "Pushup";
+        Integer num = 50;
+        Calender calender = new Calender(memberid,time,event,num);
+        Calender calender1 = new Calender(1,"2023-05-13","Pushup",10);
+        List<Calender> calenders = new ArrayList<>();
+        calenders.add(calender);
+        calenders.add(calender1);
+        CalenderService calenderService1 = new CalenderServiceImpl(calenderRepository,mongoTemplate);
+        Query query = new Query();
+        query.addCriteria(Criteria.where("memberid").is(memberid));
+        when(mongoTemplate.find(query,Calender.class)).thenReturn(calenders);
+
+        List<Calender> result = calenderService1.getCalenderByMember(memberid);
+
+        assertNotNull(result);
+        assertEquals(2,result.size());
+    }
 
     @Test
-    public void testCalenderByMemberAndDate(){
+    public void GetCalenderByMemberAndDateTest(){
         int memberid = 1;
         String time1 = "2023-05-12";
         String event1 = "Pushup";
@@ -255,200 +306,7 @@ public class ApplicationTest {
         assertEquals(calenders, result);
     }
     @Test
-    public void testCalenderCalorie(){
-
-        int memberid = 1;
-        String time1 = "2023-05-12";
-        String event1 = "Pushup";
-        String event2 = "Jumprope";
-        Integer num1 = 50;
-        Integer num2 = 100;
-
-        Integer answer = 200;
-        List<Calender> calenders = new ArrayList<>();
-        calenders.add(new Calender(memberid, time1, event1, num1));
-        calenders.add(new Calender(memberid, time1, event2, num2));
-
-        when(calenderService.getCalorieByMemberAndTime(memberid,time1)).thenReturn(answer);
-
-        CalenderController calenderController = new CalenderController(calenderService);
-        Integer result = calenderController.getCalorieOnDate(memberid,time1);
-
-        assertNotNull(result);
-        assertEquals(answer,result);
-    }
-
-
-    @Test
-    public void testPostCalender(){
-
-        int memberid = 1;
-        String time1 = "2023-05-12";
-        String event1 = "NotExists";
-        String event2 = "Jumprope";
-        Integer num1 = 50;
-        Integer num2 = -1;
-        Calender test1 = new Calender(memberid, time1, event2, num1);
-        Calender test2 = new Calender(memberid, time1, event1, num1);
-        Calender test3 = new Calender(memberid, time1, event2, num2);
-        CalenderController calenderController = new CalenderController(calenderService);
-        String output1 = calenderController.save(test2);
-        String output2 = calenderController.save(test3);
-        String output3 = calenderController.save(test1);
-        assertEquals(null,output1);
-        assertEquals(null,output2);
-        assertEquals(test1.getId(),output3);
-    }
-
-    @Test
-    public void testCalorieCalenderEmpty(){
-        CalenderController calenderController = new CalenderController(calenderService);
-        Integer result = calenderController.getCalorieOnDate(1,"2023-05-07");
-        Integer answer = 0;
-        assertEquals(answer, result);
-    }
-    @Test
-    public void testCalorieCalender(){
-        int memberid = 1;
-        String time1 = "2023-05-12";
-        String event1 = "NotExists";
-        Integer num1 = 50;
-        List<Calender> calenders = new ArrayList<>();
-        calenders.add(new Calender(memberid, time1, event1, num1));
-
-        when(calenderService.getCalorieByMemberAndTime(memberid,time1)).thenReturn(-1);
-        CalenderController calenderController = new CalenderController(calenderService);
-        Integer result = calenderController.getCalorieOnDate(memberid,time1);
-        Integer answer = -1;
-
-        assertEquals(answer, result);
-    }
-    @Test
-    public void testGetAllExercise(){
-        List<Exercise> exercises= new ArrayList<>();
-        exercises.add(new Exercise("TestExercise1",100));
-        exercises.add(new Exercise("TestExercise2",50));
-        when(exerciseService.getExercise()).thenReturn(exercises);
-
-        ExerciseController exerciseController = new ExerciseController(exerciseService);
-        List<Exercise> result = exerciseController.getAllExercise();
-
-        assertNotNull(result);
-        assertEquals(2,result.size());
-        assertEquals(exercises, result);
-    }
-    @Test
-    public void testGetAllExerciseService(){
-        List<Exercise> exercises= new ArrayList<>();
-        Exercise exercise1 = new Exercise("TestExercise1",100);
-        Exercise exercise2 = new Exercise("TestExercise2",50);
-        exercises.add(exercise1);
-        exercises.add(exercise2);
-        when(exerciseRepository.findAll()).thenReturn(exercises);
-        ExerciseService exerciseService1 = new ExerciseServiceImpl(exerciseRepository,mongoTemplate);
-        List<Exercise> result = exerciseService1.getExercise();
-
-        assertNotNull(result);
-        assertEquals(2,result.size());
-        assertEquals(exercises, result);
-    }
-    @Test
-    public void testGetExerciseByType(){
-        List<Exercise> exercises= new ArrayList<>();
-        exercises.add(new Exercise ("TestExercise1",100));
-        when(exerciseService.getExerciseByExercisetype("TestExercise1")).thenReturn(exercises);
-
-        ExerciseController exerciseController = new ExerciseController(exerciseService);
-        List<Exercise> result = exerciseController.getEvents("TestExercise1");
-
-        assertNotNull(result);
-        assertEquals(1,result.size());
-        assertEquals(exercises, result);
-    }
-    @Test
-    public void testPostExercise(){
-        String event1 = "NewExercise";
-        String event2 = "Jumprope";
-        Integer num1 = 50;
-        Integer num2 = -1;
-        Exercise test1 = new Exercise(event1,num1);
-        Exercise test2 = new Exercise(event2,num1);
-        Exercise test3 = new Exercise("NewerExercise",num2);
-        ExerciseController exerciseController = new ExerciseController(exerciseService);
-        String output1 = exerciseController.save(test1);
-        String output2 = exerciseController.save(test2);
-        String output3 = exerciseController.save(test3);
-        assertEquals(test1.getId(),output1);
-        assertEquals(null,output2);
-        assertEquals(null,output3);
-    }
-
-    @Test
-    public void CalenderModelTest(){
-        Calender calender1 = new Calender();
-        Calender calender2 = new Calender(1,"2023-05-14","Pushup",10);
-        assertEquals(calender1.getClass(),Calender.class);
-        assertEquals(calender2.getMemberid(),1);
-        assertEquals(calender2.getTime(),"2023-05-14");
-        assertEquals(calender2.getEvent(),"Pushup");
-        assertEquals(calender2.getNum(),10);
-        calender1.setId("TEST");
-        calender1.setMemberid(1);
-        calender1.setEvent("NewEvent");
-        calender1.setTime("2023-05-15");
-        calender1.setNum(10);
-        assertEquals(calender1.getId(),"TEST");
-        assertEquals(calender1.getMemberid(),1);
-        assertEquals(calender1.getTime(),"2023-05-15");
-        assertEquals(calender1.getEvent(),"NewEvent");
-        assertEquals(calender1.getNum(),10);
-    }
-
-    @Test
-    public void CalenderServiceTest(){
-        CalenderService calenderService1 = new CalenderServiceImpl();
-        CalenderService calenderService2 = new CalenderServiceImpl(calenderRepository);
-        CalenderService calenderService3 = new CalenderServiceImpl(calenderRepository, mongoTemplate);
-
-        assertEquals(calenderService1.getClass(),CalenderServiceImpl.class);
-        assertEquals(calenderService2.getClass(),CalenderServiceImpl.class);
-        assertEquals(calenderService3.getClass(),CalenderServiceImpl.class);
-    }
-    @Test
-    public void testPostCalenderService(){
-        int memberid = 1;
-        String time1 = "2023-05-12";
-        String event1 = "NotExists";
-        String event2 = "Jumprope";
-        Integer num1 = 50;
-        Integer num2 = -1;
-        CalenderService calenderService1 = new CalenderServiceImpl(calenderRepository,mongoTemplate);
-        Calender test1 = new Calender(memberid, time1, event2, num1);
-        Calender test2 = new Calender(memberid, time1, event1, num1);
-        Calender test3 = new Calender(memberid, time1, event2, num2);
-        Exercise exercise = new Exercise("Jumprope",1);
-        Query query1 = new Query();
-        query1.addCriteria(Criteria.where("exercisetype").is("Jumprope"));
-        when(mongoTemplate.findOne(query1, Exercise.class)).thenReturn(exercise);
-        Query query2 = new Query();
-        query2.addCriteria(Criteria.where("exercisetype").is("NotExists"));
-        when(mongoTemplate.findOne(query2, Exercise.class)).thenReturn(null);
-        when(calenderRepository.save(test1)).thenReturn(test1);
-        when(calenderRepository.save(test2)).thenReturn(test2);
-        when(calenderRepository.save(test3)).thenReturn(test3);
-        String answer = test1.getId();
-        String id1 = calenderService1.save(test1);
-        String id2 = calenderService1.save(test2);
-        String id3 = calenderService1.save(test3);
-
-        assertEquals(answer,id1);
-        assertEquals(null,id2);
-        assertEquals(null,id3);
-
-    }
-
-    @Test
-    public void testGetCalenderServiceByMemberAndDate(){
+    public void GetCalenderServiceByMemberAndDateTest(){
         int memberid = 1;
         String time = "2023-05-12";
         String event = "Pushup";
@@ -477,29 +335,56 @@ public class ApplicationTest {
         assertEquals(1,result.size());
     }
 
-    @Test
-    public void testGetCalenderServiceByMember(){
-        int memberid = 1;
-        String time = "2023-05-12";
-        String event = "Pushup";
-        Integer num = 50;
-        Calender calender = new Calender(memberid,time,event,num);
-        Calender calender1 = new Calender(1,"2023-05-13","Pushup",10);
-        List<Calender> calenders = new ArrayList<>();
-        calenders.add(calender);
-        calenders.add(calender1);
-        CalenderService calenderService1 = new CalenderServiceImpl(calenderRepository,mongoTemplate);
-        Query query = new Query();
-        query.addCriteria(Criteria.where("memberid").is(memberid));
-        when(mongoTemplate.find(query,Calender.class)).thenReturn(calenders);
 
-        List<Calender> result = calenderService1.getCalenderByMember(memberid);
+    @Test
+    public void GetCalenderCalorieTest(){
+
+        int memberid = 1;
+        String time1 = "2023-05-12";
+        String event1 = "Pushup";
+        String event2 = "Jumprope";
+        Integer num1 = 50;
+        Integer num2 = 100;
+
+        Integer answer = 200;
+        List<Calender> calenders = new ArrayList<>();
+        calenders.add(new Calender(memberid, time1, event1, num1));
+        calenders.add(new Calender(memberid, time1, event2, num2));
+
+        when(calenderService.getCalorieByMemberAndTime(memberid,time1)).thenReturn(answer);
+
+        CalenderController calenderController = new CalenderController(calenderService);
+        Integer result = calenderController.getCalorieOnDate(memberid,time1);
 
         assertNotNull(result);
-        assertEquals(2,result.size());
+        assertEquals(answer,result);
+    }
+
+    @Test
+    public void GetCalenderCalorieEmptyTest(){
+        CalenderController calenderController = new CalenderController(calenderService);
+        Integer result = calenderController.getCalorieOnDate(1,"2023-05-07");
+        Integer answer = 0;
+        assertEquals(answer, result);
     }
     @Test
-    public void testGetCalorieServiceByMemberAndDate(){
+    public void GetCalenderCalorieErrorTest(){
+        int memberid = 1;
+        String time1 = "2023-05-12";
+        String event1 = "NotExists";
+        Integer num1 = 50;
+        List<Calender> calenders = new ArrayList<>();
+        calenders.add(new Calender(memberid, time1, event1, num1));
+
+        when(calenderService.getCalorieByMemberAndTime(memberid,time1)).thenReturn(-1);
+        CalenderController calenderController = new CalenderController(calenderService);
+        Integer result = calenderController.getCalorieOnDate(memberid,time1);
+        Integer answer = -1;
+
+        assertEquals(answer, result);
+    }
+    @Test
+    public void GetCalenderServiceCalorieByMemberAndDateTest(){
         int memberid = 1;
         String time = "2023-05-12";
         String event = "Pushup";
@@ -534,7 +419,7 @@ public class ApplicationTest {
     }
 
     @Test
-    public void testGetCalorieServiceByMemberAndDateError()
+    public void testGetCalenderServiceCalorieByMemberAndDateError()
     {
         int memberid = 1;
         String time = "2023-05-12";
@@ -558,6 +443,65 @@ public class ApplicationTest {
         assertNotNull(result);
         assertEquals(answer, result);
     }
+
+    @Test
+    public void PostCalenderTest(){
+
+        int memberid = 1;
+        String time1 = "2023-05-12";
+        String event1 = "NotExists";
+        String event2 = "Jumprope";
+        Integer num1 = 50;
+        Integer num2 = -1;
+        Calender test1 = new Calender(memberid, time1, event2, num1);
+        test1.setId("TEST");
+        Calender test2 = new Calender(memberid, time1, event1, num1);
+        Calender test3 = new Calender(memberid, time1, event2, num2);
+        CalenderController calenderController = new CalenderController(calenderService);
+        when(calenderService.save(test1)).thenReturn(test1.getId());
+        when(calenderService.save(test2)).thenReturn(null);
+        when(calenderService.save(test3)).thenReturn(null);
+        String output1 = calenderController.save(test2);
+        String output2 = calenderController.save(test3);
+        String output3 = calenderController.save(test1);
+        assertNotNull(output3);
+        assertEquals(null,output1);
+        assertEquals(null,output2);
+        assertEquals(test1.getId(),output3);
+    }
+    @Test
+    public void PostCalenderServiceTest(){
+        int memberid = 1;
+        String time1 = "2023-05-12";
+        String event1 = "NotExists";
+        String event2 = "Jumprope";
+        Integer num1 = 50;
+        Integer num2 = -1;
+        CalenderService calenderService1 = new CalenderServiceImpl(calenderRepository,mongoTemplate);
+        Calender test1 = new Calender(memberid, time1, event2, num1);
+        test1.setId("TEST");
+        Calender test2 = new Calender(memberid, time1, event1, num1);
+        Calender test3 = new Calender(memberid, time1, event2, num2);
+        Exercise exercise = new Exercise("Jumprope",1);
+        Query query1 = new Query();
+        query1.addCriteria(Criteria.where("exercisetype").is("Jumprope"));
+        when(mongoTemplate.findOne(query1, Exercise.class)).thenReturn(exercise);
+        Query query2 = new Query();
+        query2.addCriteria(Criteria.where("exercisetype").is("NotExists"));
+        when(mongoTemplate.findOne(query2, Exercise.class)).thenReturn(null);
+        when(calenderRepository.save(test1)).thenReturn(test1);
+        when(calenderRepository.save(test2)).thenReturn(test2);
+        when(calenderRepository.save(test3)).thenReturn(test3);
+        String answer = test1.getId();
+        String id1 = calenderService1.save(test1);
+        String id2 = calenderService1.save(test2);
+        String id3 = calenderService1.save(test3);
+        assertNotNull(id1);
+        assertEquals(answer,id1);
+        assertEquals(null,id2);
+        assertEquals(null,id3);
+    }
+
     @Test
     public void ExerciseModelTest(){
         Exercise exercise1 = new Exercise();
@@ -587,7 +531,85 @@ public class ApplicationTest {
     }
 
     @Test
-    public void testPostExerciseService(){
+    public void GetAllExerciseTest(){
+        List<Exercise> exercises= new ArrayList<>();
+        exercises.add(new Exercise("TestExercise1",100));
+        exercises.add(new Exercise("TestExercise2",50));
+        when(exerciseService.getExercise()).thenReturn(exercises);
+
+        ExerciseController exerciseController = new ExerciseController(exerciseService);
+        List<Exercise> result = exerciseController.getAllExercise();
+
+        assertNotNull(result);
+        assertEquals(2,result.size());
+        assertEquals(exercises, result);
+    }
+    @Test
+    public void GetAllExerciseServiceTest(){
+        List<Exercise> exercises= new ArrayList<>();
+        Exercise exercise1 = new Exercise("TestExercise1",100);
+        Exercise exercise2 = new Exercise("TestExercise2",50);
+        exercises.add(exercise1);
+        exercises.add(exercise2);
+        when(exerciseRepository.findAll()).thenReturn(exercises);
+        ExerciseService exerciseService1 = new ExerciseServiceImpl(exerciseRepository,mongoTemplate);
+        List<Exercise> result = exerciseService1.getExercise();
+
+        assertNotNull(result);
+        assertEquals(2,result.size());
+        assertEquals(exercises, result);
+    }
+    @Test
+    public void GetExerciseByTypeTest(){
+        List<Exercise> exercises= new ArrayList<>();
+        exercises.add(new Exercise ("TestExercise1",100));
+        when(exerciseService.getExerciseByExercisetype("TestExercise1")).thenReturn(exercises);
+
+        ExerciseController exerciseController = new ExerciseController(exerciseService);
+        List<Exercise> result = exerciseController.getEvents("TestExercise1");
+
+        assertNotNull(result);
+        assertEquals(1,result.size());
+        assertEquals(exercises, result);
+    }
+    @Test
+    public void GetExerciseServiceByTypeTest(){
+
+        String event2 = "Jumprope";
+        Integer num1 = 50;
+        Exercise exercise = new Exercise(event2,num1);
+        List<Exercise> exercises = new ArrayList<>();
+        exercises.add(exercise);
+        Query query1 = new Query();
+        query1.addCriteria(Criteria.where("exercisetype").is(event2));
+        when(mongoTemplate.find(query1, Exercise.class)).thenReturn(exercises);
+        ExerciseService exerciseService1 = new ExerciseServiceImpl(exerciseRepository,mongoTemplate);
+        List<Exercise> result = exerciseService1.getExerciseByExercisetype(event2);
+        assertNotNull(result);
+        assertEquals(result.size(),1);
+        assertEquals(result,exercises);
+    }
+
+    @Test
+    public void PostExerciseTest(){
+        String event1 = "NewExercise";
+        String event2 = "Jumprope";
+        Integer num1 = 50;
+        Integer num2 = -1;
+        Exercise test1 = new Exercise(event1,num1);
+        Exercise test2 = new Exercise(event2,num1);
+        Exercise test3 = new Exercise("NewerExercise",num2);
+        ExerciseController exerciseController = new ExerciseController(exerciseService);
+        String output1 = exerciseController.save(test1);
+        String output2 = exerciseController.save(test2);
+        String output3 = exerciseController.save(test3);
+        assertEquals(test1.getId(),output1);
+        assertEquals(null,output2);
+        assertEquals(null,output3);
+    }
+
+    @Test
+    public void PostExerciseServiceTest(){
 
         String event1 = "NewExercise";
         String event2 = "Jumprope";
@@ -618,27 +640,6 @@ public class ApplicationTest {
         assertEquals(answer,id2);
         assertEquals(null,id3);
     }
-
-    @Test
-    public void ExerciseServiceGetByExerciseType(){
-
-        String event2 = "Jumprope";
-        Integer num1 = 50;
-        Exercise exercise = new Exercise(event2,num1);
-        List<Exercise> exercises = new ArrayList<>();
-        exercises.add(exercise);
-        Query query1 = new Query();
-        query1.addCriteria(Criteria.where("exercisetype").is(event2));
-        when(mongoTemplate.find(query1, Exercise.class)).thenReturn(exercises);
-        ExerciseService exerciseService1 = new ExerciseServiceImpl(exerciseRepository,mongoTemplate);
-        List<Exercise> result = exerciseService1.getExerciseByExercisetype(event2);
-        assertNotNull(result);
-        assertEquals(result.size(),1);
-        assertEquals(result,exercises);
-    }
-
-
-
 
     // <--- Calender Test Code lines --->
 

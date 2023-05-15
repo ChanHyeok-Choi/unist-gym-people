@@ -72,71 +72,79 @@ java -jar target/cse364-project-1.0-SNAPSHOT.jar
 
 
 1. Command to show every exercise member has done.
-   * (Memberid) is Integer value.
+   * returns All Calenders for memberid 1
+      * (Memberid) is Integer value.
 ```
 curl -X GET http://localhost:8080/Calender/1
-
-//returns All Calenders for memberid 1
+> [{"id":"6462006b76440abe8d237bb4","memberid":1,"time":"2023-05-08","event":"Running","num":200},
+  {"id":"6462006b76440abe8d237bb5","memberid":1,"time":"2023-05-08","event":"Swimming","num":200},
+  {"id":"6462006b76440abe8d237bb9","memberid":1,"time":"2023-05-07","event":"Pushup","num":100}]
 ```
 
 2. Command to show every exercise member has done on certain date.
-   * (Data) is String value, with format yyyy-mm-dd (ex. 2023-05-07).
+   * returns Calenders for member id with date.
+     * (Data) is String value, with format yyyy-mm-dd (ex. 2023-05-07).
 ```
 curl -X GET http://localhost:8080/Calender/1/2023-05-08
-
-//returns Calenders for memberid 1 with date 2023-05-08
+> [{"id":"6462006b76440abe8d237bb4","memberid":1,"time":"2023-05-08","event":"Running","num":200},
+   {"id":"6462006b76440abe8d237bb5","memberid":1,"time":"2023-05-08","event":"Swimming","num":200}]
 ```
 
-3. Command to show total Calorie membe has spent on certain date.
-   * Expected return value is Integer.
+3. Command to show total Calorie member has spent on certain date.
+   * returns Total Calorie for memberid with date.
+     * Expected return value is Integer.
 ```
 curl -X GET http://localhost:8080/Calender/1/2023-05-08/Calorie
-
-//returns Total Calorie for memberid 1 with date 2023-05-08
-//now for the sample data, the result is (Running) 200 * 10 + (Swimming) 200 * 20 = 6000
+> 6000
 ```
 
-4. Command to save the Calender in database
-   * (event) is String value, and (num) is Integer value.
-   * Exception thrown when Exercise type is not declared exercise.csv, or num is 0 or negative.
+4. Command to save the Calendar in database
+   * NULL is thrown when Exercise type is not declared exercise.csv, or num is 0 or negative.
+     * (event) is String value, and (num) is Integer value.
 ```
 curl -X POST http://localhost:8080/Calender -H 'Content-type:application/json' -d '{"memberid":"2", "time":"2023-05-11", "event":"Wrong","num":"1"}'
-//Throws exception "Exercise type not found!"
+> (null)
 
 curl -X POST http://localhost:8080/Calender -H 'Content-type:application/json' -d '{"memberid":"2", "time":"2023-05-11", "event":"Swimming","num":"-1"}'
-//Throws exception "Number must be positive"
+> (null)
 
 curl -X POST http://localhost:8080/Calender -H 'Content-type:application/json' -d '{"memberid":"2", "time":"2023-05-11", "event":"Swimming","num":"20"}'
-//Saves Database
+> 646201fbca750a39a015963broot@d49d8dfc5a4a
 ```
 
 5. Command to show all Exercise in database.
+   * Returns All Exercises.
 ```
 curl -X GET http://localhost:8080/Exercise
-
-//returns All Exercises
+> [{"id":"6462006bc29958c26ba528c1","exercisetype":"Swimming","percalorie":20},
+   {"id":"6462006bc29958c26ba528c2","exercisetype":"Running","percalorie":10},
+   {"id":"6462006bc29958c26ba528c3","exercisetype":"dumbbell","percalorie":2},
+   {"id":"6462006bc29958c26ba528c4","exercisetype":"Kettlebell","percalorie":3},
+   {"id":"6462006bc29958c26ba528c5","exercisetype":"Plank","percalorie":1},
+   {"id":"6462006bc29958c26ba528c6","exercisetype":"Pushup","percalorie":2},
+   {"id":"6462006bc29958c26ba528c7","exercisetype":"Jumprope","percalorie":1}]
 ```
 
 6. Command to show specific Exercise in database.
-   * (Exercisetype) is String value.
+   * Returns Database for certain exercise.
+     * (Exercisetype) is String value.
 ```
 curl -X GET http://localhost:8080/Exercise/Swimming
-
-//returns Database for Swimming
+> [{"id":"6462006bc29958c26ba528c1","exercisetype":"Swimming","percalorie":20}]
 ```
 
 7. Command to add new Exercise in database
-   * (exercisetype) is String value and (percalorie) is Integer value.
-   * Exception is thrown when Exercise type already exists or percalorie is not positive
+   * Null is thrown when Exercise type already exists or percalorie is not positive
+     * (exercisetype) is String value and (percalorie) is Integer value.
 ```
 curl -X POST http://localhost:8080/Exercise -H 'Content-type:application/json' -d '{"exercisetype":"Jumprope","percalorie":"10"}'
-//Throws exception "Exercise Already exists!"
+> (null)
 
 curl -X POST http://localhost:8080/Exercise -H 'Content-type:application/json' -d '{"exercisetype":"TestExercise","percalorie":"0"}'
-//Throws exception "PerCalorie must be positive value!"
+> (null)
 
 curl -X POST http://localhost:8080/Exercise -H 'Content-type:application/json' -d '{"exercisetype":"TestExercise","percalorie":"10"}'
-//Saves Database
+> 64620358ca750a39a015963croot@d49d8dfc5a4a
 ```
 
 ---
@@ -154,3 +162,22 @@ curl -X POST http://localhost:8080/Exercise -H 'Content-type:application/json' -
 4. testSendMessage(): verify that `sendMessage()` function works well in [ChatService.java](src/main/java/com/unistgympeople/chatRoom/service/ChatService.java)
 
 ### Feature 3 : User's Workout Calender
+   On the result of 'mvn jacoco:report', there are some branches in Calender Package.
+1. CalenderModelTest() & CalenderServiceTest() & ExerciseModelTest() & ExerciseServiceTest()
+    * verify that `calender`, `calender service`, `exercise`, `exercises service` constructors, getter and setter function work well.
+2. GetCalenderByMemberTest() & GetCalenderServiceByMemberTest()
+    * verify that `getEvents()`, `getCalenderByMember()` works well in [CalenderController.java](src/main/java/com/unistgympeople/Calender/controller/CalenderController.java) and [CalenderServiceImpl.java](src/main/java/com/unistgympeople/Calender/Service/CalenderServiceImpl.java).
+3. GetCalenderByMemberAndDateTest() & GetCalenderServiceByMemberAndDateTest()
+   * verify that `getEventsOnDate()`, `getCalenderByMemberAndTime()` works well in [CalenderController.java](src/main/java/com/unistgympeople/Calender/controller/CalenderController.java) and [CalenderServiceImpl.java](src/main/java/com/unistgympeople/Calender/Service/CalenderServiceImpl.java).
+4. GetCalenderCalorieTest() & GetCalenderCalorieEmptyTest() & GetCalenderCalorieErrorTest() & GetCalenderServiceCalorieByMemberAndDateTest() & testGetCalenderServiceCalorieByMemberAndDateError()
+    * verify that `getCalorieOnDate()`, `getCalorieByMemberAndTime()` works well in [CalenderController.java](src/main/java/com/unistgympeople/Calender/controller/CalenderController.java) and [CalenderServiceImpl.java](src/main/java/com/unistgympeople/Calender/Service/CalenderServiceImpl.java) including all the branch cases.
+5. PostCalenderTest() & PostCalenderServiceTest()
+    * verify that `save()` works well in [CalenderController.java](src/main/java/com/unistgympeople/Calender/controller/CalenderController.java) and [CalenderServiceImpl.java](src/main/java/com/unistgympeople/Calender/Service/CalenderServiceImpl.java) including all the branch cases.
+6. GetAllExerciseTest() & GetAllExerciseServiceTest()
+    * verify that `getAllExercise()`, `getExercise()` works well in [ExerciseController.java](src/main/java/com/unistgympeople/Calender/controller/ExerciseController.java) and [ExerciseServiceImpl.java](src/main/java/com/unistgympeople/Calender/Service/ExerciseServiceImpl.java).
+7. GetExerciseByTypeTest() & GetExerciseServiceByTypeTest()
+   * verify that `getEvents()`, `getExerciseByExercisetype()` works well in [ExerciseController.java](src/main/java/com/unistgympeople/Calender/controller/ExerciseController.java) and [ExerciseServiceImpl.java](src/main/java/com/unistgympeople/Calender/Service/ExerciseServiceImpl.java).
+8. PostExerciseTest() & PostExerciseServiceTest()
+    * verify that `save()` works well in [ExerciseController.java](src/main/java/com/unistgympeople/Calender/controller/ExerciseController.java) and [ExerciseServiceImpl.java](src/main/java/com/unistgympeople/Calender/Service/ExerciseServiceImpl.java) including all the branch cases.
+
+
