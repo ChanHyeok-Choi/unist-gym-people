@@ -6,8 +6,8 @@
 You can execute `sh run.sh` as the following:
 ```
 git clone https://github.com/ChanHyeok-Choi/CSE364Project.git
-git checkout milestone2
 cd CSE364Project
+git checkout milestone2
 
 # Create User Administrator MongoDB
 mongod --fork --logpath /var/log/mongodb.log
