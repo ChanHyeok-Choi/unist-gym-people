@@ -16,7 +16,6 @@ mongosh admin --eval "db.createUser({ user: 'admin', pwd: 'password', roles: ['u
 mongoimport --db=cse364 --collection=users --authenticationDatabase admin --username admin --password password --type=csv --file=data/users.csv --fields=userId.int32\(\),timeStamp.string\(\) --columnsHaveTypes
 mongoimport --db=cse364 --collection=usernums --authenticationDatabase admin --username admin --password password --type=csv --file=data/usernums.csv --fields=usernumId.int32\(\),date.string\(\),time.string\(\),num.int32\(\) --columnsHaveTypes
 
-mongoimport --db=cse364 --collection=member --authenticationDatabase admin --username admin --password password --type=csv --file=data/member.csv --fields=memberid.int32\(\),member_name.string\(\) --columnsHaveTypes
 mongoimport --db=cse364 --collection=calender --authenticationDatabase admin --username admin --password password --type=csv --file=data/calender.csv --fields=memberid.int32\(\),time.string\(\),event.string\(\),num.int32\(\) --columnsHaveTypes
 mongoimport --db=cse364 --collection=exercise --authenticationDatabase admin --username admin --password password --type=csv --file=data/exercise.csv --fields=exercisetype.string\(\),percalorie.int32\(\) --columnsHaveTypes
 mvn package
