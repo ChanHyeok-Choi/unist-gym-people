@@ -47,12 +47,18 @@ public class CalenderServiceImpl implements CalenderService {
 
     @Override
     public List<Calender> getCalenderByMember(int memberid) {
-        return calenderRepository.findCalenderByMemberid(memberid);
+        Query query = new Query(Criteria.where("memberid").is(memberid));
+        List<Calender> result = mongoTemplate.find(query, Calender.class);
+        return result;
     }
 
     @Override
     public List<Calender> getCalenderByMemberAndTime(int memberid, String time) {
-        return calenderRepository.findCalenderByMemberidAndTime(memberid, time);
+        Query query = new Query();
+        query.addCriteria(Criteria.where("memberid").is(memberid));
+        query.addCriteria(Criteria.where("time").is(time));
+        List<Calender> result = mongoTemplate.find(query, Calender.class);
+        return result;
     }
 
     @Override
