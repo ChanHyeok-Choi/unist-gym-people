@@ -392,6 +392,16 @@ public class ApplicationTest {
         assertEquals(calender2.getTime(),"2023-05-14");
         assertEquals(calender2.getEvent(),"Pushup");
         assertEquals(calender2.getNum(),10);
+        calender1.setId("TEST");
+        calender1.setMemberid(1);
+        calender1.setEvent("NewEvent");
+        calender1.setTime("2023-05-15");
+        calender1.setNum(10);
+        assertEquals(calender1.getId(),"TEST");
+        assertEquals(calender1.getMemberid(),1);
+        assertEquals(calender1.getTime(),"2023-05-15");
+        assertEquals(calender1.getEvent(),"NewEvent");
+        assertEquals(calender1.getNum(),10);
     }
 
     @Test
@@ -557,6 +567,12 @@ public class ApplicationTest {
         assertEquals(exercise2.getClass(),Exercise.class);
         assertEquals(exercise2.getexercisetype(),"NewExercise");
         assertEquals(exercise2.getpercalorie(), answer);
+        exercise1.setId("TEST");
+        exercise1.setExercisetype("NewExercise");
+        exercise1.setPercalorie(10);
+        assertEquals(exercise1.getId(),"TEST");
+        assertEquals(exercise1.getexercisetype(),"NewExercise");
+        assertEquals(exercise1.getpercalorie(),answer);
     }
 
     @Test
