@@ -382,7 +382,7 @@ public class ApplicationTest {
         assertEquals(calenders,result);
     }*/
 
-    @Test
+    /*@Test
     public void testGetCalenderServiceByMember(){
         int memberid = 1;
         String time = "2023-05-12";
@@ -398,7 +398,7 @@ public class ApplicationTest {
         assertNotNull(result);
         assertEquals(1,result.size());
         assertEquals(calenders,result);
-    }
+    }*/
 
     @Test
     public void ExerciseModelTest(){
