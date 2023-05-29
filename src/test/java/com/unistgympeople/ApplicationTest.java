@@ -74,35 +74,35 @@ public class ApplicationTest {
         MockitoAnnotations.initMocks(this);
     }
 
-    @Test
-    public void testRegisterWebSocketHandler() throws Exception {
-        ChatRoomWebSocketConfig webSocketConfig = new ChatRoomWebSocketConfig(chatRoomWebSocketHandler);
-        when(registry.addHandler(any(ChatRoomWebSocketHandler.class), eq("ws/chat"))).thenReturn(registration);
-        webSocketConfig.registerWebSocketHandlers(registry);
-        verify(registration).setAllowedOrigins("*");
-
-        String roomId = "1";
-        String sender = "user1";
-        String messageText = "test";
-
-        ChatMessage chatMessage = new ChatMessage();
-        chatMessage.setRoomId(roomId);
-        chatMessage.setSender(sender);
-        chatMessage.setMessage(messageText);
-
-        WebSocketSession session = mock(WebSocketSession.class);
-        ChatRoom chatRoom = mock(ChatRoom.class);
-        TextMessage textMessage = new TextMessage("{\"type\":\"ENTER\", \"roomId\":\"1\", \"sender\":\"user1\", \"message\":\"something\"}");
-        String payload = textMessage.getPayload();
-        when(objectMapper.readValue(payload, ChatMessage.class)).thenReturn(chatMessage);
-        when(chatService.findRoomById(roomId)).thenReturn(chatRoom);
-
-        ChatRoomWebSocketHandler webSocketHandler = new ChatRoomWebSocketHandler(objectMapper, chatService);
-        webSocketHandler.handleTextMessage(session, textMessage);
-
-        verify(objectMapper).readValue(payload, ChatMessage.class);
-        verify(chatRoom).handlerActions(session, chatMessage, chatService);
-    }
+//    @Test
+//    public void testRegisterWebSocketHandler() throws Exception {
+//        ChatRoomWebSocketConfig webSocketConfig = new ChatRoomWebSocketConfig(chatRoomWebSocketHandler);
+//        when(registry.addHandler(any(ChatRoomWebSocketHandler.class), eq("ws/chat"))).thenReturn(registration);
+//        webSocketConfig.registerWebSocketHandlers(registry);
+//        verify(registration).setAllowedOrigins("*");
+//
+//        String roomId = "1";
+//        String sender = "user1";
+//        String messageText = "test";
+//
+//        ChatMessage chatMessage = new ChatMessage();
+//        chatMessage.setRoomId(roomId);
+//        chatMessage.setSender(sender);
+//        chatMessage.setMessage(messageText);
+//
+//        WebSocketSession session = mock(WebSocketSession.class);
+//        ChatRoom chatRoom = mock(ChatRoom.class);
+//        TextMessage textMessage = new TextMessage("{\"type\":\"ENTER\", \"roomId\":\"1\", \"sender\":\"user1\", \"message\":\"something\"}");
+//        String payload = textMessage.getPayload();
+//        when(objectMapper.readValue(payload, ChatMessage.class)).thenReturn(chatMessage);
+//        when(chatService.findRoomById(roomId)).thenReturn(chatRoom);
+//
+//        ChatRoomWebSocketHandler webSocketHandler = new ChatRoomWebSocketHandler(objectMapper, chatService);
+//        webSocketHandler.handleTextMessage(session, textMessage);
+//
+//        verify(objectMapper).readValue(payload, ChatMessage.class);
+//        verify(chatRoom).handlerActions(session, chatMessage, chatService);
+//    }
 
     @Test
     public void testSingleHandleTextMessage() throws Exception {

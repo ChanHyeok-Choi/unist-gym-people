@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>UNIST GYM PEOPLE</title>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/css/bootstrap.min.css" rel="stylesheet"
+          integrity="sha384-+0n0xVW2eSR5OomGNYDnhzAbDsOXxcvSN1TPprVMTNDbiYZCxYbOOl7+AMvyTG2x" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/js/bootstrap.bundle.min.js"
+            integrity="sha384-gtEjrD/SeCtmISkJkNUaaKMoLD0//ElJ19smozuHV6z3Iehds+3Ulb9Bn9Plx0x4"
+            crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sockjs-client@1/dist/sockjs.min.js"></script>
+</head>
+<body>
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+    <div class="container-fluid logo-text">
+        <a class="navbar-brand" href="index.html">UNIST GYM PEOPLE</a>
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+            <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                <li class="nav-item">
+                    <a class="nav-link" aria-current="page" href="index.html">Real-time User Viewer & Hot-time Viewer</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link active" href="chatRoom.html">Real-time Chatting Room</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="">User Calendar with Workout</a>
+                </li>
+            </ul>
+        </div>
+    </div>
+</nav>
+<th:block th:replace="~{/layout/basic :: setContent(~{this :: content})}">
+    <th:block th:fragment="content">
+
+        <div class="container">
+            <div class="col-6">
+                <label><b>Chat Room</b></label>
+            </div>
+            <div>
+                <div id="msgArea" class="col"></div>
+                <div class="col-6">
+                    <div class="input-group mb-3">
+                        <input type="text" id="msg" class="form-control" aria-label="Recipient's username" aria-describedby="button-addon2">
+                        <div class="input-group-append">
+                            <button class="btn btn-outline-secondary" type="button" id="button-send">Send</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </th:block>
+</th:block>
+<script th:inline="javascript">
+    $(document).ready(function(){
+
+        const username = [[${#authentication.principal.username}]];
+
+        $("#disconn").on("click", (e) => {
+            disconnect();
+        })
+
+        $("#button-send").on("click", (e) => {
+            send();
+        });
+
+        const websocket = new WebSocket("ws://localhost:8080/ws/chat");
+
+        websocket.onmessage = onMessage;
+        websocket.onopen = onOpen;
+        websocket.onclose = onClose;
+
+        function send(){
+
+            let msg = document.getElementById("msg");
+
+            console.log(username + ":" + msg.value);
+            websocket.send(username + ":" + msg.value);
+            msg.value = '';
+        }
+
+        function onClose(evt) {
+            var str = username + ": exits.";
+            websocket.send(str);
+        }
+
+        function onOpen(evt) {
+            var str = username + ": enters.";
+            websocket.send(str);
+        }
+
+        function onMessage(msg) {
+            var data = msg.data;
+            var sessionId = null;
+            var message = null;
+            var arr = data.split(":");
+
+            for(var i=0; i<arr.length; i++){
+                console.log('arr[' + i + ']: ' + arr[i]);
+            }
+
+            var cur_session = username;
+
+            console.log("cur_session : " + cur_session);
+            sessionId = arr[0];
+            message = arr[1];
+
+            console.log("sessionID : " + sessionId);
+            console.log("cur_session : " + cur_session);
+
+            if(sessionId == cur_session){
+                var str = "<div class='col-6'>";
+                str += "<div class='alert alert-secondary'>";
+                str += "<b>" + sessionId + " : " + message + "</b>";
+                str += "</div></div>";
+                $("#msgArea").append(str);
+            }
+            else{
+                var str = "<div class='col-6'>";
+                str += "<div class='alert alert-warning'>";
+                str += "<b>" + sessionId + " : " + message + "</b>";
+                str += "</div></div>";
+                $("#msgArea").append(str);
+            }
+        }
+    })
+</script>
+</body>
+</html>
