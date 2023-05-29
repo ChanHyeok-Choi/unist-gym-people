@@ -87,7 +87,7 @@ java -jar target/cse364-project-1.0-SNAPSHOT.jar
 1. Use REST-API for creating a ChatRoom to use real-time chat service.
    ```
    :~/project# curl -X POST http://localhost:8080/chat -H "Content-Type: application/json" -d "{ \ "name" : "ChatRoom1" \ }"
-   {"roomId":"108fca4d-ccda-44f2-8015-1f0aab43ddba","name":"{ \\ name : ChatRoom1 \\ }","sessions":[]}
+   {"roomId":"UNISTGYMPEOPLE","name":"{ \\ name : ChatRoom1 \\ }","sessions":[]}
    ```
 2. Open new Terminal and make a `ENTER` request for `user1` and `user2`. Actually, you can use multiple users requests. 
    When requesting a message in the format of `json`, you make sure please adhere to the following format and include the roomId returned after creating the chatRoom. 
@@ -95,19 +95,19 @@ java -jar target/cse364-project-1.0-SNAPSHOT.jar
    ```
    :~/project# wscat -c ws://localhost:8080/ws/chat
    Connected (press CTRL+C to quit)
-   > {"type":"ENTER", "roomId":"108fca4d-ccda-44f2-8015-1f0aab43ddba", "sender":"user1", "message":"something"}
-   < {"type":"ENTER","roomId":"108fca4d-ccda-44f2-8015-1f0aab43ddba","sender":"user1","message":"user1 enter 108fca4d-ccda-44f2-8015-1f0aab43ddba room."}
+   > {"type":"ENTER", "roomId":"UNISTGYMPEOPLE", "sender":"user1", "message":"something"}
+   < {"type":"ENTER","roomId":"UNISTGYMPEOPLE","sender":"user1","message":"user1 enter 108fca4d-ccda-44f2-8015-1f0aab43ddba room."}
    ```
    * Terminal 2:
    ```
    :~/project# wscat -c ws://localhost:8080/ws/chat
    Connected (press CTRL+C to quit)
-   > {"type":"ENTER", "roomId":"108fca4d-ccda-44f2-8015-1f0aab43ddba", "sender":"user2", "message":"something"}
-   < {"type":"ENTER","roomId":"108fca4d-ccda-44f2-8015-1f0aab43ddba","sender":"user2","message":"user2 enter 108fca4d-ccda-44f2-8015-1f0aab43ddba room."}
+   > {"type":"ENTER", "roomId":"UNISTGYMPEOPLE", "sender":"user2", "message":"something"}
+   < {"type":"ENTER","roomId":"UNISTGYMPEOPLE","sender":"user2","message":"user2 enter 108fca4d-ccda-44f2-8015-1f0aab43ddba room."}
    ```
    If `user2` enters the ChatRoom on already connected `user1`, you can see an additional message in Terminal 1:
    ```
-   < {"type":"ENTER","roomId":"108fca4d-ccda-44f2-8015-1f0aab43ddba","sender":"user2","message":"user2 enter 108fca4d-ccda-44f2-8015-1f0aab43ddba room."}
+   < {"type":"ENTER","roomId":"UNISTGYMPEOPLE","sender":"user2","message":"user2 enter 108fca4d-ccda-44f2-8015-1f0aab43ddba room."}
    ```
 3. Make a `TALK` request for conversation.
    * Terminal 1:
