@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
     <title>UNIST GYM PEOPLE</title>
@@ -56,42 +56,64 @@
 </th:block>
 
 <script>
-    const socket = new WebSocket("ws://localhost:8080/ws/chat");
+    const websocket = new WebSocket("ws://localhost:8080/ws/chat");
 
-    socket.onopen = function(event) {
+    websocket.onopen = function(event) {
         console.log("WebSocket connection established.");
     };
 
-    socket.onmessage = function(event) {
-        const message = JSON.parse(event.data);
-        handleMessage(message);
-    };
-
-    socket.onclose = function(event) {
+    websocket.onclose = function(event) {
         console.log("WebSocket connection closed.");
     };
 
+    websocket.onmessage = function(msg) {
+        var data = msg.data;
+        var sessionId = null;
+        //데이터를 보낸 사람
+        var message = null;
+        var arr = data.split(":");
+
+        for(var i=0; i<arr.length; i++){
+            console.log('arr[' + i + ']: ' + arr[i]);
+        }
+
+        console.log("cur_session : " + cur_session);
+        sessionId = arr[0];
+        message = arr[1];
+
+        console.log("sessionID : " + sessionId);
+        console.log("cur_session : " + cur_session);
+
+        if(sessionId == cur_session){
+            var str = "<div class='col-6'>";
+            str += "<div class='alert alert-secondary'>";
+            str += "<b>" + params.sender + " : " + params.message + "</b>";
+            str += "</div></div>";
+            $("#msgArea").append(str);
+        }
+        else{
+            var str = "<div class='col-6'>";
+            str += "<div class='alert alert-warning'>";
+            str += "<b>" + params.sender + " : " + params.message + "</b>";
+            str += "</div></div>";
+            $("#msgArea").append(str);
+        }
+    };
+
     $("#button-send").click(function () {
-        const params = {
-            roomId      : $("#roomId").val()
-            , sender       : $("#userName").val()
+        const params = JSON.stringify({
+            type        : "TALK"
+            ,roomId      : $("#roomId").val()
+            , sender       : $("#sender").val()
             , message       : $("#message").val()
+        })
+        if ((params[2] !== null) && (params[3] !== null)) {
+            console.log("type: " + params.type)
+            console.log("roomId: " + params.roomId)
+            console.log("sender: " + params.sender)
+            console.log("message: " + params.message)
         }
     })
-
-    function handleMessage(message) {
-        if (message.type === "ENTER") {
-            const roomElement = document.getElementById("rooms");
-            const roomItem = document.createElement("li");
-            roomItem.textContent = message.sender + " entered the room.";
-            roomElement.appendChild(roomItem);
-        } else if (message.type === "TALK") {
-            const chatMessages = document.getElementById("chat-messages");
-            const messageItem = document.createElement("p");
-            messageItem.textContent = message.sender + ": " + message.message;
-            chatMessages.appendChild(messageItem);
-        }
-    }
 </script>
 </body>
 </html>
