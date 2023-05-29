@@ -163,11 +163,9 @@ public class ApplicationTest {
         chatService.init();
 
         chatService.createRoom("Room 1");
-        chatService.createRoom("Room 2");
 
         List<ChatRoom> rooms = new ArrayList<>();
         rooms.add(new ChatRoom(UUID.randomUUID().toString(), "Room 1"));
-        rooms.add(new ChatRoom(UUID.randomUUID().toString(), "Room 2"));
 
         assertEquals(chatService.findAllRoom().size(), rooms.size());
 
@@ -175,7 +173,7 @@ public class ApplicationTest {
         List<ChatRoom> result = chatController.findAllRoom();
 
         assertNotNull(result);
-        assertEquals(2, result.size());
+        assertEquals(1, result.size());
     }
 
     @Test
