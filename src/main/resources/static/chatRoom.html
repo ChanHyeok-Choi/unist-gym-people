@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 <head>
     <meta charset="UTF-8">
     <title>UNIST GYM PEOPLE</title>
@@ -30,5 +30,123 @@
         </div>
     </div>
 </nav>
+<th:block th:replace="~{/layout/basic :: setContent(~{this :: content})}">
+    <th:block th:fragment="content">
+
+        <div class="container">
+            <div class="col-6">
+                <label><b>Chat Room</b></label>
+            </div>
+            <div>
+                <div id="msgArea" class="col"></div>
+                <div class="col-6">
+                    <div class="input-group mb-3">
+                        <input type="text" id="msg" class="form-control" aria-label="Recipient's username" aria-describedby="button-addon2">
+                        <div class="input-group-append">
+                            <button class="btn btn-outline-secondary" type="button" id="button-send">Send</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </th:block>
+</th:block>
+
+<div id="chat-room" style="display: none;">
+    <h2 id="room-name"></h2>
+    <div id="chat-messages"></div>
+    <form id="chat-form">
+        <input type="text" id="message-input" placeholder="Type a message...">
+        <button type="submit">Send</button>
+    </form>
+</div>
+
+<script>
+    const socket = new WebSocket("ws://localhost:8080/ws/chat");
+
+    socket.onopen = function(event) {
+        console.log("WebSocket connection established.");
+    };
+
+    socket.onmessage = function(event) {
+        const message = JSON.parse(event.data);
+        handleMessage(message);
+    };
+
+    socket.onclose = function(event) {
+        console.log("WebSocket connection closed.");
+    };
+
+    function handleMessage(message) {
+        if (message.type === "ENTER") {
+            const roomElement = document.getElementById("rooms");
+            const roomItem = document.createElement("li");
+            roomItem.textContent = message.sender + " entered the room.";
+            roomElement.appendChild(roomItem);
+        } else if (message.type === "TALK") {
+            const chatMessages = document.getElementById("chat-messages");
+            const messageItem = document.createElement("p");
+            messageItem.textContent = message.sender + ": " + message.message;
+            chatMessages.appendChild(messageItem);
+        }
+    }
+
+    function createRoom() {
+        const roomName = prompt("Enter the room name:");
+        if (roomName.trim() !== "") {
+            const data = JSON.stringify(roomName);
+            fetch("/chat", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: data
+            })
+                .then(response => response.json())
+                .then(room => {
+                    const roomList = document.getElementById("rooms");
+                    const roomItem = document.createElement("li");
+                    roomItem.textContent = room.name;
+                    roomItem.addEventListener("click", () => joinRoom(room.roomId, room.name));
+                    roomList.appendChild(roomItem);
+                })
+                .catch(error => console.error(error));
+        }
+    }
+
+    function joinRoom(roomId, roomName) {
+        const roomList = document.getElementById("room-list");
+        const chatRoom = document.getElementById("chat-room");
+        const roomNameElement = document.getElementById("room-name");
+        const chatMessages = document.getElementById("chat-messages");
+        const chatForm = document.getElementById("chat-form");
+
+        roomList.style.display = "none";
+        chatRoom.style.display = "block";
+        roomNameElement.textContent = roomName;
+        chatMessages.innerHTML = "";
+
+        chatForm.addEventListener("submit", function(event) {
+            event.preventDefault();
+            const messageInput = document.getElementById("message-input");
+            const message = messageInput.value;
+            if (message.trim() !== "") {
+                const data = JSON.stringify({
+                    type: "TALK",
+                    roomId: roomId,
+                    sender: "You",
+                    message: message
+                });
+                socket.send(data);
+                messageInput.value = "";
+            }
+        });
+    }
+
+    window.addEventListener("beforeunload", function() {
+        socket.close();
+    });
+</script>
 </body>
 </html>

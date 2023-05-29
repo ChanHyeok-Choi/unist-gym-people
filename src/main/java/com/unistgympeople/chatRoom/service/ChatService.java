@@ -37,7 +37,7 @@ public class ChatService {
     }
 
     public ChatRoom createRoom(String name) {
-        String randomId = UUID.randomUUID().toString();
+        String randomId = "UNISTGYMPEOPLE";
         ChatRoom chatRoom = ChatRoom.builder()
                 .roomId(randomId)
                 .name(name)
