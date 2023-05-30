@@ -50,66 +50,71 @@
                     </div>
                 </div>
             </div>
+            <div class="col-6"></div>
         </div>
 
         <script src="https://cdn.jsdelivr.net/npm/sockjs-client@1/dist/sockjs.min.js"></script>
 
         <script>
-            const websocket = new WebSocket("ws://localhost:8080/ws/chat");
+            $(document).ready(function() {
+                const websocket = new WebSocket("ws://localhost:8080/ws/chat");
 
-            websocket.onopen = function(event) {
-                console.log("WebSocket connection established.");
-            };
+                websocket.onopen = function (event) {
+                    console.log("WebSocket connection established.");
+                };
 
-            websocket.onclose = function(event) {
-                console.log("WebSocket connection closed.");
-            };
+                websocket.onclose = function (event) {
+                    console.log("WebSocket connection closed.");
+                };
 
-            websocket.onmessage = function(event) {
-                const data = JSON.parse(event.data);
-                handleMessage(data);
-            };
+                websocket.onmessage = function (event) {
+                    const data = JSON.parse(event.data);
+                    handleMessage(data);
+                };
 
-            function handleMessage(data) {
-                const user = document.getElementById("sender");
-                const sender = data.sender;
-                const message = data.message;
-                if (data.type === "ENTER") {
+                function handleMessage(data) {
+                    const user = document.getElementById("sender");
+                    const sender = data.sender;
+                    const message = data.message;
+                    if (data.type === "ENTER") {
 
-                } else if (data.type === "TALK") {
-                    if (sender === user) {
-                        var str = "<div class='col-6'>";
-                        str += "<div class='alert alert-secondary'>";
-                        str += "<b>" + sender + " : " + message + "</b>";
-                        str += "</div></div>";
-                        $("#msgArea").append(str);
-                    } else {
-                        var str = "<div class='col-6'>";
-                        str += "<div class='alert alert-warning'>";
-                        str += "<b>" + sender + " : " + message + "</b>";
-                        str += "</div></div>";
-                        $("#msgArea").append(str);
+                    } else if (data.type === "TALK") {
+                        if (sender === user) {
+                            var str = "<div class='col-6'>";
+                            str += "<div class='alert alert-secondary'>";
+                            str += "<b>" + sender + " : " + message + "</b>";
+                            str += "</div></div>";
+                            $("#msgArea").append(str);
+                        } else {
+                            var str = "<div class='col-6'>";
+                            str += "<div class='alert alert-warning'>";
+                            str += "<b>" + sender + " : " + message + "</b>";
+                            str += "</div></div>";
+                            $("#msgArea").append(str);
+                        }
                     }
                 }
-            }
 
-            $("#button-send").click(function () {
-                const senderInput = document.getElementById("sender")
-                const sender = senderInput.value;
-                const messageInput = document.getElementById("message-input");
-                const message = messageInput.value;
-                if (sender.trim() !== "" && message.trim() !== "") {
-                    const data = JSON.stringify({
-                        type         : "TALK"
-                        , roomId      : $("#roomId").val()
-                        , sender       : $("#sender").val()
-                        , message       : $("#message").val()
-                    });
+                $("#button-send").click(function () {
+                    const senderInput = document.getElementById("sender")
+                    const sender = senderInput.value;
+                    const messageInput = document.getElementById("message-input");
+                    const message = messageInput.value;
+                    if (sender.trim() !== "" && message.trim() !== "") {
+                        console.log("sender: " + sender);
+                        console.log("message: " + message);
+                        const data = JSON.stringify({
+                            type: "TALK"
+                            , roomId: $("#roomId").val()
+                            , sender: $("#sender").val()
+                            , message: $("#message").val()
+                        });
 
-                    websocket.send(data);
-                    messageInput.value = "";
-                }
-            });
+                        websocket.send(data);
+                        messageInput.value = "";
+                    }
+                });
+            })
         </script>
 
     </th:block>
