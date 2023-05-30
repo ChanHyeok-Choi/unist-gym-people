@@ -112,12 +112,12 @@ java -jar target/cse364-project-1.0-SNAPSHOT.jar
 3. Make a `TALK` request for conversation.
    * Terminal 1:
    ```
-   > {"type":"TALK", "roomId":"108fca4d-ccda-44f2-8015-1f0aab43ddba", "sender":"user2", "message":"Hello!"}
-   < {"type":"TALK","roomId":"108fca4d-ccda-44f2-8015-1f0aab43ddba","sender":"user2","message":"Hello!"}
+   > {"type":"TALK", "roomId":"UNISTGYMPEOPLE", "sender":"user2", "message":"Hello!"}
+   < {"type":"TALK","roomId":"UNISTGYMPEOPLE","sender":"user2","message":"Hello!"}
    ```
    * Terminal 2:
    ```
-   < {"type":"TALK","roomId":"108fca4d-ccda-44f2-8015-1f0aab43ddba","sender":"user2","message":"Hello!"}
+   < {"type":"TALK","roomId":"UNISTGYMPEOPLE","sender":"user2","message":"Hello!"}
    ```
 
 ### Feature 3 : User's Workout Calender
