@@ -16,7 +16,7 @@ public class ExerciseController {
     public ExerciseController(ExerciseService exerciseService) {this.exerciseService=exerciseService;}
 
     @PostMapping
-    public String save(@RequestBody Exercise exercise){
+    public String save(@RequestParam Exercise exercise){
         return exerciseService.save(exercise);
     }
     @GetMapping

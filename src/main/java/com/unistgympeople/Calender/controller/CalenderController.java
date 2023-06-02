@@ -22,7 +22,7 @@ public class CalenderController {
     }
 
     @PostMapping
-    public String save(@RequestBody Calender calender)
+    public String save(@RequestParam Calender calender)
     {
         return calenderService.save(calender);
     }
