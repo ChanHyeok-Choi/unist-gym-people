@@ -88,11 +88,12 @@
     $(document).ready(function(){
         $("#submit-btn").click(function(){
             $.ajax({
-                url : document.location.href=getvalue(),
-                type : "get",
+                url : "document.location.href=getvalue()",
+                type : "GET",
+                dataType:"json",
                 success : function(result){
                     alert("success");
-                    $("#getresult").text("결과 : " + JSON.stringify(result));
+                    $("#getresult").text("Result : " + JSON.stringify(result));
                     var tblresult = result;
                     var str = "";
                     $.each(tblresult, function(i){
