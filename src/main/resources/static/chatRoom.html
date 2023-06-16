@@ -54,6 +54,13 @@
     const websocket = new WebSocket("ws://localhost:8080/ws/chat");
 
     websocket.onopen = function (event) {
+        const data = JSON.stringify({
+            type: "ENTER",
+            roomId: $("#roomId").val(),
+            sender: "John",
+            message: "message"
+        });
+        websocket.send(data);
         console.log("WebSocket connection established.");
     };
 
