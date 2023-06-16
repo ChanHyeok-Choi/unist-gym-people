@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <title>UNIST GYM PEOPLE</title>
@@ -9,7 +9,6 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/js/bootstrap.bundle.min.js"
             integrity="sha384-gtEjrD/SeCtmISkJkNUaaKMoLD0//ElJ19smozuHV6z3Iehds+3Ulb9Bn9Plx0x4"
             crossorigin="anonymous"></script>
-    <script src="https://cdn.jsdelivr.net/npm/sockjs-client@1/dist/sockjs.min.js"></script>
 </head>
 <body>
 <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
@@ -30,94 +29,84 @@
         </div>
     </div>
 </nav>
-<th:block th:replace="~{/layout/basic :: setContent(~{this :: content})}">
-    <th:block th:fragment="content">
 
-        <div class="container">
-            <div class="col-6">
-                <label><b>Chat Room</b></label>
-            </div>
-            <div>
-                <div id="msgArea" class="col"></div>
-                <div class="col-6">
-                    <div class="input-group mb-3">
-                        <input type="hidden" name="roomId" value="UNISTGYMPEOPLE">
-                        <input type="text" id="sender" placeholder="Input user name" aria-label="Recipient's username" aria-describedby="button-addon2">
-                        <input type="text" id="message" placeholder="Input message" class="form-control" aria-label="Recipient's username" aria-describedby="button-addon2">
-                        <div class="input-group-append">
-                            <button class="btn btn-outline-secondary" type="button" id="button-send">Send</button>
-                        </div>
-                    </div>
+<div class="container">
+    <div class="col-6">
+        <label><b>Chat Room</b></label>
+    </div>
+    <div>
+        <div id="msgArea" class="col"></div>
+        <div class="col-6">
+            <div class="input-group mb-3">
+                <input type="hidden" id="roomId" value="UNISTGYMPEOPLE">
+                <input type="text" id="sender" placeholder="Input user name" aria-label="Recipient's username" aria-describedby="button-addon2">
+                <input type="text" id="message-input" placeholder="Input message" class="form-control" aria-label="Recipient's username" aria-describedby="button-addon2">
+                <div class="input-group-append">
+                    <button class="btn btn-outline-secondary" type="button" id="button-send">Send</button>
                 </div>
             </div>
-            <div class="col-6"></div>
         </div>
+    </div>
+    <div class="col-6"></div>
+</div>
 
-        <script src="https://cdn.jsdelivr.net/npm/sockjs-client@1/dist/sockjs.min.js"></script>
+<script>
+    const websocket = new WebSocket("ws://localhost:8080/ws/chat");
 
-        <script>
-            const websocket = new WebSocket("ws://localhost:8080/ws/chat");
+    websocket.onopen = function (event) {
+        console.log("WebSocket connection established.");
+    };
 
-            websocket.onopen = function (event) {
-                console.log("WebSocket connection established.");
-            };
+    websocket.onclose = function (event) {
+        console.log("WebSocket connection closed.");
+    };
 
-            websocket.onclose = function (event) {
-                console.log("WebSocket connection closed.");
-            };
+    websocket.onmessage = function (event) {
+        const data = JSON.parse(event.data);
+        handleMessage(data);
+    };
 
-            websocket.onmessage = function (event) {
-                const data = JSON.parse(event.data);
-                handleMessage(data);
-            };
+    function handleMessage(data) {
+        const sender = data.sender;
+        const message = data.message;
+        if (data.type === "ENTER") {
 
-            function handleMessage(data) {
-                const user = document.getElementById("sender");
-                const sender = data.sender;
-                const message = data.message;
-                if (data.type === "ENTER") {
-
-                } else if (data.type === "TALK") {
-                    if (sender === user) {
-                        var str = "<div class='col-6'>";
-                        str += "<div class='alert alert-secondary'>";
-                        str += "<b>" + sender + " : " + message + "</b>";
-                        str += "</div></div>";
-                        $("#msgArea").append(str);
-                    } else {
-                        var str = "<div class='col-6'>";
-                        str += "<div class='alert alert-warning'>";
-                        str += "<b>" + sender + " : " + message + "</b>";
-                        str += "</div></div>";
-                        $("#msgArea").append(str);
-                    }
-                }
+        } else if (data.type === "TALK") {
+            const user = document.getElementById("sender").value;
+            if (sender === user) {
+                var str = "<div class='col-6'>";
+                str += "<div class='alert alert-secondary'>";
+                str += "<b>" + sender + " : " + message + "</b>";
+                str += "</div></div>";
+                $("#msgArea").append(str);
+            } else {
+                var str = "<div class='col-6'>";
+                str += "<div class='alert alert-warning'>";
+                str += "<b>" + sender + " : " + message + "</b>";
+                str += "</div></div>";
+                $("#msgArea").append(str);
             }
+        }
+    }
 
-            $("#button-send").click(function () {
-                const senderInput = document.getElementById("sender")
-                const sender = senderInput.value;
-                const messageInput = document.getElementById("message-input");
-                const message = messageInput.value;
-                if (sender.trim() !== "" && message.trim() !== "") {
-                    console.log("sender: " + sender);
-                    console.log("message: " + message);
-                    const data = JSON.stringify({
-                        type: "TALK"
-                        , roomId: $("#roomId").val()
-                        , sender: $("#sender").val()
-                        , message: $("#message").val()
-                    });
-
-                    websocket.send(data);
-                    messageInput.value = "";
-                }
+    $("#button-send").click(function () {
+        const senderInput = document.getElementById("sender");
+        const sender = senderInput.value;
+        const messageInput = document.getElementById("message-input");
+        const message = messageInput.value;
+        if (sender.trim() !== "" && message.trim() !== "") {
+            const data = JSON.stringify({
+                type: "TALK",
+                roomId: $("#roomId").val(),
+                sender: sender,
+                message: message
             });
-        </script>
 
-    </th:block>
-</th:block>
-
+            websocket.send(data);
+            messageInput.value = "";
+        }
+    });
+</script>
 
 </body>
 </html>
