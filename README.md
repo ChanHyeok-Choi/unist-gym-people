@@ -58,6 +58,10 @@ some messages and send them by the send button, text boxes that appear depend on
 
 ## Part 5 : Write User Documentation (15 points)
 
+When users firstly open our web application through `http://localhost:8080/chatRoom.html`, they can see our
+logo as the following:
+![Index.png](samples/Index.png)
+
 ### Feature 1 : Real-Time User Viewer
 
 ### Feature 2 : Real-Time Chat Service
