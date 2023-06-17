@@ -93,7 +93,7 @@
     $("#calendar-btn").click(function(){
     $.ajax({
         dataType: "JSON",
-        url: `document.location.href=getvalue()`,
+        url: document.location.href=getvalue(),
         method: "GET",
         success: function(result){
             console.log("Success");
