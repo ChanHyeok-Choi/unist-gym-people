@@ -97,7 +97,7 @@
                 url : `document.location.href=getvalue()`,
                 type : "GET"
                 success : function(data){
-                    alert("success");
+                    console.log("success");
                     $.each(data, function(){
                         str += "<TR>"
                         str += '<TD>' + data.event + '</TD><TD>' + data.num + '</TD>
@@ -106,7 +106,7 @@
                     $("#Calendar").append(str);
                 },
                 error : function(xhr, status, error){
-                    alert("error");
+                    console.log("error");
                 }
             });
         });
