@@ -80,8 +80,7 @@
         if (data.type === "ENTER") {
 
         } else if (data.type === "TALK") {
-            const user = document.getElementById("sender").value;
-            if (sender === user) {
+            if (sender === senderName) {
                 var str = "<div class='col-6'>";
                 str += "<div class='alert alert-secondary'>";
                 str += "<b>" + sender + " : " + message + "</b>";
