@@ -88,19 +88,19 @@
 
     let allEventList = [];
     $("#calendar-btn").click(function(){
-    $.ajax({
+        $.ajax({
         dataType: "JSON",
         url: document.location.href=getvalue(),
         method: "GET",
-        success: function(result){
+        success: function(data){
             console.log("Success");
-            console.log(result);
-            $.each(allEvent, function(){
-                str += "<TR>"
-                str += '<TD>' + result.event + '</TD><TD>' + result.num + '</TD>'
-                str += '</TR>'
+            $.each(result, function(){
+                str += "<tr>"
+                str += '<td>' + this.event + '</td><td>' + this.num + '</td>'
+                str += '</tr>'
                 });
                 $('#Calendar').append(str);
+                $('div').html();
             },
             error: function(xhr, status, error){
                 console.log("Error");
