@@ -88,32 +88,26 @@
 </div>
 
 <script>
-        $("#calendar-btn").click(function(){
-            const senderId = document.getElementById("memberid");
-            const Id = snederInput.value;
-            const senderDate = document.getElementById("date");
-            const Date = senderDate.value;
-
-            let allEvents = [];
-            $.ajax({
-                dataType:"JSON",
-                url : document.location.href=getvalue(),
-                contentType: "application/json; charset=utf-8"
-                method : "GET"
-                success : function(data){
-                    console.log("success");
-                    $.each(data, function(){
-                        str += "<TR>"
-                        str += '<TD>' + data.event + '</TD><TD>' + data.num + '</TD>
-                        str += '</TR>'
-                    });
-                    $("#Calendar").append(str);
-                },
-                error : function(xhr, status, error){
-                    console.log("error");
-                }
-            });
+    memberid = $("#memberid")
+    date = $("#date")
+    let allEventList = [];
+    $.ajax({
+        dataType: "JSON"
+        url: `http://localhost:8080/Calender/memberid?id=${memberid.id}/date?id=${date.id}`.
+        method: "GET"
+        success: function(result){
+            $.each(allEvent, function(){
+                str += "<TR>"
+                str += '<TD>' + result.event + '</TD><TD>' + result.num + '</TD>
+                str += '</TR>'
+                });
+                $("#Calendar").append(str);
+            },
+            error: function(xhr, status, error){
+                alert("error");
+            }
         });
+    });
 </script>
 </body>
 </html>
