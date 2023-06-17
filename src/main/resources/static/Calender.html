@@ -97,8 +97,9 @@
             let allEvents = [];
             $.ajax({
                 dataType:"JSON",
-                url : `document.location.href=getvalue()`,
-                type : "GET"
+                url : document.location.href=getvalue(),
+                contentType: "application/json; charset=utf-8"
+                method : "GET"
                 success : function(data){
                     console.log("success");
                     $.each(data, function(){
