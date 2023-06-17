@@ -66,7 +66,7 @@
                     </fieldset>
             </div>
         </div>
-        <button type = "button" onclick="alert('Calender Submit')" id="calendar-btn" class="btn btn-primary mb-3">Submit</button>
+        <button type = "button" onclick=GetCalendarByDateAndEvent id="calendar-btn" class="btn btn-primary mb-3">Submit</button>
     </form>
 </div>
 
@@ -85,6 +85,7 @@
 </div>
 
 <script>
+function GetCalendarByDateAndEvent(){
     let allEventList = [];
     $.ajax({
         dataType: "JSON",
@@ -103,6 +104,7 @@
             }
         });
     });
+}
 </script>
 </body>
 </html>
