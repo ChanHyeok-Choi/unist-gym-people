@@ -69,7 +69,7 @@
                     </fieldset>
             </div>
         </div>
-        <button type = "button" id="submit-btn" class="btn btn-primary mb-3">Submit</button>
+        <button type = "button" id="calendar-btn" class="btn btn-primary mb-3">Submit</button>
     </form>
 </div>
 
@@ -88,13 +88,12 @@
 </div>
 
 <script>
-    $(document).ready(function(){
-        $("#submit-btn").click(function(){
+        $("#calendar-btn").click(function(){
             $.ajax({
                 url : "document.location.href=getvalue()",
                 type : "GET",
                 dataType:"json",
-                success : function(result){
+                success : function(data){
                     alert("success");
                     $("#getresult").text("Result : " + JSON.stringify(result));
                     var tblresult = result;
@@ -111,7 +110,6 @@
                 }
             });
         });
-    });
 </script>
 </body>
 </html>
