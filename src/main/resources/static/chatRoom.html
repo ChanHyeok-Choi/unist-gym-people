@@ -39,7 +39,6 @@
         <div class="col-6">
             <div class="input-group mb-3">
                 <input type="hidden" id="roomId" value="UNISTGYMPEOPLE">
-                <input type="text" id="sender" placeholder="Input user name" aria-label="Recipient's username" aria-describedby="button-addon2">
                 <input type="text" id="message-input" placeholder="Input message" class="form-control" aria-label="Recipient's username" aria-describedby="button-addon2">
                 <div class="input-group-append">
                     <button class="btn btn-outline-secondary" type="button" id="button-send">Send</button>
@@ -53,11 +52,13 @@
 <script>
     const websocket = new WebSocket("ws://localhost:8080/ws/chat");
 
+    const senderName = "Unknown#" + Math.floor(Math.random() * (500 - 1) + 1);
+
     websocket.onopen = function (event) {
         const data = JSON.stringify({
             type: "ENTER",
             roomId: $("#roomId").val(),
-            sender: "John",
+            sender: senderName,
             message: "message"
         });
         websocket.send(data);
