@@ -90,7 +90,7 @@
     $("#calendar-btn").click(function(){
     $.ajax({
         dataType: "JSON",
-        url: `http://localhost:8080/Calender/memberid?id=${memberid.id}/date?id=${date.id}`,
+        url: `document.location.href=getvalue()`,
         method: "GET",
         success: function(result){
             console.log("Success");
