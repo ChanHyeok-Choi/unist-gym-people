@@ -97,15 +97,13 @@
     }
 
     $("#button-send").click(function () {
-        const senderInput = document.getElementById("sender");
-        const sender = senderInput.value;
         const messageInput = document.getElementById("message-input");
         const message = messageInput.value;
-        if (sender.trim() !== "" && message.trim() !== "") {
+        if (message.trim() !== "") {
             const data = JSON.stringify({
                 type: "TALK",
                 roomId: $("#roomId").val(),
-                sender: sender,
+                sender: senderName,
                 message: message
             });
 
