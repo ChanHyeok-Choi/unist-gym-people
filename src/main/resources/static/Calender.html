@@ -86,18 +86,21 @@
 
 <script>
         $("#calendar-btn").click(function(){
+            const senderId = document.getElementById("memberid");
+            const Id = snederInput.value;
+            const senderDate = document.getElementById("date");
+            const Date = senderDate.value;
+
+            let allEvents = [];
             $.ajax({
-                url : "document.location.href=getvalue()",
-                type : "POST",
-                dataType:"json",
+                dataType:"JSON",
+                url : `document.location.href=getvalue()`,
+                type : "GET"
                 success : function(data){
                     alert("success");
-                    $("#getresult").text("Result : " + JSON.stringify(result));
-                    var tblresult = result;
-                    var str = "";
-                    $.each(tblresult, function(i){
+                    $.each(data, function(){
                         str += "<TR>"
-                        str += '<TD>' + tblresult[i].event + '</TD><TD>' + tblresult[i].num + '</TD>
+                        str += '<TD>' + data.event + '</TD><TD>' + data.num + '</TD>
                         str += '</TR>'
                     });
                     $("#Calendar").append(str);
