@@ -87,7 +87,7 @@
 <script>
 
     let allEventList = [];
-    $("#submit-btn").click(function(){
+    $("#calendar-btn").click(function(){
     $.ajax({
         dataType: "JSON",
         url: `http://localhost:8080/Calender/memberid?id=${memberid.id}/date?id=${date.id}`,
@@ -97,13 +97,13 @@
             console.log(result);
             $.each(allEvent, function(){
                 str += "<TR>"
-                str += '<TD>' + result.event + '</TD><TD>' + result.num + '</TD>
+                str += '<TD>' + result.event + '</TD><TD>' + result.num + '</TD>'
                 str += '</TR>'
                 });
                 $("#Calendar").append(str);
             },
             error: function(xhr, status, error){
-                alert("error");
+                console.log("Error);
             }
         });
     });
