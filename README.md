@@ -27,7 +27,11 @@ java -jar target/cse364-project-1.0-SNAPSHOT.jar
 
 ## Part 2 : Build Web Application (120 points, 40 points for each feature)
 
-### Feature 1 : Real-Time User Viewer
+### Feature 1 : Real-Time User Viewer & Hot-Time Viewer
+
+Users can access to see Real-Time User Viewer, by `http://localhost:8080/Realtime.html`. It shows the current user of the gym in the center blue circle. It differs from each 1 minutes if there is change in users. Also, the current time is shown under the page, for convenience.
+
+Users can access to see Hot-Time Viewer, by `http://localhost:8080/Hottime.html`. It show the last week (from current date) history of users. It shows data by line-graph with maximum number and average number of user history of each date.
 
 ### Feature 2 : Real-Time Chat Service
 
@@ -62,11 +66,20 @@ When users firstly open our web application through `http://localhost:8080/chatR
 logo as the following:
 ![Index.png](samples/Index.png)
 
-### Feature 1 : Real-Time User Viewer
+### Feature 1 : Real-Time User Viewer & Hot-Time Viewer
 
 Users can open or access the url: `http://localhost:8080/Realtime.html` to see the current user of the gym. The user number
 is updated automatically for each 1 minute. Current time is also shown under the page.
 ![Realtime.png](samples/Realtime.png)
+
+Users can open or access the url: `http://localhost:8080/Hottime.html` to see the hot-time of the gym. It shows the last week's maximum and average number of users at gym. At first time, the page is not loaded fully, so user show press `F12` button to load it.
+
+![Hottime_F12.png](samples/Hottime_f12.png)
+
+Then, it will be loaded and users can view line-graph. Users can see exact numbers by placing mouse pointer on the graph. The full view will be look like this.
+
+![Hottime.png](samples/Hottime.png)
+
 
 ### Feature 2 : Real-Time Chat Service
 
