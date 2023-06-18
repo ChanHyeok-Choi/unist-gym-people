@@ -87,14 +87,14 @@
             console.log("Success");
             var str = "";
             $.each(data, function(){
-                str += "<thead>
-                        <tr>
-                            <th> Exercise Type </th>
-                            <th> Count </th>
-                        </tr>
-                        </thead>
-                        <tbody>
-                        </tbody>";
+                str += "<thead>";
+                str +=      "<tr>";
+                str +=            "<th> Exercise Type </th>";
+                str +=            "<th> Count </th>";
+                str +=        "</tr>";
+                str +=        "</thead>";
+                str +=        "<tbody>";
+                str +=        "</tbody>";
                 str += "<tr>";
                 str += '<td>' + this.event + '</td><td>' + this.num + '</td>';
                 str += '</tr>';
