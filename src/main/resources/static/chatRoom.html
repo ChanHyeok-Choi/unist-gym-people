@@ -162,7 +162,7 @@
     $("#button-create").click(function () {
         $.ajax({
             dataType: "text",
-            url: "http://localhost:8080/chat?" + $.param({"roomId":$("#chatroom-input").val()}),
+            url: "http://localhost:8080/chat?" + $.param({"name":$("#chatroom-input").val()}),
             contentType: "application/json; charset=utf-8",
             method: "POST",
             success: function (data) {
