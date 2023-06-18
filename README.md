@@ -73,3 +73,14 @@ The relevant logs can be showed on the server as following:
 ![ChatRoomServer.png](samples/ChatRoomServer.png)
 
 ### Feature 3 : User's Workout Calender
+
+To save the event on date, access the url: `http://localhost:8080/CalendarSave.html`. Or access from
+`http://localhost:8080/Calender.html` and click the "Save new" Button.
+And then, input a Member Id, Date, Exercise Type, and Number value to save the data to database.
+If success, "Save Success"  will appear but if fails, "Error" will appear. And it directs them to `http://localhost:8080/Calender.html`.
+![CalendarSave.png](samples/Calendar Save.png)
+To view the event on date you saved, access the url `http://localhost:8080/Calender.html`.
+To search, fill the Member Id and Date, and it will show the data they saved in the table
+and below table shows the total calorie they spent on that specific date.
+Button "Save new" directs them to `http://localhost:8080/CalendarSave.html`.
+![CalendarSearch.png](samples/Calendar Search.png)
