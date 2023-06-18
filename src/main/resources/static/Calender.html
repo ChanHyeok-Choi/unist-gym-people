@@ -90,11 +90,19 @@
             console.log("Success");
             var str = "";
             $.each(data, function(){
+                str += "<thead>
+                        <tr>
+                            <th> Exercise Type </th>
+                            <th> Count </th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        </tbody>";
                 str += "<tr>";
                 str += '<td>' + this.event + '</td><td>' + this.num + '</td>';
                 str += '</tr>';
                 });
-                $('#Calendar').append(str);
+                $('#Calendar').replacewith(str);
             },
         error: function(xhr, status, error){
             console.log("Error");
