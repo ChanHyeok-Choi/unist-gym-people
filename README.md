@@ -50,11 +50,15 @@ some messages and send them by the send button, text boxes that appear depend on
 ### Feature 3 : User's Workout Calender
 
 Users can access to see data for their calendar, simply fill the form in `http://localhost:8080/Calender.html`. By Input both integer memberid and date, they will see the table for the data in the database.
+
 If at least one space is blank, the error will happen and doesn't show the result.
 
 Users can also access to save data for their calendar, simply click the button for "Save new" or visit `http://localhost:8080/CalendarSave.html`.
+
 By Input all the forms, they can save data into the database, "Save Success" popup will appear, and redirect back to `http://localhost:8080/Calender.html`.
+
 If some invalid input or some fields are not filled, "Error" popup will appear, and redirect back to `http://localhost:8080/Calender.html`.
+
 ---
   
 ## Part 3 : Deploy Application (40 points)
