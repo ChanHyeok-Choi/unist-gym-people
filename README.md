@@ -74,8 +74,8 @@ The relevant logs can be showed on the server as following:
 
 ### Feature 3 : User's Workout Calender
 
-To save the event on date, access the url: `http://localhost:8080/CalendarSave.html`. Or access from
-`http://localhost:8080/Calender.html` and click the "Save new" Button.
+To save the event on date, access the url: `http://localhost:8080/CalendarSave.html`. 
+Or access from`http://localhost:8080/Calender.html` and click the "Save new" Button.
 And then, input a Member Id, Date, Exercise Type, and Number value to save the data to database.
 If success, "Save Success"  will appear but if fails, "Error" will appear. And it directs them to `http://localhost:8080/Calender.html`.
 ![CalendarSave.png](samples/Calendar Save.png)
