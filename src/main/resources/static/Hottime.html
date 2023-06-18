@@ -107,11 +107,11 @@
     if (mm < 10) {
         mm = "0" + mm;
     }
-    var dd = date.getDate();
-    if (dd < 10) {
-        dd = "0" + dd;
-    }
     while (start_date < current_date) {
+        var dd = start_date;
+        if (dd < 10) {
+            dd = "0" + dd;
+        }
         $.ajax({
             dataType: "JSON",
             url: "http://localhost:8080/Calender/hotdate/"+ yyyy + "-" + mm + "-" + dd,
