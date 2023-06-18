@@ -99,7 +99,7 @@
         var Snu = $("#Snum").val();
         $.ajax({
         dataType: "JSON",
-        url: "http://localhost:8080/Calender.html?" + $.param({"memberid":Smem,"date":Sdat,"event":Seve,"num":Snu}),
+        url: "http://localhost:8080/Calender?" + $.param({"memberid":Smem,"date":Sdat,"event":Seve,"num":Snu}),
         contentType: "application/json; charset=utf-8",
         method: "POST",
         success: function(){
