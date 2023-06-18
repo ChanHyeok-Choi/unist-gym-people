@@ -98,7 +98,7 @@
         url: "http://localhost:8080/Calender",
         contentType: "application/json; charset=utf-8",
         method: "POST",
-        data: "memberid=" + $("#Smemberid").val() + "$date="+$("#Sdate").val() +"$event="+$("#Sevent")+"$num="+$("#Snum"),
+        data: "memberid=" + $("#Smemberid").val() + "$date="+$("#Sdate").val() +"$event="+$("#Sevent").val()+"$num="+$("#Snum").val(),
         success: function(data){
                 console.log("Success");
                 alert("Save Success");
