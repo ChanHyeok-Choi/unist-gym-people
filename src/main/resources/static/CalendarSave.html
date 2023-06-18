@@ -98,7 +98,7 @@
         var Seve = $("#Sevent").val();
         var Snu = $("#Snum").val();
         $.ajax({
-        dataType: "String",
+        dataType: "text",
         url: "http://localhost:8080/Calender?" + $.param({"memberid":Smem,"date":Sdat,"event":Seve,"num":Snu}),
         contentType: "application/json; charset=utf-8",
         method: "POST",
