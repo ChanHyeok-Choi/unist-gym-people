@@ -88,21 +88,12 @@
         method: "GET",
         success: function(data){
             console.log("Success");
-            var str = "";
             $.each(data, function(){
-                str += "<thead>";
-                str +=      "<tr>";
-                str +=            "<th> Exercise Type </th>";
-                str +=            "<th> Count </th>";
-                str +=        "</tr>";
-                str +=        "</thead>";
-                str +=        "<tbody>";
-                str +=        "</tbody>";
                 str += "<tr>";
                 str += '<td>' + this.event + '</td><td>' + this.num + '</td>';
                 str += '</tr>';
                 });
-                $('#Calendar').replaceWith(str);
+                $('#Calendar').empty().append(str);
             },
         error: function(xhr, status, error){
             console.log("Error");
