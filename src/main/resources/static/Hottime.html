@@ -87,8 +87,14 @@
 </body>
  
 <script>
-    var calculate_data = {labels: [],
-                dataset:
+    var calculate_data = {labels: ["Monday",
+                "Tuesday",
+                "Wednesday",
+                "Thursday",
+                "Friday",
+                "Saturday",
+                "Sunday",],
+                datasets:
                     [{label: "maximum number",
                         data: [],
                         backgroundColor: "rgba(153,205,1,0.6)"
@@ -128,9 +134,8 @@
                         maximum = this.userNumber;
                     }
                 });
-                calculate_data.labels.push(start_date);
-                calculate_data.dataset[0].data.push(maximum);
-                calculate_data.dataset[1].data.push(totalNum / count);
+                calculate_data.datasets[0].data.push(maximum);
+                calculate_data.datasets[1].data.push(totalNum / count);
             },
             error: function(xhr, status, error){
                 console.log("Error");
