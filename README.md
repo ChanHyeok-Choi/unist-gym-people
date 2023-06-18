@@ -104,9 +104,9 @@ Then, it will be loaded and users can view line-graph. Users can see exact numbe
 Users just open or access the url: `http://localhost:8080/chatRoom.html`. And then, they input a text message
 and eventually click the send button for sending it to other users. Messages sent by you appear in gray, and messages received from others appear in yellow.
 You can see the example as the following:
-![ChatRoom.png](samples/ChatRoom.png)
+![ChatRoom.png](samples/chatRoom.png)
 The relevant logs can be showed on the server as following:
-![ChatRoomServer.png](samples/ChatRoomServer.png)
+![ChatRoomServer.png](samples/chatRoomServer.png)
 
 ### Feature 3 : User's Workout Calender
 
