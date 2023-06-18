@@ -107,8 +107,8 @@
                 alert("Save Success");
                 location.href = "Calendar.html";
             },
-        error: function(xhr, status, error){
-            console.log("http://localhost:8080/Calender?" + $.param({"memberid":Smem,"date":Sdat,"event":Seve,"num":Snu}));
+        error: function(request, status, error){
+            console.log("code = " + request.status + "message = " + request.responseText + "error = " + error);
             alert("Error");
             location.href = "Calender.html";
         }
