@@ -102,15 +102,11 @@
         url: "http://localhost:8080/Calender?" + $.param({"memberid":Smem,"date":Sdat,"event":Seve,"num":Snu}),
         contentType: "application/json; charset=utf-8",
         method: "POST",
-        success: function(data){
+        done: function(data){
                 console.log("Success");
                 alert("Save Success");
                 location.href = "Calendar.html";
-            },
-        error: function(xhr, status, error){
-            console.log("http://localhost:8080/Calender?" + $.param({"memberid":Smem,"date":Sdat,"event":Seve,"num":Snu}));
-            location.href = "Calender.html";
-        }
+            }
         });
     });
 </script>
