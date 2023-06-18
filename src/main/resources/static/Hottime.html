@@ -45,7 +45,15 @@
     </div>
 </nav>
 
-<img src="./images/logo.png" alt="UNIST GYM PEOPLE Logo">
+<div class = "mb-3 row">
+    <label class = "description-text"> Choose Date </label>
+    <div class = "col-sm-10">
+        <fieldset>
+            <input type = "date" id="date" min = "2020-01-01" max="2030-12-31" name = "date" step = "1"
+                   required="required">
+        </fieldset>
+    </div>
+</div>
 
 
 <link rel=
@@ -89,32 +97,52 @@
 </body>
  
 <script>
+    var calculate_data = {labels: [],
+                dataset:
+                    [{label: "maximum number",
+                        data: [],
+                        backgroundColor: "rgba(153,205,1,0.6)"
+                        },
+                        {
+                            label: "average number",
+                            data: [],
+                            backgroundColor: "rgba(155,153,10,0.6)",
+                        }]
+                };
+    var current_date = $("#date").val();
+    const end_date = $("#date").val() + 7;
+    while (current_date < end_date) {
+        $.ajax({
+            dataType: "JSON",
+            url: "http://localhost:8080/Calender/hotdate/"+$("#date").val(),
+            method: "GET",
+            success: function(data){
+                console.log("Success");
+                var totalNum = 0;
+                var maximum = 0;
+                var count = 0;
+                $.each(data, function(){
+                    totalNum += this.userNumber;
+                    count += 1;
+                    if (maximum < this.userNumber) {
+                        maximum = this.userNumber;
+                    }
+                });
+                calculate_data.labels.push(current_date);
+                calculate_data.dataset[0].data.push(maximum);
+                calculate_data.dataset[1].data.push(totalNum / count);
+            },
+            error: function(xhr, status, error){
+                console.log("Error");
+            }
+        });
+        current_date += 1;
+    }
+
     let ctx = document.getElementById("myChart").getContext("2d");
     let myChart = new Chart(ctx, {
         type: "line",
-        data: {
-            labels: [
-                "Monday",
-                "Tuesday",
-                "Wednesday",
-                "Thursday",
-                "Friday",
-                "Saturday",
-                "Sunday",
-            ],
-            datasets: [
-                {
-                    label: "maximum number",
-                    data: [2, 9, 3, 17, 6, 3, 7],
-                    backgroundColor: "rgba(153,205,1,0.6)",
-                },
-                {
-                    label: "average number",
-                    data: [2, 2, 5, 5, 2, 1, 10],
-                    backgroundColor: "rgba(155,153,10,0.6)",
-                },
-            ],
-        },
+        data: calculate_data,
     });
 </script>
   
