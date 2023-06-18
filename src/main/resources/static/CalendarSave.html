@@ -93,13 +93,15 @@
 
 <script>
     $("#Scalendar-btn").click(function(){
-    var Cal = new Calender($("#Smemberid").val(),$("#Sdate").val(),$("#Sevent").val(),$("#Snum").val())
+        var Smem = $("#Smemberid").val();
+        var Sdat = $("#Sdate").val();
+        var Seve = $("#Sevent").val();
+        var Snu = $("#Snum").val();
         $.ajax({
         dataType: "JSON",
-        url: "http://localhost:8080/Calender",
+        url: "http://localhost:8080/Calender.html?memberid="+Smem+"&date="+Sdat+"&event="+Seve+"&num="+Snu+"/",
         contentType: "application/json; charset=utf-8",
         method: "POST",
-        data: Cal,
         success: function(data){
                 console.log("Success");
                 alert("Save Success");
