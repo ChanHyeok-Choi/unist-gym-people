@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="ko"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>CalenderServiceImpl.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">cse364-project</a> &gt; <a href="index.source.html" class="el_package">com.unistgympeople.Calender.Service</a> &gt; <span class="el_source">CalenderServiceImpl.java</span></div><h1>CalenderServiceImpl.java</h1><pre class="source lang-java linenums">package com.unistgympeople.Calender.Service;
+
+import com.unistgympeople.Calender.model.Calender;
+import com.unistgympeople.Calender.model.Exercise;
+import com.unistgympeople.Calender.repository.CalenderRepository;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.mongodb.core.MongoTemplate;
+import org.springframework.data.mongodb.core.query.Criteria;
+import org.springframework.data.mongodb.core.query.Query;
+import org.springframework.stereotype.Service;
+
+import java.util.List;
+
+@Service
+public class CalenderServiceImpl implements CalenderService {
+    @Autowired
+    private CalenderRepository calenderRepository;
+    @Autowired
+    private MongoTemplate mongoTemplate;
+
+<span class="fc" id="L21">    public CalenderServiceImpl(){};</span>
+
+    public CalenderServiceImpl(CalenderRepository calenderRepository)
+<span class="fc" id="L24">    {this.calenderRepository=calenderRepository;}</span>
+
+<span class="fc" id="L26">    public CalenderServiceImpl(CalenderRepository calenderRepository, MongoTemplate mongoTemplate){</span>
+<span class="fc" id="L27">        this.calenderRepository=calenderRepository;</span>
+<span class="fc" id="L28">        this.mongoTemplate=mongoTemplate;</span>
+<span class="fc" id="L29">    }</span>
+
+    @Override
+    public String save(Calender calender) {
+        {
+<span class="fc" id="L34">            String exercise_type = calender.getEvent();</span>
+<span class="fc" id="L35">            Query query = new Query();</span>
+<span class="fc" id="L36">            query.addCriteria(Criteria.where(&quot;exercisetype&quot;).is(exercise_type));</span>
+<span class="fc" id="L37">            Exercise exercise = mongoTemplate.findOne(query, Exercise.class);</span>
+<span class="fc bfc" id="L38" title="All 2 branches covered.">            if (exercise == null) {</span>
+<span class="fc" id="L39">                return null;</span>
+            }
+<span class="fc bfc" id="L41" title="All 2 branches covered.">            if (calender.getNum() &lt;= 0) {</span>
+<span class="fc" id="L42">                return null;</span>
+            }
+<span class="fc" id="L44">            return calenderRepository.save(calender).getId();</span>
+        }
+    }
+
+    @Override
+    public List&lt;Calender&gt; getCalenderByMember(int memberid) {
+<span class="fc" id="L50">        Query query = new Query(Criteria.where(&quot;memberid&quot;).is(memberid));</span>
+<span class="fc" id="L51">        List&lt;Calender&gt; result = mongoTemplate.find(query, Calender.class);</span>
+<span class="fc" id="L52">        return result;</span>
+    }
+
+    @Override
+    public List&lt;Calender&gt; getCalenderByMemberAndTime(int memberid, String time) {
+<span class="fc" id="L57">        Query query = new Query();</span>
+<span class="fc" id="L58">        query.addCriteria(Criteria.where(&quot;memberid&quot;).is(memberid));</span>
+<span class="fc" id="L59">        query.addCriteria(Criteria.where(&quot;time&quot;).is(time));</span>
+<span class="fc" id="L60">        List&lt;Calender&gt; result = mongoTemplate.find(query, Calender.class);</span>
+<span class="fc" id="L61">        return result;</span>
+    }
+
+    @Override
+    public Integer getCalorieByMemberAndTime(int memberid, String time)
+    {
+<span class="fc" id="L67">        Query query = new Query();</span>
+<span class="fc" id="L68">        query.addCriteria(Criteria.where(&quot;memberid&quot;).is(memberid));</span>
+<span class="fc" id="L69">        query.addCriteria(Criteria.where(&quot;time&quot;).is(time));</span>
+<span class="fc" id="L70">        List&lt;Calender&gt; result = mongoTemplate.find(query, Calender.class);</span>
+<span class="fc" id="L71">        Integer total = 0;</span>
+<span class="fc bfc" id="L72" title="All 2 branches covered.">        for(int i = 0; i&lt;result.size();i++)</span>
+        {
+<span class="fc" id="L74">            Calender now = result.get(i);</span>
+<span class="fc" id="L75">            Query innerquery = new Query();</span>
+<span class="fc" id="L76">            innerquery.addCriteria(Criteria.where(&quot;exercisetype&quot;).is(now.getEvent()));</span>
+<span class="fc" id="L77">            Exercise exercise = mongoTemplate.findOne(innerquery, Exercise.class);</span>
+<span class="fc bfc" id="L78" title="All 2 branches covered.">            if (exercise == null) {</span>
+<span class="fc" id="L79">                return -1;</span>
+            }
+<span class="fc" id="L81">            Integer count = now.getNum() * exercise.getpercalorie();</span>
+<span class="fc" id="L82">            total = total + count;</span>
+        }
+<span class="fc" id="L84">        return total;</span>
+    }
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>

@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="ko"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>ExerciseServiceImpl.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">cse364-project</a> &gt; <a href="index.source.html" class="el_package">com.unistgympeople.Calender.Service</a> &gt; <span class="el_source">ExerciseServiceImpl.java</span></div><h1>ExerciseServiceImpl.java</h1><pre class="source lang-java linenums">package com.unistgympeople.Calender.Service;
+
+import com.mongodb.client.result.UpdateResult;
+import com.unistgympeople.Calender.model.Exercise;
+import com.unistgympeople.Calender.repository.ExerciseRepository;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.mongodb.core.MongoTemplate;
+import org.springframework.data.mongodb.core.query.Criteria;
+import org.springframework.data.mongodb.core.query.Query;
+import org.springframework.data.mongodb.core.query.Update;
+import org.springframework.stereotype.Service;
+
+import java.util.List;
+
+@Service
+public class ExerciseServiceImpl implements ExerciseService{
+    @Autowired
+    private ExerciseRepository exerciseRepository;
+    @Autowired
+    private MongoTemplate mongoTemplate;
+<span class="fc" id="L21">    public ExerciseServiceImpl(){};</span>
+<span class="fc" id="L22">    public ExerciseServiceImpl(ExerciseRepository exerciseRepository){</span>
+<span class="fc" id="L23">        this.exerciseRepository=exerciseRepository;</span>
+<span class="fc" id="L24">    }</span>
+<span class="fc" id="L25">    public ExerciseServiceImpl(ExerciseRepository exerciseRepository, MongoTemplate mongoTemplate){</span>
+<span class="fc" id="L26">        this.exerciseRepository=exerciseRepository;</span>
+<span class="fc" id="L27">        this.mongoTemplate=mongoTemplate;</span>
+<span class="fc" id="L28">    }</span>
+    @Override
+    public String save(Exercise exercise){
+<span class="fc" id="L31">        String exercise_type = exercise.getexercisetype();</span>
+<span class="fc" id="L32">        Query query = new Query();</span>
+<span class="fc" id="L33">        query.addCriteria(Criteria.where(&quot;exercisetype&quot;).is(exercise_type));</span>
+<span class="fc" id="L34">        Exercise result = mongoTemplate.findOne(query, Exercise.class);</span>
+<span class="fc bfc" id="L35" title="All 2 branches covered.">        if (result != null) {</span>
+<span class="fc" id="L36">            return null;</span>
+        }
+<span class="fc bfc" id="L38" title="All 2 branches covered.">        if (exercise.getpercalorie() &lt;=0){</span>
+<span class="fc" id="L39">            return null;</span>
+        }
+
+<span class="fc" id="L42">        return exerciseRepository.save(exercise).getId();</span>
+    }
+    @Override
+    public List&lt;Exercise&gt; getExercise(){
+<span class="fc" id="L46">        return exerciseRepository.findAll();</span>
+    }
+    @Override
+    public List&lt;Exercise&gt; getExerciseByExercisetype(String exercisetype){
+<span class="fc" id="L50">        Query query = new Query(Criteria.where(&quot;exercisetype&quot;).is(exercisetype));</span>
+<span class="fc" id="L51">        List&lt;Exercise&gt; result = mongoTemplate.find(query, Exercise.class);</span>
+<span class="fc" id="L52">        return result;</span>
+
+    }
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>

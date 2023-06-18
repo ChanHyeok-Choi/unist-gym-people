@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="ko"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>CalenderController.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">cse364-project</a> &gt; <a href="index.source.html" class="el_package">com.unistgympeople.Calender.controller</a> &gt; <span class="el_source">CalenderController.java</span></div><h1>CalenderController.java</h1><pre class="source lang-java linenums">package com.unistgympeople.Calender.controller;
+
+
+import com.unistgympeople.Calender.Service.CalenderService;
+import com.unistgympeople.Calender.model.Calender;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
+
+@RestController
+@RequestMapping(&quot;/Calender&quot;)
+public class CalenderController {
+    @Autowired
+    private CalenderService calenderService;
+
+
+<span class="fc" id="L18">    public CalenderController(){};</span>
+
+<span class="fc" id="L20">    public CalenderController(CalenderService calenderService){</span>
+<span class="fc" id="L21">        this.calenderService=calenderService;</span>
+<span class="fc" id="L22">    }</span>
+
+    @PostMapping
+    public String save(@RequestParam(&quot;memberid&quot;)Integer memberid,@RequestParam(&quot;date&quot;)String date,
+                       @RequestParam(&quot;event&quot;) String event, @RequestParam(&quot;num&quot;) Integer num)
+    {
+<span class="nc" id="L28">        Calender calender = new Calender(memberid, date, event, num);</span>
+<span class="nc" id="L29">        return calenderService.save(calender);</span>
+    }
+
+    @GetMapping(&quot;/{memberid}&quot;)
+    @ResponseBody
+    public List&lt;Calender&gt; getEvents(@PathVariable(&quot;memberid&quot;) int memberid){
+<span class="fc" id="L35">        List&lt;Calender&gt; result = calenderService.getCalenderByMember(memberid);</span>
+<span class="fc" id="L36">        return result;</span>
+    }
+    @GetMapping(&quot;/{memberid}/{time}&quot;)
+    @ResponseBody
+    public List&lt;Calender&gt; getEventsOnDate(@PathVariable(&quot;memberid&quot;) int memberid, @PathVariable(&quot;time&quot;) String time){
+<span class="fc" id="L41">        List&lt;Calender&gt; result = calenderService.getCalenderByMemberAndTime(memberid, time);</span>
+<span class="fc" id="L42">        return result;</span>
+    }
+
+    @GetMapping(&quot;/{memberid}/{time}/Calorie&quot;)
+    @ResponseBody
+    public Integer getCalorieOnDate(@PathVariable(&quot;memberid&quot;) int memberid, @PathVariable(&quot;time&quot;) String time){
+<span class="fc" id="L48">        Integer result = calenderService.getCalorieByMemberAndTime(memberid, time);</span>
+<span class="fc" id="L49">        return result;</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>

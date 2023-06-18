@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>UNIST GYM PEOPLE</title>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/css/bootstrap.min.css" rel="stylesheet"
+          integrity="sha384-+0n0xVW2eSR5OomGNYDnhzAbDsOXxcvSN1TPprVMTNDbiYZCxYbOOl7+AMvyTG2x" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/js/bootstrap.bundle.min.js"
+            integrity="sha384-gtEjrD/SeCtmISkJkNUaaKMoLD0//ElJ19smozuHV6z3Iehds+3Ulb9Bn9Plx0x4"
+            crossorigin="anonymous"></script>
+</head>
+<body>
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+    <div class="container-fluid logo-text">
+        <a class="navbar-brand" href="index.html">UNIST GYM PEOPLE</a>
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+            <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                <li class="nav-item">
+                    <a class="nav-link" href="Realtime.html">Real-time User Viewer</a>
+                  </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="Hottime.html">Hot-time Viewer</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link active" href="chatRoom.html">Real-time Chatting Room</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" aria-current="page" href="Calender.html">User Calendar with Workout</a>
+                </li>
+            </ul>
+        </div>
+    </div>
+</nav>
+
+<div class="container">
+    <div class="col-6">
+        <label><b>Chat Room</b></label>
+    </div>
+    <div>
+        <div id="msgArea" class="col"></div>
+        <div class="col-6">
+            <div class="input-group mb-3">
+                <input type="hidden" id="roomId" value="UNISTGYMPEOPLE">
+                <input type="text" id="message-input" placeholder="Input message" class="form-control" aria-label="Recipient's username" aria-describedby="button-addon2">
+                <div class="input-group-append">
+                    <button class="btn btn-outline-secondary" type="button" id="button-send">Send</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-6"></div>
+</div>
+
+<script>
+    const websocket = new WebSocket("ws://localhost:8080/ws/chat");
+
+    const senderName = "Unknown#" + Math.floor(Math.random() * (500 - 1) + 1);
+
+    websocket.onopen = function (event) {
+        const data = JSON.stringify({
+            type: "ENTER",
+            roomId: $("#roomId").val(),
+            sender: senderName,
+            message: "message"
+        });
+        websocket.send(data);
+        console.log("WebSocket connection established.");
+    };
+
+    websocket.onclose = function (event) {
+        console.log("WebSocket connection closed.");
+    };
+
+    websocket.onmessage = function (event) {
+        const data = JSON.parse(event.data);
+        handleMessage(data);
+    };
+
+    function handleMessage(data) {
+        const sender = data.sender;
+        const message = data.message;
+        if (data.type === "ENTER") {
+
+        } else if (data.type === "TALK") {
+            if (sender === senderName) {
+                var str = "<div class='col-6'>";
+                str += "<div class='alert alert-secondary'>";
+                str += "<b>" + sender + " : " + message + "</b>";
+                str += "</div></div>";
+                $("#msgArea").append(str);
+            } else {
+                var str = "<div class='col-6'>";
+                str += "<div class='alert alert-warning'>";
+                str += "<b>" + sender + " : " + message + "</b>";
+                str += "</div></div>";
+                $("#msgArea").append(str);
+            }
+        }
+    }
+
+    $("#button-send").click(function () {
+        const messageInput = document.getElementById("message-input");
+        const message = messageInput.value;
+        if (message.trim() !== "") {
+            const data = JSON.stringify({
+                type: "TALK",
+                roomId: $("#roomId").val(),
+                sender: senderName,
+                message: message
+            });
+
+            websocket.send(data);
+            messageInput.value = "";
+        }
+    });
+</script>
+
+</body>
+</html>

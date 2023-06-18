@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="ko"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>UsernumServiceImpl.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">cse364-project</a> &gt; <a href="index.source.html" class="el_package">com.unistgympeople.realTime.service</a> &gt; <span class="el_source">UsernumServiceImpl.java</span></div><h1>UsernumServiceImpl.java</h1><pre class="source lang-java linenums">package com.unistgympeople.realTime.service;
+
+import com.unistgympeople.realTime.model.Usernum;
+import com.unistgympeople.realTime.repository.UsernumRepository;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.mongodb.core.MongoTemplate;
+import org.springframework.data.mongodb.core.query.Criteria;
+import org.springframework.data.mongodb.core.query.Query;
+import org.springframework.stereotype.Service;
+
+import java.time.LocalDate;
+import java.time.LocalTime;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
+
+@Service
+<span class="fc" id="L18">public class UsernumServiceImpl implements UsernumService{</span>
+
+    @Autowired
+    private UsernumRepository usernumRepository;
+    @Autowired
+    private MongoTemplate mongoTemplate2;
+
+    public void setUsernumRepository(UsernumRepository usernumRepository) {
+<span class="fc" id="L26">        this.usernumRepository = usernumRepository;</span>
+<span class="fc" id="L27">    }</span>
+
+    public void setMongoTemplate2(MongoTemplate mongoTemplate) {
+<span class="fc" id="L30">        this.mongoTemplate2 = mongoTemplate;</span>
+<span class="fc" id="L31">    }</span>
+
+    @Override
+    public String save(Usernum usernum,int number){
+<span class="fc" id="L35">        LocalDate date = LocalDate.now();</span>
+<span class="fc" id="L36">        String strdate = date.getYear() + &quot;-&quot; + date.getMonthValue() + &quot;-&quot; + date.getDayOfMonth();</span>
+<span class="fc" id="L37">        usernum.setDate(strdate);</span>
+
+<span class="fc" id="L39">        LocalTime time = LocalTime.now();</span>
+<span class="fc" id="L40">        String strtime = time.getHour() + &quot;:&quot; + time.getMinute() + &quot;:&quot; + time.getSecond();</span>
+<span class="fc" id="L41">        usernum.setTime(strtime);</span>
+
+<span class="fc" id="L43">        usernum.setUserNumber(number);</span>
+<span class="fc" id="L44">        return usernumRepository.save(usernum).getId();</span>
+    }
+
+    @Override
+    public Optional&lt;Usernum&gt; getUsernumById(String id) {
+<span class="fc" id="L49">        return usernumRepository.findById(id);</span>
+    }
+    @Override
+    public List&lt;Usernum&gt; getAllUsernum() {
+<span class="fc" id="L53">        Query datequery = new Query();</span>
+<span class="fc" id="L54">        List&lt;Usernum&gt; dates = mongoTemplate2.find(datequery,Usernum.class);</span>
+<span class="fc" id="L55">        return dates;</span>
+    }
+    @Override
+    public List&lt;Usernum&gt; getUsernumByDate(String date) {
+<span class="fc" id="L59">        Query query = new Query(Criteria.where(&quot;date&quot;).is(date));</span>
+<span class="fc" id="L60">        List&lt;Usernum&gt; dates = mongoTemplate2.find(query,Usernum.class);</span>
+
+<span class="fc" id="L62">        long avg_num = 0;</span>
+<span class="fc bfc" id="L63" title="All 2 branches covered.">        for (Usernum d : dates) {</span>
+<span class="fc" id="L64">            avg_num += d.getUserNumber();</span>
+<span class="fc" id="L65">        }</span>
+<span class="fc" id="L66">        avg_num /= dates.size();</span>
+
+<span class="fc" id="L68">        List&lt;Usernum&gt; results = new ArrayList&lt;&gt;();</span>
+<span class="fc bfc" id="L69" title="All 2 branches covered.">        for (Usernum d : dates) {</span>
+<span class="fc bfc" id="L70" title="All 2 branches covered.">            if (d.getUserNumber() &gt; avg_num) {</span>
+<span class="fc" id="L71">                results.add(d);</span>
+            }
+<span class="fc" id="L73">        }</span>
+<span class="fc" id="L74">        return results;</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>
