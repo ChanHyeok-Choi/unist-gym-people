@@ -22,8 +22,10 @@ public class CalenderController {
     }
 
     @PostMapping
-    public String save(@RequestParam Calender calender)
+    public String save(@RequestParam("memberid")Integer memberid,@RequestParam("date")String date,
+                       @RequestParam("event") String event, @RequestParam("num") Integer num)
     {
+        Calender calender = new Calender(memberid, date, event, num);
         return calenderService.save(calender);
     }
 
