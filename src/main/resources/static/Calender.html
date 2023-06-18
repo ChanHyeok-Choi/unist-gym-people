@@ -93,6 +93,9 @@
     </table>
 </div>
 
+<div>
+    <button type = "button" id="calendar-post-btn" class="btn btn-primary mb-3" >Save new</button>
+</div>
 <script>
     $("#calendar-btn").click(function(){
         $.ajax({
@@ -142,6 +145,12 @@
         error: function(xhr, status, error){
             console.log("Error");
         }
+        });
+    });
+
+    $(function(){
+        $("#calendar-post-btn").click(function(){
+            location.href = "CalendarSave.html";
         });
     });
 </script>
