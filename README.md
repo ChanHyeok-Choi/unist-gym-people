@@ -57,6 +57,8 @@ some messages and send them by the send button, text boxes that appear depend on
 
 ## Part 4 : Use Continuous Integration (GitHub Actions) (20 points)
 
+You can see our simple CI at [here](./.github/workflows/main.yml).
+For each pull request or push to main stream, set up Java 17 & Maven, then run build and test by `mvn clean package`.
 
 ---
 
