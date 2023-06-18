@@ -82,7 +82,7 @@ And then, input a Member Id, Date, Exercise Type, and Number value to save the d
 
 If success, "Save Success"  will appear but if fails, "Error" will appear. And it directs them to `http://localhost:8080/Calender.html`.
 
-![CalendarSave.png](samples/Calendar Save.png)
+![CalendarSave.png](samples/CalendarSave.png)
 
 To view the event on date you saved, access the url `http://localhost:8080/Calender.html`.
 
@@ -92,4 +92,4 @@ and below table shows the total calorie they spent on that specific date.
 
 Button "Save new" directs them to `http://localhost:8080/CalendarSave.html`.
 
-![CalendarSearch.png](samples/Calendar Search.png)
+![CalendarSearch.png](samples/CalendarSearch.png)
