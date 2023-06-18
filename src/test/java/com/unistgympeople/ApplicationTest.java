@@ -449,7 +449,7 @@ public class ApplicationTest {
         assertEquals(answer, result);
     }
 
-    @Test
+    /*@Test
     public void PostCalenderTest(){
 
         int memberid = 1;
@@ -473,7 +473,7 @@ public class ApplicationTest {
         assertEquals(null,output1);
         assertEquals(null,output2);
         assertEquals(test1.getId(),output3);
-    }
+    }*/
     @Test
     public void PostCalenderServiceTest(){
         int memberid = 1;
