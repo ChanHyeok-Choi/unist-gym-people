@@ -85,6 +85,8 @@ Then, it will be loaded and users can view line-graph. Users can see exact numbe
 
 ### Feature 2 : Real-Time Chat Service
 
+* **NOTE: If there doesn't exist ChatRoom made by server terminal, Chat Service doesn't work. So please make sure POST RestAPI to make a chat room on the terminal.**
+
 Users just open or access the url: `http://localhost:8080/chatRoom.html`. And then, they input a text message
 and eventually click the send button for sending it to other users. You can see the example as the following:
 ![ChatRoom.png](samples/ChatRoom.png)
