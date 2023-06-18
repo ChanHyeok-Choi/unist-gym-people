@@ -14,14 +14,6 @@
         table{ width: 75%}
         table, th, td{ border: 1px solid #bcbcbc}
     </style>
-    <script>
-            function getvalue(){
-                var memberidx = document.getElementById('memberid').value;
-                var datex = document.getElementById('date').value;
-                var urll = 'http://localhost:8080/Calender/' + memberidx +'/' + datex;
-                return urll;
-            }
-    </script>
 
 
 </head>
@@ -86,12 +78,18 @@
 
 <script>
 
+    var Id = "";
+    var D = "";
+
+    Id=$("memberid").val();
+    D=$("date").val();
     let allEventList = [];
     $("#calendar-btn").click(function(){
         $.ajax({
         dataType: "JSON",
-        url: `document.location.href=getvalue()`,
+        url: "http://localhost:8080/Calendar/"+Id+"/"+D,
         method: "GET",
+        cache : false,
         success: function(data){
             console.log("Success");
             $.each(result, function(){
