@@ -9,18 +9,6 @@
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/js/bootstrap.bundle.min.js"
           integrity="sha384-gtEjrD/SeCtmISkJkNUaaKMoLD0//ElJ19smozuHV6z3Iehds+3Ulb9Bn9Plx0x4"
           crossorigin="anonymous"></script>
-  <style>
-        .thumbnail {
-            position: relative;
-        }
-        
-        .caption {
-            position: absolute;
-            top: 16%;
-            left: 0;
-            width: 100%;
-        }
-    </style>
 </head>
 <body>
 <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
@@ -29,7 +17,10 @@
     <div class="collapse navbar-collapse" id="navbarSupportedContent">
       <ul class="navbar-nav me-auto mb-2 mb-lg-0">
         <li class="nav-item">
-          <a class="nav-link" aria-current="page" href="">Real-time User Viewer & Hot-time Viewer</a>
+          <a class="nav-link" href="Realtime.html">Real-time User Viewer</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="Hottime.html">Hot-time Viewer</a>
         </li>
         <li class="nav-item">
           <a class="nav-link" href="chatRoom.html">Real-time Chatting Room</a>
@@ -43,45 +34,7 @@
 </nav>
 
 <div class="container" style="text-align: center;">
-    <img src="./images/logo.png" alt="UNIST GYM PEOPLE Logo">
-    <span class="text"> <br> </span>
-    <div class="row" id="box-search">
-        <div class="thumbnail text-center">
-            <img id="back" src="./images/white_background.jpg" alt="" class="img-responsive rounded-circle" style="width: 300px; height: 300px; border-style:solid; border-color:mediumblue; border-width:10px;">
-            <div class="caption">
-                <p id="inner" style="font-size: 120px; color:black; font-weight:bolder"></p>
-                <script>
-                    var curnum = 0;
-                    function curusenum() {
-                        curnum = curnum+1;
-                        setTimeout("curusenum()",2000)
-                        document.getElementById("inner").innerHTML = curnum;
-                    }
-                </script>
-            </div>
-        </div>
-    </div>
-    <br>
-    <h1 class="text" style="font-weight:bolder; color:black">Users at Gym</h1>
-</div>
-
-<script>
-    function printTime() {
-        var clock = document.getElementById("clock");
-        var now = new Date();
-        var nowTime = now.getFullYear() + "." + (now.getMonth()+1) + "." + now.getDate() + " " + now.getHours() + ":" + now.getMinutes() + ":" + now.getSeconds();
-        clock.innerHTML = nowTime;
-        setTimeout("printTime()",1000);
-    }
-    window.onload = function() {
-        curusenum();
-        printTime();
-    }
-
-</script>
-
-<div class="container" style="text-align: center;">
-    Current Time:  <span id="clock"></span> .<br />
+  <img src="./images/logo.png" alt="UNIST GYM PEOPLE Logo">
 </div>
 
 </body>
