@@ -84,9 +84,8 @@
     $("#calendar-btn").click(function(){
         $.ajax({
         dataType: "JSON",
-        url: "http://localhost:8080/Calendar/"+$("#memberid").val()+"/"+$("#date").val(),
+        url: "http://localhost:8080/Calender/"+$("#memberid").val()+"/"+$("#date").val(),
         method: "GET",
-        cache : false,
         success: function(data){
             console.log("Success");
             $.each(result, function(){
