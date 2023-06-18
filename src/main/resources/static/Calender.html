@@ -88,7 +88,7 @@
         method: "GET",
         success: function(data){
             console.log("Success");
-            val str = "";
+            var str = "";
             $.each(data, function(){
                 str += "<tr>";
                 str += '<td>' + this.event + '</td><td>' + this.num + '</td>';
