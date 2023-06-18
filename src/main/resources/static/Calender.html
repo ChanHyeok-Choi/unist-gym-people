@@ -77,17 +77,11 @@
 </div>
 
 <script>
-
-    var Id = "";
-    var D = "";
-
-    Id=$("memberid").val();
-    D=$("date").val();
     let allEventList = [];
     $("#calendar-btn").click(function(){
         $.ajax({
         dataType: "JSON",
-        url: "http://localhost:8080/Calendar/"+Id+"/"+D,
+        url: "http://localhost:8080/Calendar/"+$("#memberid").val()+"/"+$("#date").val(),
         method: "GET",
         cache : false,
         success: function(data){
