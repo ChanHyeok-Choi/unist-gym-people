@@ -64,6 +64,10 @@ logo as the following:
 
 ### Feature 1 : Real-Time User Viewer
 
+Users can open or access the url: `http://localhost:8080/Realtime.html` to see the current user of the gym. The user number
+is updated automatically for each 1 minute. Current time is also shown under the page.
+![Realtime.png](samples/Realtime.png)
+
 ### Feature 2 : Real-Time Chat Service
 
 Users just open or access the url: `http://localhost:8080/chatRoom.html`. And then, they input a text message
