@@ -21,7 +21,12 @@ jobs:
       with:
         java-version: '11'
         distribution: 'adopt'
+    
+    - name: Setup Maven
+      uses: stCarolas/setup-maven@v.4.5
+      with:
+        maven-version: 3.8.2
 
     - name: Build and run tests
       run: |
-        ./mvnw clean package
+        ./mvn clean package
