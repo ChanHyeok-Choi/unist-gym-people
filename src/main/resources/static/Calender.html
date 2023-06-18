@@ -88,10 +88,11 @@
         method: "GET",
         success: function(data){
             console.log("Success");
+            val str = "";
             $.each(data, function(){
-                str += "<tr>"
-                str += '<td>' + this.event + '</td><td>' + this.num + '</td>'
-                str += '</tr>'
+                str += "<tr>";
+                str += '<td>' + this.event + '</td><td>' + this.num + '</td>';
+                str += '</tr>';
                 });
                 $('#Calendar').append(str);
             },
