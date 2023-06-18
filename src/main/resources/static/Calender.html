@@ -76,8 +76,21 @@
     </table>
 </div>
 
+<div>
+    <table id="Calorie" border = "2">
+        <thead>
+        <tr>
+            <th> Calorie Spent </th>
+            <th> kCal </th>
+        </tr>
+        </thead>
+        <tbody>
+
+        </tbody>
+    </table>
+</div>
+
 <script>
-    let allEventList = [];
     $("#calendar-btn").click(function(){
         $.ajax({
         dataType: "JSON",
@@ -86,12 +99,42 @@
         success: function(data){
             console.log("Success");
             var str = "";
+            str += "<thead>";
+            str +=      "<tr>";
+            str +=            "<th> Exercise Type </th>";
+            str +=            "<th> Count </th>";
+            str +=        "</tr>";
+            str +=        "</thead>";
+            str +=        "<tbody>";
+            str +=        "</tbody>";
             $.each(data, function(){
                 str += "<tr>";
                 str += '<td>' + this.event + '</td><td>' + this.num + '</td>';
                 str += '</tr>';
                 });
                 $('#Calendar').empty().append(str);
+            },
+        error: function(xhr, status, error){
+            console.log("Error");
+        }
+        });
+        $.ajax({
+        dataType: "JSON",
+        url: "http://localhost:8080/Calender/"+$("#memberid").val()+"/"+$("#date").val()+"/Calorie",
+        method: "GET",
+        success: function(data){
+            console.log("Success");
+            var str = "";
+            str += "<thead>";
+            str +=      "<tr>";
+            str +=            "<th> Calorie Spent </th>";
+            str +=            "<th>" +data + "</th>";
+            str +=        "</tr>";
+            str +=        "</thead>";
+            str +=        "<tbody>";
+            str +=        "</tbody>";
+
+                $('#Calorie').empty().append(str);
             },
         error: function(xhr, status, error){
             console.log("Error");
