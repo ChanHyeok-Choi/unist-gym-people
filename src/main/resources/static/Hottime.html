@@ -45,16 +45,6 @@
     </div>
 </nav>
 
-<div class = "mb-3 row">
-    <label class = "description-text"> Choose Date </label>
-    <div class = "col-sm-10">
-        <fieldset>
-            <input type = "date" id="date" min = "2020-01-01" max="2030-12-31" name = "date" step = "1"
-                   required="required">
-        </fieldset>
-    </div>
-</div>
-
 
 <link rel=
 "https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css"
@@ -109,12 +99,22 @@
                             backgroundColor: "rgba(155,153,10,0.6)",
                         }]
                 };
-    var current_date = $("#date").val();
-    const end_date = $("#date").val() + 7;
-    while (current_date < end_date) {
+    var date = new Date();
+    var current_date = date.getDate();
+    var start_date = date.getDate() - 7;
+    var yyyy = date.getFullYear();
+    var mm = date.getMonth() + 1;
+    if (mm < 10) {
+        mm = "0" + mm;
+    }
+    var dd = date.getDate();
+    if (dd < 10) {
+        dd = "0" + dd;
+    }
+    while (start_date < current_date) {
         $.ajax({
             dataType: "JSON",
-            url: "http://localhost:8080/Calender/hotdate/"+$("#date").val(),
+            url: "http://localhost:8080/Calender/hotdate/"+ yyyy + "-" + mm + "-" + dd,
             method: "GET",
             success: function(data){
                 console.log("Success");
@@ -136,7 +136,7 @@
                 console.log("Error");
             }
         });
-        current_date += 1;
+        start_date += 1;
     }
 
     let ctx = document.getElementById("myChart").getContext("2d");
