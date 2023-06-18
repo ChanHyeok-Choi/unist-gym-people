@@ -38,13 +38,34 @@
         <label><b>Chat Room</b></label>
     </div>
     <div>
+        <div id="connectArea" class="col"></div>
+        <div class="col-6">
+            <div class="input-group mb-3">
+                <input type="text" id="roomId" value="UNISTGYMPEOPLE" placeholder="Input ChatRoom name" class="form-control">
+                <div class="input-group-append">
+                    <button class="btn btn-outline-secondary" type="button" id="button-connect">Connect</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div>
         <div id="msgArea" class="col"></div>
         <div class="col-6">
             <div class="input-group mb-3">
-                <input type="hidden" id="roomId" value="UNISTGYMPEOPLE">
                 <input type="text" id="message-input" placeholder="Input message" class="form-control" aria-label="Recipient's username" aria-describedby="button-addon2">
                 <div class="input-group-append">
                     <button class="btn btn-outline-secondary" type="button" id="button-send">Send</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div>
+        <div id="createArea" class="col"></div>
+        <div class="col-6">
+            <div class="input-group mb-4">
+                <input type="text" id="chatroom-input" placeholder="Input chatroom name for creation" class="form-control" aria-label="Recipient's username" aria-describedby="button-addon3">
+                <div class="input-group-append">
+                    <button class="btn btn-outline-secondary" type="button" id="button-create">CreateRoom</button>
                 </div>
             </div>
         </div>
@@ -81,7 +102,19 @@
         const sender = data.sender;
         const message = data.message;
         if (data.type === "ENTER") {
-
+            if (sender === senderName) {
+                var str = "<div class='col-6'>";
+                str += "<div class='alert alert-secondary'>";
+                str += "<b>" + sender + " : " + message + "</b>";
+                str += "</div></div>";
+                $("#msgArea").append(str);
+            } else {
+                var str = "<div class='col-6'>";
+                str += "<div class='alert alert-warning'>";
+                str += "<b>" + sender + " : " + message + "</b>";
+                str += "</div></div>";
+                $("#msgArea").append(str);
+            }
         } else if (data.type === "TALK") {
             if (sender === senderName) {
                 var str = "<div class='col-6'>";
@@ -99,6 +132,17 @@
         }
     }
 
+    $("#button-connect").click(function () {
+        const data = JSON.stringify({
+            type: "ENTER",
+            roomId: $("#roomId").val(),
+            sender: senderName,
+            message: "message"
+        });
+        websocket.send(data);
+        console.log("WebSocket connection established.");
+    });
+
     $("#button-send").click(function () {
         const messageInput = document.getElementById("message-input");
         const message = messageInput.value;
@@ -114,6 +158,28 @@
             messageInput.value = "";
         }
     });
+
+    $("button-send").click(function () {
+        $.ajax({
+            dataType: "text",
+            url: "http://localhost:8080/Calender?" + $.param({"memberid":$("#chatroom-input")}),
+            contentType: "application/json; charset=utf-8",
+            method: "POST",
+            success: function (data) {
+                var str = "<div class='col-6'>";
+                str += "<div class='alert alert-secondary'>";
+                str += "<b>" + "RoomId : " + this.roomId + "</b>";
+                str += "</div></div>";
+                $("#createArea").append(str);
+                console.log("Success");
+                location.href = "chatRoom.html";
+            },
+            error: function (xhr, status, error) {
+                console.log("Error");
+            }
+        })
+    });
+
 </script>
 
 </body>
