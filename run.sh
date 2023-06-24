@@ -2,6 +2,7 @@
 
 git clone https://github.com/ChanHyeok-Choi/CSE364Project.git
 cd CSE364Project
+git checkout milestone3
 
 # Create User Administrator MongoDB
 mongod --fork --logpath /var/log/mongodb.log

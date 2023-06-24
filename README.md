@@ -1,5 +1,5 @@
 # CSE364Project
-2023 CSE364 Group 28 Project - Milestone 2
+2023 CSE364 Group 28 Project - Milestone 3
 
 ## Part 1 : Create Git branches
 
@@ -7,6 +7,7 @@ You can execute `sh run.sh` as the following:
 ```
 git clone https://github.com/ChanHyeok-Choi/CSE364Project.git
 cd CSE364Project
+git checkout milestone3
 
 # Create User Administrator MongoDB
 mongod --fork --logpath /var/log/mongodb.log
