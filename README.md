@@ -1,5 +1,5 @@
 # CSE364Project
-2023 CSE364 Group 28 Project - Milestone 2
+2023 CSE364 Group 28 Project - main
 
 ## Part 1 : Create Git branches
 
