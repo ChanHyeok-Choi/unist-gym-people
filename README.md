@@ -1,5 +1,6 @@
 # CSE364Project
 2023 CSE364 Group 28 Project - main
+Synchronize our motivation through [interim presentation](https://docs.google.com/presentation/d/1tTHjl09RUwSqzrp2oSrGRAirXTbnPk23EHiN-qhXiV4/edit?usp=sharing)
 
 ## Part 1 : Create Git branches
 
